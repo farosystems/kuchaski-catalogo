@@ -84,7 +84,7 @@ export default function ProductosPage() {
         <div className="bg-gradient-to-br from-gray-50 to-blue-50">
           <GlobalAppBar />
           
-          <div className="flex">
+          <div className="flex min-h-screen">
             {/* Sidebar */}
             <div className={`fixed left-0 bg-white shadow-2xl z-40 transform transition-transform duration-300 ease-in-out ${
               showSidebar ? 'translate-x-0' : '-translate-x-full'
@@ -127,7 +127,7 @@ export default function ProductosPage() {
             )}
 
             {/* Contenido Principal - Loading */}
-            <div className="flex-1 lg:ml-0">
+            <div className="flex-1 lg:ml-0" style={{ minHeight: 'calc(100vh - 140px)' }}>
               <div style={{ marginTop: '80px' }}>
                 <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16 py-4">
                   <div className="flex items-center justify-center py-20">

@@ -205,6 +205,7 @@ export async function getProducts(): Promise<Product[]> {
       .from('productos')
       .select('*')
       .gt('precio', 0)
+      .eq('activo', true)
       .order('destacado', { ascending: false })
       .order('descripcion', { ascending: true })
 
@@ -269,6 +270,7 @@ export async function getFeaturedProducts(): Promise<Product[]> {
       .select('*')
       .eq('destacado', true)
       .gt('precio', 0)
+      .eq('activo', true)
       .order('descripcion', { ascending: true })
 
     if (error) {
@@ -328,6 +330,7 @@ export async function getProductsByCategory(categoryId: number): Promise<Product
       .select('*')
       .eq('fk_id_categoria', categoryId)
       .gt('precio', 0)
+      .eq('activo', true)
       .order('destacado', { ascending: false })
       .order('descripcion', { ascending: true })
 
@@ -388,6 +391,7 @@ export async function getProductsByBrand(brandId: number): Promise<Product[]> {
       .select('*')
       .eq('fk_id_marca', brandId)
       .gt('precio', 0)
+      .eq('activo', true)
       .order('destacado', { ascending: false })
       .order('descripcion', { ascending: true })
 
@@ -447,6 +451,7 @@ export async function getProductById(id: string): Promise<Product | null> {
       .from('productos')
       .select('*')
       .eq('id', id)
+      .eq('activo', true)
       .single()
 
     if (error) {
@@ -573,7 +578,7 @@ export async function getTipoPlanesProducto(productoId: string): Promise<'especi
         return 'default'
       }
     } catch (error) {
-      ('⚠️ getTipoPlanesProducto: Error al verificar planes por defecto (tabla puede no existir):', error)
+      //console.log('⚠️ getTipoPlanesProducto: Error al verificar planes por defecto (tabla puede no existir):', error)
     }
 
     // 3. Si no hay planes especiales ni por defecto, no hay planes para este producto
