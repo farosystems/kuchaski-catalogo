@@ -73,7 +73,17 @@ export default function WhatsAppButton({ product }: WhatsAppButtonProps) {
       const phoneNumber = telefono || "5491123365608"
       const message = generateWhatsAppMessage(product)
       const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
-      window.open(whatsappUrl, '_blank')
+      
+      // Detectar si es móvil para usar el método correcto
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      
+      if (isMobile) {
+        // En móviles, usar window.location.href para abrir la app directamente
+        window.location.href = whatsappUrl
+      } else {
+        // En desktop, usar window.open
+        window.open(whatsappUrl, '_blank')
+      }
     }
   }
 
