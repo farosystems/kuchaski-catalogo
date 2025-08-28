@@ -90,8 +90,8 @@ export default function ProductSearch({ className = '' }: ProductSearchProps) {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (searchTerm.trim()) {
-      // Redirigir a la página de cocinas con el término de búsqueda
-      window.location.href = `/cocinas?search=${encodeURIComponent(searchTerm)}`
+      // Redirigir a la página de búsqueda global con el término
+      window.location.href = `/buscar?q=${encodeURIComponent(searchTerm)}`
     }
   }
 
@@ -127,7 +127,7 @@ export default function ProductSearch({ className = '' }: ProductSearchProps) {
 
       {/* Resultados de búsqueda */}
       {isSearchOpen && (
-                 <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 max-h-[600px] overflow-y-auto z-50">
+                 <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 max-h-[400px] sm:max-h-[500px] lg:max-h-[600px] overflow-y-auto z-50">
           {/* Sugerencias de búsqueda */}
           <div className="p-4 border-b border-gray-100">
             <h3 className="text-sm font-semibold text-gray-700 mb-2">Sugerencias</h3>
@@ -162,7 +162,7 @@ export default function ProductSearch({ className = '' }: ProductSearchProps) {
                   className="flex items-center p-3 hover:bg-gray-50 rounded-lg transition-colors group"
                 >
                   {/* Imagen del producto */}
-                  <div className="flex-shrink-0 w-16 h-16 mr-4">
+                  <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 mr-3 sm:mr-4">
                     <img
                       src={product.imagen || '/placeholder.jpg'}
                       alt={product.descripcion}
@@ -172,22 +172,22 @@ export default function ProductSearch({ className = '' }: ProductSearchProps) {
 
                   {/* Información del producto */}
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-medium text-gray-900 group-hover:text-violet-600 transition-colors line-clamp-2">
+                    <h4 className="text-xs sm:text-sm font-medium text-gray-900 group-hover:text-violet-600 transition-colors line-clamp-2">
                       {highlightText(product.descripcion || '', searchTerm)}
                     </h4>
-                    <div className="flex items-center mt-1 space-x-2">
-                      <span className="text-xs text-gray-500">
+                    <div className="flex items-center mt-1 space-x-1 sm:space-x-2">
+                      <span className="text-xs text-gray-500 truncate">
                         {product.categoria?.descripcion}
                       </span>
-                      <span className="text-xs text-gray-300">•</span>
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-gray-300 hidden sm:inline">•</span>
+                      <span className="text-xs text-gray-500 truncate hidden sm:inline">
                         {product.marca?.descripcion}
                       </span>
                     </div>
                   </div>
 
-                  {/* Precios financiados */}
-                  <div className="flex-shrink-0 text-right">
+                  {/* Precios financiados - oculto en móvil */}
+                  <div className="flex-shrink-0 text-right hidden sm:block">
                     <ProductFinancingPrices product={product} />
                   </div>
                 </Link>
@@ -198,7 +198,7 @@ export default function ProductSearch({ className = '' }: ProductSearchProps) {
             {filteredProducts.length > 0 && (
               <div className="mt-4 pt-3 border-t border-gray-100">
                 <Link
-                  href={`/cocinas?search=${encodeURIComponent(searchTerm)}`}
+                  href={`/buscar?q=${encodeURIComponent(searchTerm)}`}
                   onClick={() => setIsSearchOpen(false)}
                   className="flex items-center justify-center w-full py-2 px-4 bg-violet-600 text-white text-sm font-medium rounded-lg hover:bg-violet-700 transition-colors"
                 >

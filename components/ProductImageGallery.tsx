@@ -13,8 +13,10 @@ interface ProductImageGalleryProps {
 export default function ProductImageGallery({ images, productName, isFeatured = false }: ProductImageGalleryProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
-  // Filtrar imágenes que no estén vacías o sean null/undefined
-  const validImages = (images || []).filter(img => img && img.trim() !== '')
+  // Filtrar imágenes que no estén vacías o sean null/undefined y trimear espacios
+  const validImages = (images || [])
+    .filter(img => img && img.trim() !== '')
+    .map(img => img.trim())
   
   // Debug: Log para verificar las imágenes
   //console.log('🔍 ProductImageGallery - Imágenes recibidas:', images)
@@ -127,7 +129,7 @@ export default function ProductImageGallery({ images, productName, isFeatured = 
               <button
                 key={index}
                 onClick={() => goToImage(index)}
-                className={`w-20 h-20 bg-white rounded-xl flex items-center justify-center shadow-md transition-all duration-200 cursor-pointer ${
+                className={`w-20 h-20 bg-white rounded-xl flex items-center justify-center shadow-md transition-all duration-200 cursor-pointer overflow-hidden ${
                   index === currentImageIndex 
                     ? 'border-2 border-violet-500 scale-105' 
                     : 'border border-gray-300 hover:border-violet-300 hover:scale-105'
@@ -138,8 +140,8 @@ export default function ProductImageGallery({ images, productName, isFeatured = 
                 <Image 
                   src={image} 
                   alt={`Thumbnail ${index + 1}`} 
-                  width={70} 
-                  height={70} 
+                  width={50} 
+                  height={50} 
                   className="object-contain rounded-lg" 
                 />
               </button>

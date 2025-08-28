@@ -11,6 +11,7 @@ import FinancingPlansLarge from "@/components/FinancingPlansLarge"
 import ProductCard from "@/components/ProductCard"
 import WhatsAppButton from "@/components/WhatsAppButton"
 import AddToListButton from "@/components/AddToListButton"
+import FormattedProductDescription from "@/components/FormattedProductDescription"
 import { useProducts } from "@/hooks/use-products"
 import { getProductById } from "@/lib/supabase-products"
 
@@ -204,11 +205,9 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
 
         {/* Descripción del Producto (sección separada) */}
         <div className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">Descripción del Producto</h2>
-          <div className="bg-white rounded-lg p-6 shadow-sm max-w-4xl mx-auto">
-            <div className="text-gray-700 leading-relaxed text-lg whitespace-pre-line">
-              {productDescription}
-            </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Descripción del Producto</h2>
+          <div className="bg-white rounded-lg p-8 shadow-sm max-w-4xl mx-auto">
+            <FormattedProductDescription description={productDescription} />
           </div>
         </div>
 

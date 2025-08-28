@@ -33,24 +33,24 @@ export default function ProductCard({ product }: ProductCardProps) {
       </div>
 
       {/* Información del producto */}
-      <div className="p-4">
+      <div className="p-3 sm:p-4">
         {/* Categoría y Marca */}
-        <div className="flex gap-2 mb-2">
-          <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+        <div className="flex gap-1 sm:gap-2 mb-2 flex-wrap">
+          <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full truncate">
             {productCategory}
           </span>
-          <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+          <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full truncate">
             {productBrand}
           </span>
         </div>
 
         {/* Título del producto */}
-        <h3 className="text-base font-semibold text-gray-900 mb-2 line-clamp-2">
+        <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2 line-clamp-2">
           {product.descripcion || product.name || 'Sin descripción'}
         </h3>
 
-        {/* Descripción detallada */}
-        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+        {/* Descripción detallada - oculta en móvil */}
+        <p className="text-sm text-gray-600 mb-3 line-clamp-2 hidden sm:block">
           {product.descripcion_detallada || product.description || 'Sin descripción detallada'}
         </p>
 
@@ -67,7 +67,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               `/${productCategory.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}/${product.id}` :
               `/varios/${product.id}`
             }
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-xl font-semibold hover:bg-blue-700 transition-colors duration-300 block text-center text-sm"
+            className="w-full bg-blue-600 text-white py-2 px-3 sm:px-4 rounded-xl font-semibold hover:bg-blue-700 transition-colors duration-300 block text-center text-xs sm:text-sm"
           >
             Ver Detalles
           </Link>
