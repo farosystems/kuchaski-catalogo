@@ -16,12 +16,20 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group">
-      {/* Imagen del producto */}
-      <div className="relative aspect-square overflow-hidden">
+      {/* Imagen del producto - clickeable */}
+      <Link
+        href={product.categoria && product.categoria.descripcion && 
+              !product.categoria.descripcion.toLowerCase().includes('categor') &&
+              product.categoria.descripcion.trim() !== '' ? 
+          `/${productCategory.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}/${product.id}` :
+          `/varios/${product.id}`
+        }
+        className="relative block aspect-square overflow-hidden"
+      >
         <img
           src={product.imagen || product.image || '/placeholder.jpg'}
           alt={product.descripcion || product.name || 'Producto'}
-          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 cursor-pointer"
         />
         
         {/* Badge Destacado */}
@@ -30,7 +38,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             Destacado
           </div>
         )}
-      </div>
+      </Link>
 
       {/* Información del producto */}
       <div className="p-3 sm:p-4">

@@ -184,7 +184,10 @@ export default function ProductImageGallery({ images, productName, isFeatured = 
           {validImages.length > 1 && (
             <>
               <button 
-                onClick={prevImage}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  prevImage()
+                }}
                 className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white transition-all duration-300 z-10 cursor-pointer"
                 aria-label="Imagen anterior"
                 type="button"
@@ -192,7 +195,10 @@ export default function ProductImageGallery({ images, productName, isFeatured = 
                 <ChevronLeft size={20} className="text-gray-700" />
               </button>
               <button 
-                onClick={nextImage}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  nextImage()
+                }}
                 className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white transition-all duration-300 z-10 cursor-pointer"
                 aria-label="Imagen siguiente"
                 type="button"
@@ -216,7 +222,10 @@ export default function ProductImageGallery({ images, productName, isFeatured = 
             {validImages.map((image, index) => (
               <button
                 key={index}
-                onClick={() => goToImage(index)}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  goToImage(index)
+                }}
                 className={`w-20 h-20 bg-white rounded-xl flex items-center justify-center shadow-md transition-all duration-200 cursor-pointer overflow-hidden ${
                   index === currentImageIndex 
                     ? 'border-2 border-violet-500 scale-105' 
