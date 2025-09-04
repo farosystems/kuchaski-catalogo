@@ -31,7 +31,7 @@ export default function AddToListButton({ product, variant = 'card' }: AddToList
       <button
         onClick={handleAddToList}
         disabled={isAdding || isInShoppingList}
-        className={`w-full py-2 px-4 rounded-xl font-semibold transition-all duration-300 text-sm flex items-center justify-center gap-2 ${
+        className={`w-full py-1.5 px-3 rounded-xl font-semibold transition-all duration-300 text-sm flex items-center justify-center gap-2 ${
           isInShoppingList
             ? 'bg-green-100 text-green-700 cursor-not-allowed'
             : isAdding

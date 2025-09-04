@@ -132,8 +132,40 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
           </button>
         </div>
 
+        {/* Título móvil - arriba de la imagen */}
+        <div className="lg:hidden mb-6">
+          {/* Categoría y Marca */}
+          <div className="flex gap-2 mb-3">
+            {product.categoria && (
+              <span className="text-xs text-violet-600 bg-violet-100 px-2 py-1 rounded-full uppercase">
+                {product.categoria.descripcion}
+              </span>
+            )}
+            {product.marca && (
+              <span className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded-full uppercase">
+                {product.marca.descripcion}
+              </span>
+            )}
+          </div>
+          
+          {/* Logo de la marca - móvil */}
+          {product.marca?.logo && (
+            <div className="mb-4 flex justify-center">
+              <img
+                src={product.marca.logo}
+                alt={`Logo ${product.marca.descripcion}`}
+                className="h-16 w-auto max-w-48 object-contain"
+              />
+            </div>
+          )}
+          
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 uppercase">
+            {product.descripcion}
+          </h1>
+        </div>
+
         {/* Producto Principal */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-8">
           {/* Galería de imágenes */}
           <div>
             <ProductImageGallery 
@@ -146,8 +178,8 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
 
           {/* Información del producto */}
           <div>
-            {/* Categoría y Marca */}
-            <div className="flex gap-2 mb-4">
+            {/* Categoría y Marca - solo desktop */}
+            <div className="hidden lg:flex gap-2 mb-4">
               {product.categoria && (
                 <span className="text-xs text-violet-600 bg-violet-100 px-2 py-1 rounded-full uppercase">
                   {product.categoria.descripcion}
@@ -160,7 +192,18 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
               )}
             </div>
             
-            <h1 className="text-3xl font-bold text-gray-900 mb-4 uppercase">
+            {/* Logo de la marca - desktop */}
+            {product.marca?.logo && (
+              <div className="hidden lg:flex justify-start mb-4">
+                <img
+                  src={product.marca.logo}
+                  alt={`Logo ${product.marca.descripcion}`}
+                  className="h-20 w-auto max-w-64 object-contain"
+                />
+              </div>
+            )}
+            
+            <h1 className="hidden lg:block text-3xl font-bold text-gray-900 mb-4 uppercase">
               {product.descripcion}
             </h1>
 
@@ -193,7 +236,7 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
         </div>
 
         {/* Descripción del Producto (sección separada) */}
-        <div className="mb-16">
+        <div className="mb-4">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Descripción del Producto</h2>
           <div className="bg-white rounded-lg p-8 shadow-sm max-w-4xl mx-auto">
             <FormattedProductDescription description={productDescription} />
@@ -201,7 +244,7 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
         </div>
 
         {/* Sección "Por qué elegirnos" */}
-        <div className="mb-16 bg-gray-50 py-16">
+        <div className="mb-4 bg-gray-50 py-16">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               ¿Por qué elegir MUNDOCUOTAS?
@@ -216,7 +259,7 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">Envío Gratis</h3>
               <p className="text-gray-600">
-                Entrega a domicilio sin cargo adicional en toda la ciudad
+                Entrega a domicilio sin cargo adicional en tu zona
               </p>
             </div>
 
@@ -256,12 +299,31 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {relatedProducts.slice(0, 3).map((relatedProduct) => (
-                <div key={relatedProduct.id} className="animate-fade-in-up">
-                  <ProductCard product={relatedProduct} />
+            {/* Carrusel para móviles */}
+            <div className="md:hidden">
+              <div className="overflow-x-auto pb-4 scrollbar-hide">
+                <div className="flex gap-4 px-4">
+                  {relatedProducts.map((relatedProduct) => (
+                    <div
+                      key={relatedProduct.id}
+                      className="flex-shrink-0 w-64"
+                    >
+                      <ProductCard product={relatedProduct} />
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+            </div>
+
+            {/* Grid para desktop */}
+            <div className="hidden md:block">
+              <div className="grid grid-cols-3 gap-8">
+                {relatedProducts.slice(0, 3).map((relatedProduct) => (
+                  <div key={relatedProduct.id} className="animate-fade-in-up">
+                    <ProductCard product={relatedProduct} />
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Botón ver más */}

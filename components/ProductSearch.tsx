@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, Suspense } from 'react'
 import { Search, X, Package } from 'lucide-react'
 import Link from 'next/link'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { Product } from '@/lib/products'
 import { getProducts, getPlanesProducto, calcularCuota } from '@/lib/supabase-products'
 import { formatearPrecio } from '@/lib/supabase-products'
@@ -11,7 +12,9 @@ interface ProductSearchProps {
   className?: string
 }
 
-export default function ProductSearch({ className = '' }: ProductSearchProps) {
+function ProductSearchContent({ className = '' }: ProductSearchProps) {
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   const [searchTerm, setSearchTerm] = useState('')
   const [products, setProducts] = useState<Product[]>([])
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
@@ -19,6 +22,15 @@ export default function ProductSearch({ className = '' }: ProductSearchProps) {
   const [loading, setLoading] = useState(false)
   const searchRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  // Sincronizar con parámetros de URL cuando estamos en la página de búsqueda
+  useEffect(() => {
+    if (pathname === '/buscar') {
+      const searchQuery = searchParams.get('q') || ''
+      setSearchTerm(searchQuery)
+      setIsSearchOpen(false) // Cerrar el dropdown cuando se carga desde URL
+    }
+  }, [pathname, searchParams])
 
   // Cargar productos al montar el componente
   useEffect(() => {
@@ -58,8 +70,11 @@ export default function ProductSearch({ className = '' }: ProductSearchProps) {
          }).slice(0, 12) // Limitar a 12 resultados
 
     setFilteredProducts(filtered)
-    setIsSearchOpen(filtered.length > 0)
-  }, [searchTerm, products])
+    // No abrir automáticamente si estamos en la página de búsqueda
+    if (pathname !== '/buscar') {
+      setIsSearchOpen(filtered.length > 0)
+    }
+  }, [searchTerm, products, pathname])
 
   // Cerrar búsqueda al hacer clic fuera
   useEffect(() => {
@@ -105,6 +120,16 @@ export default function ProductSearch({ className = '' }: ProductSearchProps) {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            onFocus={() => {
+              if (searchTerm.trim() && filteredProducts.length > 0) {
+                setIsSearchOpen(true)
+              }
+            }}
+            onClick={() => {
+              if (searchTerm.trim() && filteredProducts.length > 0) {
+                setIsSearchOpen(true)
+              }
+            }}
             placeholder="Buscar productos..."
             className="w-full pl-12 pr-12 py-3 bg-white/90 backdrop-blur-sm border border-violet-200 rounded-full text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all duration-300"
           />
@@ -254,5 +279,26 @@ function ProductFinancingPrices({ product }: { product: Product }) {
         ${formatearPrecio(calculo.cuota_mensual_electro)} P.ELEC
       </div>
     </div>
+  )
+}
+
+// Componente principal con Suspense
+export default function ProductSearch({ className = '' }: ProductSearchProps) {
+  return (
+    <Suspense fallback={
+      <div className={`relative ${className}`}>
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Buscar productos..."
+            disabled
+            className="w-full pl-12 pr-12 py-3 bg-white/90 backdrop-blur-sm border border-violet-200 rounded-full text-gray-900 placeholder-gray-500 opacity-50 cursor-not-allowed"
+          />
+          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 size-5" />
+        </div>
+      </div>
+    }>
+      <ProductSearchContent className={className} />
+    </Suspense>
   )
 }

@@ -1,7 +1,15 @@
+export interface Linea {
+  id: number
+  descripcion: string
+  created_at?: string
+}
+
 export interface Categoria {
   id: number
   descripcion: string
+  fk_id_linea?: number
   created_at: string
+  linea?: Linea
 }
 
 export interface Marca {

@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import { Search, Package } from "lucide-react"
 import GlobalAppBar from "@/components/GlobalAppBar"
 import Footer from "@/components/Footer"
@@ -10,7 +11,8 @@ import { useProducts } from "@/hooks/use-products"
 
 const PRODUCTS_PER_PAGE = 6
 
-export default function BuscarPage() {
+function BuscarPageContent() {
+  const searchParams = useSearchParams()
   const [searchTerm, setSearchTerm] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [animateProducts, setAnimateProducts] = useState(false)
@@ -23,13 +25,11 @@ export default function BuscarPage() {
 
   // Obtener parámetros de la URL
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search)
-    const searchParam = urlParams.get('q')
-    
+    const searchParam = searchParams.get('q')
     if (searchParam) {
       setSearchTerm(searchParam)
     }
-  }, [])
+  }, [searchParams])
 
   // Filtrar productos por búsqueda global
   const filteredProducts = useMemo(() => {
@@ -129,60 +129,28 @@ export default function BuscarPage() {
       <GlobalAppBar />
       
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16 py-4" style={{ marginTop: '40px' }}>
-        {/* Buscador principal */}
-        <div className="mb-8">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-6 bg-gradient-to-r from-violet-600 to-blue-600 bg-clip-text text-transparent">
-              Búsqueda de Productos
-            </h1>
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={24} />
-              <input
-                type="text"
-                placeholder="Buscar productos, marcas, categorías..."
-                value={searchTerm}
-                onChange={handleSearchChange}
-                className="w-full pl-16 pr-4 py-6 bg-white border-2 border-gray-200 rounded-2xl shadow-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all duration-300 text-xl placeholder-gray-400"
-                autoFocus
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Resultados header */}
-        {searchTerm && (
+        {/* Buscador principal - Solo visible cuando no hay búsqueda */}
+        {!searchTerm && (
           <div className="mb-8">
-            <div className="text-center w-full">
-              <p className="text-gray-600 mb-4 text-lg">
-                {filteredProducts.length > 0 
-                  ? `${filteredProducts.length} resultados para "${searchTerm}"`
-                  : `No se encontraron resultados para "${searchTerm}"`
-                }
-              </p>
-              <div className="mt-2">
-                <button
-                  onClick={handleClearFilters}
-                  className="inline-flex items-center px-6 py-3 rounded-lg text-sm font-medium bg-red-100 text-red-700 hover:bg-red-200 transition-colors"
-                >
-                  <Package className="mr-2" size={16} />
-                  Limpiar búsqueda
-                </button>
+            <div className="max-w-4xl mx-auto text-center">
+              <h1 className="text-4xl font-bold text-gray-900 mb-6 bg-gradient-to-r from-violet-600 to-blue-600 bg-clip-text text-transparent">
+                Búsqueda de Productos
+              </h1>
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={24} />
+                <input
+                  type="text"
+                  placeholder="Buscar productos, marcas, categorías..."
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  className="w-full pl-16 pr-4 py-6 bg-white border-2 border-gray-200 rounded-2xl shadow-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all duration-300 text-xl placeholder-gray-400"
+                  autoFocus
+                />
               </div>
             </div>
-
-            {/* Información de resultados */}
-            {filteredProducts.length > 0 && (
-              <div className="flex items-center justify-between text-sm text-gray-600 mt-6 bg-white rounded-lg p-4 shadow-sm">
-                <span>
-                  Mostrando {startIndex + 1}-{Math.min(startIndex + PRODUCTS_PER_PAGE, filteredProducts.length)} de {filteredProducts.length} productos
-                </span>
-                <span>
-                  Página {currentPage} de {totalPages}
-                </span>
-              </div>
-            )}
           </div>
         )}
+
 
         {/* Estado inicial sin búsqueda */}
         {!searchTerm && (
@@ -201,7 +169,7 @@ export default function BuscarPage() {
         {searchTerm && (
           <div id="productos-grid" className="mb-12">
             {filteredProducts.length > 0 ? (
-              <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-300 ${
+              <div className={`grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 transition-all duration-300 ${
                 animateProducts ? 'opacity-50' : 'opacity-100'
               }`}>
                 {paginatedProducts.map((product, index) => (
@@ -250,5 +218,24 @@ export default function BuscarPage() {
       </div>
       <Footer />
     </div>
+  )
+}
+
+export default function BuscarPage() {
+  return (
+    <Suspense fallback={
+      <div className="bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen">
+        <GlobalAppBar />
+        <div className="flex items-center justify-center py-20" style={{ marginTop: '10px' }}>
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-violet-600 mx-auto mb-4"></div>
+            <h2 className="text-2xl font-bold text-gray-900">Cargando página de búsqueda...</h2>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    }>
+      <BuscarPageContent />
+    </Suspense>
   )
 }

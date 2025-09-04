@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import ProductCard from "./ProductCard"
 import Pagination from "./Pagination"
 import { getFeaturedProducts } from "@/lib/supabase-products"
@@ -13,6 +13,8 @@ export default function FeaturedSection() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
+  const scrollRef = useRef<HTMLDivElement>(null)
+
 
   // Cargar productos destacados
   useEffect(() => {
@@ -32,6 +34,7 @@ export default function FeaturedSection() {
 
     loadFeaturedProducts()
   }, [])
+
 
   if (loading) {
     return (
@@ -99,44 +102,68 @@ export default function FeaturedSection() {
         {/* Contador de productos destacados */}
         <div className="mb-8 text-center">
           <p className="text-blue-100">
-            Mostrando <span className="font-semibold text-yellow-300">{displayProducts.length}</span> de{" "}
-            <span className="font-semibold text-yellow-300">{featuredProducts.length}</span> productos destacados
+            <span className="md:hidden">
+              <span className="font-semibold text-yellow-300">{featuredProducts.length}</span> productos destacados
+            </span>
+            <span className="hidden md:inline">
+              Mostrando <span className="font-semibold text-yellow-300">{displayProducts.length}</span> de{" "}
+              <span className="font-semibold text-yellow-300">{featuredProducts.length}</span> productos destacados
+            </span>
           </p>
         </div>
 
-        {displayProducts.length === 0 ? (
+        {featuredProducts.length === 0 ? (
           <div className="text-center">
             <p className="text-xl text-blue-100">No hay productos destacados disponibles</p>
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {displayProducts.map((product, index) => (
-                <div
-                  key={`${product.id}-${currentPage}`}
-                  className={`transition-all duration-700 ${
-                    index === 0
-                      ? "delay-100 animate-fade-in-up"
-                      : index === 1
-                        ? "delay-200 animate-fade-in-up"
-                        : "delay-300 animate-fade-in-up"
-                  }`}
-                >
-                  <ProductCard product={product} />
+            {/* Carrusel para móviles */}
+            <div className="md:hidden">
+              <div className="overflow-x-auto pb-4 scrollbar-hide">
+                <div className="flex gap-4 px-4">
+                  {featuredProducts.map((product) => (
+                    <div
+                      key={product.id}
+                      className="flex-shrink-0 w-64"
+                    >
+                      <ProductCard product={product} />
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
 
-            {/* Paginación para productos destacados */}
-            {featuredProducts.length > FEATURED_PRODUCTS_PER_PAGE && (
-              <div className="mt-12">
-                <Pagination 
-                  currentPage={currentPage} 
-                  totalPages={totalPages} 
-                  onPageChange={handlePageChange} 
-                />
+            {/* Grid para desktop */}
+            <div className="hidden md:block">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-8">
+                {displayProducts.map((product, index) => (
+                  <div
+                    key={`${product.id}-${currentPage}`}
+                    className={`transition-all duration-700 ${
+                      index === 0
+                        ? "delay-100 animate-fade-in-up"
+                        : index === 1
+                          ? "delay-200 animate-fade-in-up"
+                          : "delay-300 animate-fade-in-up"
+                    }`}
+                  >
+                    <ProductCard product={product} />
+                  </div>
+                ))}
               </div>
-            )}
+
+              {/* Paginación para desktop */}
+              {featuredProducts.length > FEATURED_PRODUCTS_PER_PAGE && (
+                <div className="mt-12">
+                  <Pagination 
+                    currentPage={currentPage} 
+                    totalPages={totalPages} 
+                    onPageChange={handlePageChange} 
+                  />
+                </div>
+              )}
+            </div>
           </>
         )}
       </div>

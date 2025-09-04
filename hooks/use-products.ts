@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { Product, Categoria, Marca } from '@/lib/products'
 import { 
   getProducts, 
@@ -12,12 +12,23 @@ import {
 } from '@/lib/supabase-products'
 
 export function useProducts() {
-  const [products, setProducts] = useState<Product[]>([])
+  const [allProducts, setAllProducts] = useState<Product[]>([])
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([])
   const [categories, setCategories] = useState<Categoria[]>([])
   const [brands, setBrands] = useState<Marca[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [currentFilter, setCurrentFilter] = useState<{type: 'category' | 'brand' | null, id: number | null}>({type: null, id: null})
+
+  // Memoizar productos filtrados
+  const products = useMemo(() => {
+    if (!currentFilter.type || !currentFilter.id) return allProducts
+    
+    if (currentFilter.type === 'category') {
+      return allProducts.filter(p => p.fk_id_categoria === currentFilter.id)
+    }
+    return allProducts.filter(p => p.fk_id_marca === currentFilter.id)
+  }, [allProducts, currentFilter])
 
   useEffect(() => {
     loadInitialData()
@@ -53,7 +64,7 @@ export function useProducts() {
       const productosConPrecio = productsData.filter(p => (p.precio || 0) > 0)
       //console.log('🔍 useProducts - Productos con precio > 0:', productosConPrecio.length)
 
-      setProducts(productsData)
+      setAllProducts(productsData)
       setFeaturedProducts(featuredData)
       setCategories(categoriesData)
       setBrands(brandsData)
@@ -65,43 +76,18 @@ export function useProducts() {
     }
   }
 
-  const filterByCategory = async (categoryId: number | null) => {
-    if (categoryId === null) {
-      await loadInitialData()
-      return
-    }
+  // Callbacks memoizados para filtros
+  const filterByCategory = useCallback((categoryId: number | null) => {
+    setCurrentFilter({type: categoryId ? 'category' : null, id: categoryId})
+  }, [])
 
-    try {
-      setLoading(true)
-      const filteredProducts = await getProductsByCategory(categoryId)
-      setProducts(filteredProducts)
-    } catch (err) {
-      setError('Error al filtrar por categoría')
-    } finally {
-      setLoading(false)
-    }
-  }
+  const filterByBrand = useCallback((brandId: number | null) => {
+    setCurrentFilter({type: brandId ? 'brand' : null, id: brandId})
+  }, [])
 
-  const filterByBrand = async (brandId: number | null) => {
-    if (brandId === null) {
-      await loadInitialData()
-      return
-    }
-
-    try {
-      setLoading(true)
-      const filteredProducts = await getProductsByBrand(brandId)
-      setProducts(filteredProducts)
-    } catch (err) {
-      setError('Error al filtrar por marca')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const clearFilters = () => {
-    loadInitialData()
-  }
+  const clearFilters = useCallback(() => {
+    setCurrentFilter({type: null, id: null})
+  }, [])
 
   return {
     products,

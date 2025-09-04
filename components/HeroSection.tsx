@@ -36,11 +36,11 @@ export default function HeroSection() {
         <div className="absolute bottom-40 right-1/3 w-5 h-5 bg-purple-400 rounded-full animate-float delay-700"></div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-15 md:py-20">
         <div className={`text-center transition-all duration-1000 ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight">
             Bienvenidos a{" "}
-            <span className="inline-block min-w-[400px] md:min-w-[600px] lg:min-w-[800px]">
+            <span className="inline-block min-w-[280px] sm:min-w-[320px] md:min-w-[600px] lg:min-w-[700px]">
               <TypewriterText />
             </span>
           </h1>
@@ -51,15 +51,15 @@ export default function HeroSection() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center mt-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center mt-8 md:mt-16 max-w-5xl mx-auto">
           <div className={`transition-all duration-1000 delay-700 ${isVisible ? "animate-fade-in-left" : "opacity-0"}`}>
-            <div className="bg-white/95 backdrop-blur-xl p-8 rounded-2xl shadow-2xl border border-white/30 hover:shadow-3xl transition-all duration-300">
-              <h2 className="text-3xl font-bold mb-6 text-orange-500">¿Quiénes Somos?</h2>
-              <p className="text-lg mb-4 leading-relaxed text-gray-800">
+            <div className="bg-white/95 backdrop-blur-xl p-4 sm:p-6 md:p-6 rounded-xl sm:rounded-2xl shadow-2xl border border-white/30 hover:shadow-3xl transition-all duration-300 mx-4 sm:mx-0 overflow-hidden">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4 md:mb-6 text-orange-500">¿Quiénes Somos?</h2>
+              <p className="text-sm sm:text-base md:text-lg mb-2 sm:mb-3 md:mb-4 leading-relaxed text-gray-800">
                 En MUNDOCUOTAS somos una empresa especializada en la venta de electrodomésticos con más de 10 años de
                 experiencia en el mercado. Nos dedicamos a brindar soluciones accesibles para tu hogar.
               </p>
-              <p className="text-lg leading-relaxed text-gray-800">
+              <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-800">
                 Ofrecemos productos de las mejores marcas con planes de financiación flexibles que se adaptan a tu
                 presupuesto.
               </p>
@@ -69,9 +69,9 @@ export default function HeroSection() {
           <div
             className={`transition-all duration-1000 delay-1000 ${isVisible ? "animate-fade-in-right" : "opacity-0"}`}
           >
-            <div className="bg-white/95 backdrop-blur-xl p-8 rounded-2xl shadow-2xl border border-white/30 hover:shadow-3xl transition-all duration-300">
-              <h2 className="text-3xl font-bold mb-6 text-orange-500">¿Qué Hacemos?</h2>
-              <ul className="text-lg space-y-4">
+            <div className="bg-white/95 backdrop-blur-xl p-4 sm:p-6 md:p-6 rounded-xl sm:rounded-2xl shadow-2xl border border-white/30 hover:shadow-3xl transition-all duration-300 mx-4 sm:mx-0 overflow-hidden">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4 md:mb-6 text-orange-500">¿Qué Hacemos?</h2>
+              <ul className="text-sm sm:text-base md:text-lg space-y-2 sm:space-y-3 md:space-y-4">
                 {[
                   "Venta de electrodomésticos de primera calidad",
                   "Planes de financiación en 3, 6, 12 y 18 cuotas",
@@ -81,7 +81,7 @@ export default function HeroSection() {
                 ].map((item, index) => (
                   <li
                     key={index}
-                    className={`flex items-center transition-all duration-500 text-gray-800 ${
+                    className={`flex items-start transition-all duration-500 text-gray-800 ${
                       index === 0
                         ? "delay-1000"
                         : index === 1
@@ -93,8 +93,8 @@ export default function HeroSection() {
                               : "delay-1500"
                     } ${isVisible ? "animate-fade-in-left" : "opacity-0"}`}
                   >
-                    <span className="text-orange-500 mr-3 text-xl">✓</span>
-                    {item}
+                    <span className="text-orange-500 mr-2 sm:mr-3 text-lg sm:text-xl flex-shrink-0">✓</span>
+                    <span className="flex-1">{item}</span>
                   </li>
                 ))}
               </ul>

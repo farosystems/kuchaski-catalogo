@@ -84,18 +84,23 @@ export default function FinancingPlans({ productoId, precio, showDebug = false }
         return (
           <div
             key={plan.id}
-            className={`p-3 rounded-lg text-center font-bold text-sm ${
+            className={`py-2 px-2 sm:px-4 rounded-lg text-center font-bold text-xs sm:text-sm w-full ${
               colores[index % colores.length]
             }`}
           >
-            <div className="mb-1">
-              {plan.cuotas} CUOTAS MENSUALES x ${formatearPrecio(calculo.cuota_mensual)} EF / ${formatearPrecio(calculo.cuota_mensual_electro)} P.ELEC
+            <div className="text-center leading-tight">
+              <span className="whitespace-nowrap">{plan.cuotas} CUOTAS</span>
+              {' '}
+              <span className="whitespace-nowrap">x ${formatearPrecio(calculo.cuota_mensual)} EF</span>
+              {' / '}
+              <span className="whitespace-nowrap">${formatearPrecio(calculo.cuota_mensual_electro)} P.ELEC</span>
+              {anticipo > 0 && (
+                <>
+                  {' - '}
+                  <span className="whitespace-nowrap">Anticipo: ${formatearPrecio(anticipo)}</span>
+                </>
+              )}
             </div>
-            {anticipo > 0 && (
-              <div className="text-xs font-normal opacity-90">
-                Anticipo: ${formatearPrecio(anticipo)}
-              </div>
-            )}
           </div>
         )
       })}

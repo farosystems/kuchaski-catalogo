@@ -52,25 +52,12 @@ export default function CategoriaPage({ params }: CategoriaPageProps) {
     })
   }, [categories, resolvedParams.categoria])
 
-  // Filtrar productos por categoría y búsqueda
+  // Filtrar productos por categoría
   const filteredProducts = useMemo(() => {
     if (!categoria) return []
     
-    let filtered = products.filter(product => product.fk_id_categoria === categoria.id)
-
-    // Filtrar por búsqueda
-    if (searchTerm) {
-      filtered = filtered.filter((product) => {
-        const productName = product.descripcion || product.name || ''
-        const productDescription = product.descripcion_detallada || product.description || ''
-
-        return productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-               productDescription.toLowerCase().includes(searchTerm.toLowerCase())
-      })
-    }
-
-    return filtered
-  }, [products, categoria, searchTerm])
+    return products.filter(product => product.fk_id_categoria === categoria.id)
+  }, [products, categoria])
 
   // Debug: Log para verificar que los datos se cargan
   useEffect(() => {
@@ -156,48 +143,26 @@ export default function CategoriaPage({ params }: CategoriaPageProps) {
     <div className="bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen">
       <GlobalAppBar />
       
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16 py-4" style={{ marginTop: '140px' }}>
-        {/* Buscador */}
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16 py-4" style={{ marginTop: '40px' }}>
+        {/* Header de la página */}
         <div className="mb-6">
-          <div className="max-w-3xl mx-auto">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-              <input
-                type="text"
-                placeholder={`Buscar en ${categoria.descripcion}...`}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 bg-white border-2 border-gray-200 rounded-2xl shadow-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all duration-300 text-lg placeholder-gray-400"
-              />
-            </div>
+          <div className="text-center w-full">
+            <h1 className="text-4xl font-bold text-gray-900 mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              {categoria.descripcion}
+            </h1>
           </div>
         </div>
 
-        {/* Header de la página */}
+
+        {/* Información de resultados */}
         <div className="mb-8">
           <div className="text-center w-full">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              {categoria.descripcion}
-            </h1>
             <p className="text-gray-600 mb-4">
-              {searchTerm 
-                ? `${filteredProducts.length} resultados para "${searchTerm}" en ${categoria.descripcion}`
-                : `${filteredProducts.length} productos en ${categoria.descripcion}`
-              }
+              {filteredProducts.length} productos en {categoria.descripcion}
             </p>
-            {searchTerm && (
-              <div className="mt-2">
-                <button
-                  onClick={handleClearFilters}
-                  className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-red-100 text-red-700 hover:bg-red-200 transition-colors"
-                >
-                  Limpiar búsqueda
-                </button>
-              </div>
-            )}
           </div>
 
-          {/* Información de resultados */}
+          {/* Información de paginación */}
           <div className="flex items-center justify-between text-sm text-gray-600 mt-4">
             <span>
               Mostrando {startIndex + 1}-{Math.min(startIndex + PRODUCTS_PER_PAGE, filteredProducts.length)} de {filteredProducts.length} productos
@@ -211,7 +176,7 @@ export default function CategoriaPage({ params }: CategoriaPageProps) {
         {/* Grid de Productos */}
         <div id="productos-grid" className="mb-12">
           {filteredProducts.length > 0 ? (
-            <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-300 ${
+            <div className={`grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 transition-all duration-300 ${
               animateProducts ? 'opacity-50' : 'opacity-100'
             }`}>
               {paginatedProducts.map((product, index) => (
@@ -228,22 +193,11 @@ export default function CategoriaPage({ params }: CategoriaPageProps) {
             <div className="text-center py-16">
               <Package size={64} className="mx-auto mb-4 text-gray-300" />
               <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                No se encontraron productos
+                No hay productos disponibles
               </h3>
               <p className="text-gray-500 mb-6">
-                {searchTerm 
-                  ? `No hay productos que coincidan con "${searchTerm}" en ${categoria.descripcion}`
-                  : `No hay productos disponibles en ${categoria.descripcion}`
-                }
+                No hay productos disponibles en {categoria.descripcion}
               </p>
-              {searchTerm && (
-                <button
-                  onClick={handleClearFilters}
-                  className="px-6 py-3 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors"
-                >
-                  Limpiar búsqueda
-                </button>
-              )}
             </div>
           )}
         </div>

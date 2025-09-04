@@ -10,6 +10,7 @@ import { useShoppingList } from "@/hooks/use-shopping-list"
 
 export default function GlobalAppBar() {
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false)
+  const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false)
   const [isShoppingListOpen, setIsShoppingListOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { itemCount } = useShoppingList()
@@ -100,6 +101,7 @@ export default function GlobalAppBar() {
                 <CategoriesDropdown 
                   isOpen={isCategoriesOpen}
                   onClose={() => setIsCategoriesOpen(false)}
+                  isMobile={false}
                 />
               </div>
             </div>
@@ -178,31 +180,16 @@ export default function GlobalAppBar() {
               {/* Categorías móvil */}
               <button
                 onClick={() => {
-                  setIsCategoriesOpen(!isCategoriesOpen)
+                  setIsMobileCategoriesOpen(true)
+                  setIsMobileMenuOpen(false)
                 }}
-                className="flex items-center justify-between w-full px-4 py-3 text-white hover:bg-violet-700/50 rounded-lg transition-colors font-medium"
+                className="flex items-center w-full px-4 py-3 text-white hover:bg-violet-700/50 rounded-lg transition-colors font-medium"
               >
                 <div className="flex items-center">
                   <Menu className="mr-3" size={20} />
                   Categorías
                 </div>
-                <span className={`transform transition-transform ${isCategoriesOpen ? 'rotate-180' : ''}`}>
-                  ▼
-                </span>
               </button>
-              
-              {/* Dropdown de categorías móvil */}
-              {isCategoriesOpen && (
-                <div className="pl-8 pb-2">
-                  <CategoriesDropdown 
-                    isOpen={true}
-                    onClose={() => {
-                      setIsCategoriesOpen(false)
-                      setIsMobileMenuOpen(false)
-                    }}
-                  />
-                </div>
-              )}
             </div>
           </div>
         )}
@@ -212,6 +199,13 @@ export default function GlobalAppBar() {
       <ShoppingListModal 
         isOpen={isShoppingListOpen}
         onClose={() => setIsShoppingListOpen(false)}
+      />
+      
+      {/* Categories Dropdown - Mobile Full Screen */}
+      <CategoriesDropdown 
+        isOpen={isMobileCategoriesOpen}
+        onClose={() => setIsMobileCategoriesOpen(false)}
+        isMobile={true}
       />
     </>
   )

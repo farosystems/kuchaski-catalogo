@@ -21,7 +21,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <img
           src={product.imagen || product.image || '/placeholder.jpg'}
           alt={product.descripcion || product.name || 'Producto'}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
         />
         
         {/* Badge Destacado */}

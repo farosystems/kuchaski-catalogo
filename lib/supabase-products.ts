@@ -1,5 +1,29 @@
 import { supabase } from './supabase'
-import { Product, Categoria, Marca, PlanFinanciacion, ProductoPlan } from './products'
+import { Product, Categoria, Marca, Linea, PlanFinanciacion, ProductoPlan } from './products'
+
+// Cache global para categorías y marcas
+let categoriesCache: Map<number, Categoria> | null = null
+let brandsCache: Map<number, Marca> | null = null
+let cacheTimestamp = 0
+const CACHE_DURATION = 5 * 60 * 1000 // 5 minutos
+
+// Función para obtener categorías y marcas con cache
+async function getCachedCategoriesAndBrands(): Promise<{ categoriesCache: Map<number, Categoria>, brandsCache: Map<number, Marca> }> {
+  const now = Date.now()
+  
+  if (!categoriesCache || !brandsCache || (now - cacheTimestamp) > CACHE_DURATION) {
+    const [categoriesResponse, brandsResponse] = await Promise.all([
+      supabase.from('categorias').select('*'),
+      supabase.from('marcas').select('*')
+    ])
+    
+    categoriesCache = new Map(categoriesResponse.data?.map(cat => [cat.id, cat]) || [])
+    brandsCache = new Map(brandsResponse.data?.map(brand => [brand.id, brand]) || [])
+    cacheTimestamp = now
+  }
+  
+  return { categoriesCache: categoriesCache!, brandsCache: brandsCache! }
+}
 
 // Función para formatear números sin decimales
 export function formatearPrecio(precio: number): string {
@@ -223,26 +247,8 @@ export async function getProducts(): Promise<Product[]> {
 
     //console.log('🔍 getProducts - Total productos obtenidos:', data?.length || 0)
 
-    // Obtener categorías y marcas por separado para hacer el mapeo manualmente
-    const { data: categories, error: categoriesError } = await supabase
-      .from('categoria')
-      .select('*')
-
-    const { data: brands, error: brandsError } = await supabase
-      .from('marcas')
-      .select('*')
-
-    if (categoriesError) {
-      console.error('Error fetching categories:', categoriesError)
-    }
-
-    if (brandsError) {
-      console.error('Error fetching brands:', brandsError)
-    }
-
-    // Crear mapas para búsqueda rápida
-    const categoriesMap = new Map(categories?.map(cat => [cat.id, cat]) || [])
-    const brandsMap = new Map(brands?.map(brand => [brand.id, brand]) || [])
+    // Obtener categorías y marcas usando cache
+    const { categoriesCache: categoriesMap, brandsCache: brandsMap } = await getCachedCategoriesAndBrands()
 
     // Transformar datos para que coincidan con la nueva estructura
     const transformedData = data?.map(product => {
@@ -287,7 +293,7 @@ export async function getFeaturedProducts(): Promise<Product[]> {
 
     // Obtener categorías y marcas por separado
     const { data: categories, error: categoriesError } = await supabase
-      .from('categoria')
+      .from('categorias')
       .select('*')
 
     const { data: brands, error: brandsError } = await supabase
@@ -348,7 +354,7 @@ export async function getProductsByCategory(categoryId: number): Promise<Product
 
     // Obtener categorías y marcas por separado
     const { data: categories, error: categoriesError } = await supabase
-      .from('categoria')
+      .from('categorias')
       .select('*')
 
     const { data: brands, error: brandsError } = await supabase
@@ -409,7 +415,7 @@ export async function getProductsByBrand(brandId: number): Promise<Product[]> {
 
     // Obtener categorías y marcas por separado
     const { data: categories, error: categoriesError } = await supabase
-      .from('categoria')
+      .from('categorias')
       .select('*')
 
     const { data: brands, error: brandsError } = await supabase
@@ -468,7 +474,7 @@ export async function getProductById(id: string): Promise<Product | null> {
 
     // Obtener categorías y marcas por separado
     const { data: categories, error: categoriesError } = await supabase
-      .from('categoria')
+      .from('categorias')
       .select('*')
 
     const { data: brands, error: brandsError } = await supabase
@@ -533,7 +539,7 @@ export async function getCategories(): Promise<Categoria[]> {
   try {
     //console.log('🔍 getCategories: Intentando obtener categorías...')
     const { data, error } = await supabase
-      .from('categoria')
+      .from('categorias')
       .select('*')
       .order('descripcion', { ascending: true })
 
@@ -615,5 +621,85 @@ export async function getTipoPlanesProducto(productoId: string): Promise<'especi
   } catch (error) {
     console.error('❌ getTipoPlanesProducto: Error general:', error)
     return 'ninguno'
+  }
+}
+
+// Obtener todas las líneas
+export async function getLineas(): Promise<Linea[]> {
+  try {
+    const { data, error } = await supabase
+      .from('lineas')
+      .select('*')
+      .order('descripcion', { ascending: true })
+
+    if (error) {
+      console.error('Error fetching lineas:', error)
+      return []
+    }
+
+    return data || []
+  } catch (error) {
+    console.error('Error fetching lineas:', error)
+    return []
+  }
+}
+
+// Obtener líneas con sus categorías agrupadas
+export async function getLineasWithCategorias(): Promise<(Linea & { categorias: Categoria[] })[]> {
+  try {
+    // 1. Obtener todas las líneas
+    const { data: lineas, error: lineasError } = await supabase
+      .from('lineas')
+      .select('*')
+      .order('descripcion', { ascending: true })
+
+    if (lineasError) {
+      console.error('Error fetching lineas:', lineasError)
+      return []
+    }
+
+    // 2. Obtener todas las categorías con su línea
+    const { data: categorias, error: categoriasError } = await supabase
+      .from('categorias')
+      .select('*')
+      .order('descripcion', { ascending: true })
+
+    if (categoriasError) {
+      console.error('Error fetching categorias:', categoriasError)
+      return []
+    }
+
+    // 3. Agrupar categorías por línea y filtrar solo las que tienen categorías
+    const result = lineas?.map(linea => ({
+      ...linea,
+      categorias: categorias?.filter(categoria => categoria.fk_id_linea === linea.id) || []
+    }))
+    .filter(linea => linea.categorias.length > 0) || []
+
+    return result
+  } catch (error) {
+    console.error('Error fetching lineas with categorias:', error)
+    return []
+  }
+}
+
+// Obtener categorías sin línea asignada
+export async function getCategoriasWithoutLinea(): Promise<Categoria[]> {
+  try {
+    const { data, error } = await supabase
+      .from('categorias')
+      .select('*')
+      .is('fk_id_linea', null)
+      .order('descripcion', { ascending: true })
+
+    if (error) {
+      console.error('Error fetching categorias without linea:', error)
+      return []
+    }
+
+    return data || []
+  } catch (error) {
+    console.error('Error fetching categorias without linea:', error)
+    return []
   }
 } 

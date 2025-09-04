@@ -2,6 +2,7 @@
 
 import { MessageCircle } from "lucide-react"
 import { useState } from "react"
+import Image from "next/image"
 import type { Product } from "@/lib/products"
 import { useConfiguracion } from "@/hooks/use-configuracion"
 import { useZonas } from "@/hooks/use-zonas"
@@ -92,9 +93,15 @@ export default function WhatsAppButton({ product }: WhatsAppButtonProps) {
     return (
       <button
         disabled
-        className="relative w-full bg-gray-400 text-white font-bold py-4 px-6 rounded-2xl flex items-center justify-center transition-all duration-300 text-lg shadow-lg cursor-not-allowed"
+        className="relative w-full bg-gray-400 text-white font-semibold py-2 px-4 rounded-xl flex items-center justify-center transition-all duration-300 text-base shadow-md cursor-not-allowed"
       >
-        <MessageCircle className="mr-3 animate-pulse" size={24} />
+        <Image 
+          src="/WhatsApp.svg.webp" 
+          alt="WhatsApp" 
+          width={20} 
+          height={20} 
+          className="mr-2 animate-pulse" 
+        />
         <span>Cargando...</span>
       </button>
     )
@@ -109,7 +116,7 @@ export default function WhatsAppButton({ product }: WhatsAppButtonProps) {
     <>
       <button
         onClick={handleClick}
-        className="relative w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 text-white font-bold py-4 px-6 rounded-2xl flex items-center justify-center transition-all duration-300 text-lg shadow-lg hover:shadow-2xl transform hover:scale-105 overflow-hidden group"
+        className="relative w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 text-white font-semibold py-2 px-4 rounded-xl flex items-center justify-center transition-all duration-300 text-base shadow-md hover:shadow-lg transform hover:scale-102 overflow-hidden group"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -120,9 +127,15 @@ export default function WhatsAppButton({ product }: WhatsAppButtonProps) {
           }`}
         ></div>
 
-        <MessageCircle className={`mr-3 transition-all duration-300 ${isHovered ? "animate-bounce" : ""}`} size={24} />
+        <Image 
+          src="/WhatsApp.svg.webp" 
+          alt="WhatsApp" 
+          width={20} 
+          height={20} 
+          className={`mr-2 transition-all duration-300 ${isHovered ? "animate-bounce" : ""}`} 
+        />
 
-        <span className="relative z-10">Consultar Producto por WhatsApp</span>
+        <span className="relative z-10">Consulta</span>
 
         {/* Partículas animadas */}
         <div

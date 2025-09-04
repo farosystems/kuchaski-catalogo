@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, memo } from 'react'
 import { PlanFinanciacion } from '@/lib/products'
 import { getPlanesProducto, calcularCuota, formatearPrecio, getTipoPlanesProducto, calcularAnticipo } from '@/lib/supabase-products'
 
@@ -10,10 +10,19 @@ interface FinancingPlansLargeProps {
   showDebug?: boolean
 }
 
-export default function FinancingPlansLarge({ productoId, precio, showDebug = false }: FinancingPlansLargeProps) {
+const FinancingPlansLarge = memo(function FinancingPlansLarge({ productoId, precio, showDebug = false }: FinancingPlansLargeProps) {
   const [planes, setPlanes] = useState<PlanFinanciacion[]>([])
   const [loading, setLoading] = useState(true)
   const [tipoPlanes, setTipoPlanes] = useState<'especiales' | 'default' | 'todos' | 'ninguno'>('ninguno')
+
+  // Memoizar cálculos costosos
+  const calculatedPlanes = useMemo(() => {
+    return planes.map(plan => {
+      const calculo = calcularCuota(precio, plan)
+      const anticipo = calcularAnticipo(precio, plan)
+      return { plan, calculo, anticipo }
+    }).filter(item => item.calculo)
+  }, [planes, precio])
 
   useEffect(() => {
     async function loadPlanes() {
@@ -68,8 +77,8 @@ export default function FinancingPlansLarge({ productoId, precio, showDebug = fa
   const colores = ['bg-blue-100 text-blue-800', 'bg-green-100 text-green-800', 'bg-purple-100 text-purple-800', 'bg-orange-100 text-orange-800']
 
   return (
-    <div className="bg-white rounded-lg p-6 shadow-sm">
-      <h3 className="text-xl font-bold text-gray-900 mb-4">Planes de Financiación</h3>
+    <div className="bg-white rounded-lg p-4 sm:p-6 shadow-sm">
+      <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Planes de Financiación</h3>
       
       {/* Información de debug */}
       {showDebug && (
@@ -78,37 +87,33 @@ export default function FinancingPlansLarge({ productoId, precio, showDebug = fa
         </div>
       )}
       
-      <div className="space-y-3">
-        {planes.map((plan, index) => {
-          const calculo = calcularCuota(precio, plan)
-          const anticipo = calcularAnticipo(precio, plan)
-          if (!calculo) return null
-
-          return (
-            <div
-              key={plan.id}
-              className={`p-4 rounded-xl text-center font-bold text-lg ${
-                index === 0 ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
-              }`}
-            >
-              <div className="mb-2">
-                <div className="text-xl mb-1">
-                  {plan.cuotas} CUOTAS MENSUALES
-                </div>
-                <div className="text-lg space-y-1">
-                  <div>x ${formatearPrecio(calculo.cuota_mensual)} EF</div>
-                  <div>x ${formatearPrecio(calculo.cuota_mensual_electro)} P.ELEC</div>
-                </div>
+      <div className="space-y-2 sm:space-y-3">
+        {calculatedPlanes.map(({ plan, calculo, anticipo }, index) => (
+          <div
+            key={plan.id}
+            className={`p-3 sm:p-4 rounded-lg sm:rounded-xl text-center font-bold text-sm sm:text-lg ${
+              index === 0 ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
+            }`}
+          >
+            <div className="mb-1 sm:mb-2">
+              <div className="text-base sm:text-xl mb-1">
+                {plan.cuotas} CUOTAS MENSUALES
               </div>
-              {anticipo > 0 && (
-                <div className="text-base font-semibold opacity-90 border-t pt-2 mt-2">
-                  Anticipo: ${formatearPrecio(anticipo)}
-                </div>
-              )}
+              <div className="text-sm sm:text-lg space-y-1">
+                <div>x ${formatearPrecio(calculo!.cuota_mensual)} EF</div>
+                <div>x ${formatearPrecio(calculo!.cuota_mensual_electro)} P.ELEC</div>
+              </div>
             </div>
-          )
-        })}
+            {anticipo > 0 && (
+              <div className="text-xs sm:text-base font-semibold opacity-90 border-t pt-1 sm:pt-2 mt-1 sm:mt-2">
+                Anticipo: ${formatearPrecio(anticipo)}
+              </div>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   )
-}
+})
+
+export default FinancingPlansLarge
