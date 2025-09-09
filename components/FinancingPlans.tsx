@@ -64,6 +64,17 @@ export default function FinancingPlans({ productoId, precio, showDebug = false }
     }
   }
 
+  // Ordenar planes de menor a mayor precio (cuota mensual)
+  const planesOrdenados = [...planes].sort((a, b) => {
+    const calculoA = calcularCuota(precio, a)
+    const calculoB = calcularCuota(precio, b)
+    
+    if (!calculoA || !calculoB) return 0
+    
+    // Ordenar por cuota mensual EF de menor a mayor
+    return calculoA.cuota_mensual - calculoB.cuota_mensual
+  })
+
   // Mostrar todos los planes disponibles para este producto
   const colores = ['bg-blue-100 text-blue-800', 'bg-green-100 text-green-800', 'bg-purple-100 text-purple-800', 'bg-orange-100 text-orange-800']
 
@@ -76,7 +87,7 @@ export default function FinancingPlans({ productoId, precio, showDebug = false }
         </div>
       )}
       
-      {planes.map((plan, index) => {
+      {planesOrdenados.map((plan, index) => {
         const calculo = calcularCuota(precio, plan)
         const anticipo = calcularAnticipo(precio, plan)
         if (!calculo) return null
@@ -89,16 +100,20 @@ export default function FinancingPlans({ productoId, precio, showDebug = false }
             }`}
           >
             <div className="text-center leading-tight">
-              <span className="whitespace-nowrap">{plan.cuotas} CUOTAS</span>
-              {' '}
-              <span className="whitespace-nowrap">x ${formatearPrecio(calculo.cuota_mensual)} EF</span>
-              {' / '}
-              <span className="whitespace-nowrap">${formatearPrecio(calculo.cuota_mensual_electro)} P.ELEC</span>
+              {/* Primera línea: cuotas mensuales */}
+              <div className="whitespace-nowrap">
+                {plan.cuotas} cuotas mensuales
+              </div>
+              {/* Segunda línea: precios EF / P.ELEC */}
+              <div className="text-xs sm:text-sm">
+                <span className="block sm:inline">${formatearPrecio(calculo.cuota_mensual)} EF</span>
+                <span className="hidden sm:inline"> / </span>
+                <span className="block sm:inline">${formatearPrecio(calculo.cuota_mensual_electro)} P.ELEC</span>
+              </div>
               {anticipo > 0 && (
-                <>
-                  {' - '}
-                  <span className="whitespace-nowrap">Anticipo: ${formatearPrecio(anticipo)}</span>
-                </>
+                <div className="whitespace-nowrap text-xs">
+                  Anticipo: ${formatearPrecio(anticipo)}
+                </div>
               )}
             </div>
           </div>

@@ -34,7 +34,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         
         {/* Badge Destacado */}
         {product.destacado && (
-          <div className="absolute top-3 right-3 bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+          <div className="absolute top-2 right-2 bg-yellow-400 text-black px-2 py-1 rounded-full text-xs sm:text-sm font-semibold shadow-lg">
             Destacado
           </div>
         )}
@@ -42,12 +42,9 @@ export default function ProductCard({ product }: ProductCardProps) {
 
       {/* Información del producto */}
       <div className="p-3 sm:p-4">
-        {/* Categoría y Marca */}
+        {/* Marca */}
         <div className="flex gap-1 sm:gap-2 mb-2 flex-wrap">
-          <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full truncate">
-            {productCategory}
-          </span>
-          <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full truncate">
+          <span className="text-xs text-white bg-gradient-to-r from-blue-500 to-blue-600 px-2 py-1 rounded-full truncate font-semibold shadow-sm">
             {productBrand}
           </span>
         </div>

@@ -15,13 +15,18 @@ const FinancingPlansLarge = memo(function FinancingPlansLarge({ productoId, prec
   const [loading, setLoading] = useState(true)
   const [tipoPlanes, setTipoPlanes] = useState<'especiales' | 'default' | 'todos' | 'ninguno'>('ninguno')
 
-  // Memoizar cálculos costosos
+  // Memoizar cálculos costosos y ordenar de menor a mayor precio
   const calculatedPlanes = useMemo(() => {
     return planes.map(plan => {
       const calculo = calcularCuota(precio, plan)
       const anticipo = calcularAnticipo(precio, plan)
       return { plan, calculo, anticipo }
-    }).filter(item => item.calculo)
+    })
+    .filter(item => item.calculo)
+    .sort((a, b) => {
+      // Ordenar por cuota mensual EF de menor a mayor
+      return a.calculo!.cuota_mensual - b.calculo!.cuota_mensual
+    })
   }, [planes, precio])
 
   useEffect(() => {
@@ -96,12 +101,13 @@ const FinancingPlansLarge = memo(function FinancingPlansLarge({ productoId, prec
             }`}
           >
             <div className="mb-1 sm:mb-2">
+              {/* Primera línea: cuotas mensuales */}
               <div className="text-base sm:text-xl mb-1">
-                {plan.cuotas} CUOTAS MENSUALES
+                {plan.cuotas} cuotas mensuales
               </div>
-              <div className="text-sm sm:text-lg space-y-1">
-                <div>x ${formatearPrecio(calculo!.cuota_mensual)} EF</div>
-                <div>x ${formatearPrecio(calculo!.cuota_mensual_electro)} P.ELEC</div>
+              {/* Segunda línea: precios EF / P.ELEC */}
+              <div className="text-sm sm:text-lg">
+                ${formatearPrecio(calculo!.cuota_mensual)} EF / ${formatearPrecio(calculo!.cuota_mensual_electro)} P.ELEC
               </div>
             </div>
             {anticipo > 0 && (

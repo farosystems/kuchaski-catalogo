@@ -702,4 +702,65 @@ export async function getCategoriasWithoutLinea(): Promise<Categoria[]> {
     console.error('Error fetching categorias without linea:', error)
     return []
   }
+}
+
+// Obtener productos que tienen plan de 12 cuotas
+export async function getProductosConPlan12Cuotas(): Promise<Product[]> {
+  try {
+    // Buscar productos que tengan asociado un plan de 12 cuotas (ID = 3) en planes default
+    const { data: productosConPlan, error: planesError } = await supabase
+      .from('producto_planes_default')
+      .select('fk_id_producto')
+      .eq('fk_id_plan', 3)
+
+    if (planesError) {
+      console.error('Error fetching productos con plan 12:', planesError)
+      return []
+    }
+
+    const productIds = [...new Set(productosConPlan?.map(item => item.fk_id_producto) || [])]
+
+    if (productIds.length === 0) {
+      return []
+    }
+
+    // Obtener los productos completos
+    const { data, error } = await supabase
+      .from('productos')
+      .select('*')
+      .in('id', productIds)
+      .gt('precio', 0)
+      .eq('activo', true)
+      .order('descripcion', { ascending: true })
+
+    if (error) {
+      console.error('Error fetching productos con plan 12:', error)
+      return []
+    }
+
+    // Obtener categorías y marcas
+    const { categoriesCache, brandsCache } = await getCachedCategoriesAndBrands()
+
+    // Transformar datos
+    const transformedData = data?.map(product => {
+      const categoria = categoriesCache.get(product.fk_id_categoria) || 
+                       { id: product.fk_id_categoria || 1, descripcion: `Categoría ${product.fk_id_categoria || 1}` }
+      
+      const marca = brandsCache.get(product.fk_id_marca) || 
+                   { id: product.fk_id_marca || 1, descripcion: `Marca ${product.fk_id_marca || 1}` }
+
+      return {
+        ...product,
+        fk_id_categoria: product.fk_id_categoria || 1,
+        fk_id_marca: product.fk_id_marca || 1,
+        categoria,
+        marca
+      }
+    }) || []
+
+    return transformedData
+  } catch (error) {
+    console.error('Error fetching productos con plan 12 cuotas:', error)
+    return []
+  }
 } 

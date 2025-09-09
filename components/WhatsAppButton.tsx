@@ -135,7 +135,7 @@ export default function WhatsAppButton({ product }: WhatsAppButtonProps) {
           className={`mr-2 transition-all duration-300 ${isHovered ? "animate-bounce" : ""}`} 
         />
 
-        <span className="relative z-10">Consulta</span>
+        <span className="relative z-10">Chatea con tu vendedor!</span>
 
         {/* Partículas animadas */}
         <div

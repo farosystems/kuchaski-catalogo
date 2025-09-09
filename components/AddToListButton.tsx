@@ -65,12 +65,12 @@ export default function AddToListButton({ product, variant = 'card' }: AddToList
     <button
       onClick={handleAddToList}
       disabled={isAdding || isInShoppingList}
-      className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
+      className={`w-full py-2 px-4 rounded-xl font-semibold transition-all duration-300 text-base shadow-md flex items-center justify-center gap-2 ${
         isInShoppingList
           ? 'bg-green-100 text-green-700 cursor-not-allowed'
           : isAdding
           ? 'bg-violet-100 text-violet-700 cursor-not-allowed'
-          : 'bg-violet-600 text-white hover:bg-violet-700 hover:scale-105 shadow-lg hover:shadow-xl'
+          : 'bg-violet-600 text-white hover:bg-violet-700 hover:scale-102 hover:shadow-lg'
       }`}
       title={isInShoppingList ? 'Ya está en la lista' : 'Agregar a lista de compra'}
     >

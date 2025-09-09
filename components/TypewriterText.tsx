@@ -16,10 +16,10 @@ const fonts = [
 const colors = [
   "text-yellow-400", 
   "text-yellow-500", 
+  "text-yellow-600",
   "text-orange-400", 
   "text-orange-500", 
-  "text-violet-700",
-  "text-violet-800",
+  "text-amber-400",
   "text-amber-500",
   "text-amber-600"
 ]

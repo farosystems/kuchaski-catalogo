@@ -45,19 +45,24 @@ export default function GlobalAppBar() {
               <Link href="/" className="flex items-center group">
                 <div className="relative">
                   <img 
-                    src="/logo.svg" 
+                    src="/logo.png" 
                     alt="MUNDO CUOTAS" 
-                    className="h-16 sm:h-20 lg:h-28 w-auto transition-transform duration-300 group-hover:scale-105"
+                    className="h-24 sm:h-28 lg:h-36 xl:h-40 w-auto transition-transform duration-300 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-violet-400 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
                 </div>
-                <div className="ml-2 sm:ml-4">
-                  <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-white tracking-wide group-hover:text-violet-200 transition-colors duration-300">
+                <div className="ml-1 sm:ml-2 hidden lg:block">
+                  <h1 className="text-sm sm:text-lg lg:text-xl xl:text-2xl font-bold text-white tracking-wide group-hover:text-violet-200 transition-colors duration-300">
                     MUNDOCUOTAS
                   </h1>
                   <p className="text-xs text-violet-200 font-medium hidden sm:block">Tu tienda de confianza</p>
                 </div>
               </Link>
+            </div>
+
+            {/* Buscador móvil/tablet en header principal */}
+            <div className="flex-1 max-w-4xl mx-4 lg:hidden">
+              <ProductSearch />
             </div>
 
             {/* Buscador desktop */}
@@ -136,10 +141,6 @@ export default function GlobalAppBar() {
             </div>
           </div>
 
-          {/* Buscador móvil */}
-          <div className="lg:hidden pb-3 px-2">
-            <ProductSearch />
-          </div>
         </div>
 
         {/* Menú móvil */}

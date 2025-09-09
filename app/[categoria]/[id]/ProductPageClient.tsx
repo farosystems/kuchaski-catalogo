@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react"
 import { use } from "react"
-import { ArrowLeft, Package, CheckCircle, Star, Truck, Shield, CreditCard, Headphones } from "lucide-react"
+import { ArrowLeft, Package, CheckCircle, Star, Truck, Shield, CreditCard, Users } from "lucide-react"
 import { useRouter } from "next/navigation"
 import GlobalAppBar from "@/components/GlobalAppBar"
 import Footer from "@/components/Footer"
@@ -146,35 +146,6 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
           </button>
         </div>
 
-        {/* Título móvil - arriba de la imagen */}
-        <div className="lg:hidden mb-6">
-          {/* Categoría y Marca */}
-          <div className="flex gap-2 mb-3">
-            <span className="text-xs text-violet-600 bg-violet-100 px-2 py-1 rounded-full uppercase">
-              {categoria?.descripcion}
-            </span>
-            {product.marca && (
-              <span className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded-full uppercase">
-                {product.marca.descripcion}
-              </span>
-            )}
-          </div>
-          
-          {/* Logo de la marca - móvil */}
-          {product.marca?.logo && (
-            <div className="mb-4 flex justify-center">
-              <img
-                src={product.marca.logo}
-                alt={`Logo ${product.marca.descripcion}`}
-                className="h-16 w-auto max-w-48 object-contain"
-              />
-            </div>
-          )}
-          
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 uppercase">
-            {product.descripcion}
-          </h1>
-        </div>
 
         {/* Producto Principal */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-8">
@@ -186,6 +157,36 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
               isFeatured={product.destacado || false}
               brand={product.marca}
             />
+            
+            {/* Título móvil - debajo de la imagen */}
+            <div className="lg:hidden mt-6">
+              {/* Categoría y Marca */}
+              <div className="flex gap-2 mb-3">
+                <span className="text-xs text-violet-600 bg-violet-100 px-2 py-1 rounded-full uppercase">
+                  {categoria?.descripcion}
+                </span>
+                {product.marca && (
+                  <span className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded-full uppercase">
+                    {product.marca.descripcion}
+                  </span>
+                )}
+              </div>
+              
+              {/* Logo de la marca - móvil */}
+              {product.marca?.logo && (
+                <div className="mb-4 flex justify-start">
+                  <img
+                    src={product.marca.logo}
+                    alt={`Logo ${product.marca.descripcion}`}
+                    className="h-12 w-auto max-w-32 object-contain"
+                  />
+                </div>
+              )}
+              
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-0 uppercase">
+                {product.descripcion}
+              </h1>
+            </div>
           </div>
 
           {/* Información del producto */}
@@ -204,21 +205,21 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
             
             {/* Logo de la marca - desktop */}
             {product.marca?.logo && (
-              <div className="hidden lg:flex justify-start mb-4">
+              <div className="hidden lg:flex justify-start mb-1">
                 <img
                   src={product.marca.logo}
                   alt={`Logo ${product.marca.descripcion}`}
-                  className="h-20 w-auto max-w-64 object-contain"
+                  className="h-16 w-auto max-w-48 object-contain"
                 />
               </div>
             )}
             
-            <h1 className="hidden lg:block text-3xl font-bold text-gray-900 mb-4 uppercase">
+            <h1 className="hidden lg:block text-3xl font-bold text-gray-900 mb-2 uppercase">
               {product.descripcion}
             </h1>
 
             {/* Precios */}
-            <div className="mb-8">
+            <div className="mb-4 -mt-2 lg:mt-0">
               <FinancingPlansLarge 
                 productoId={product.id.toString()}
                 precio={product.precio || 0}
@@ -261,9 +262,9 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 max-w-6xl mx-auto">
             {/* Envío gratis */}
-            <div className="bg-white rounded-xl p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
               <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Truck className="w-8 h-8 text-blue-600" />
               </div>
@@ -274,7 +275,7 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
             </div>
 
             {/* Garantía oficial */}
-            <div className="bg-white rounded-xl p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
               <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-8 h-8 text-green-600" />
               </div>
@@ -285,13 +286,24 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
             </div>
 
             {/* Financiación flexible */}
-            <div className="bg-white rounded-xl p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
               <div className="bg-violet-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CreditCard className="w-8 h-8 text-violet-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">Financiación Flexible</h3>
               <p className="text-gray-600">
                 Planes de pago adaptados a tu presupuesto
+              </p>
+            </div>
+
+            {/* Atención personalizada */}
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
+              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="w-8 h-8 text-orange-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Atención Personalizada</h3>
+              <p className="text-gray-600">
+                Asesoramiento especializado para encontrar lo que necesitas
               </p>
             </div>
           </div>
