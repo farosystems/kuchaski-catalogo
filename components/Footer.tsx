@@ -2,12 +2,29 @@
 
 import Link from "next/link"
 import { Home, Package, Zap, Phone, Mail, Clock, MapPin, Shield, CreditCard, Truck } from "lucide-react"
+import { useConfiguracionWebContext } from '@/contexts/ConfiguracionWebContext'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 export default function Footer() {
+  const { configuracion } = useConfiguracionWebContext()
+  const isMobile = useIsMobile()
+  
   const scrollToProducts = () => {
     const productsSection = document.getElementById('productos')
     if (productsSection) {
       productsSection.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
+  const getLogoSize = () => {
+    if (!configuracion) return { width: isMobile ? 40 : 48, height: isMobile ? 30 : 36 }
+    const baseWidth = isMobile ? configuracion.mobile_logo_width : configuracion.logo_width
+    const baseHeight = isMobile ? configuracion.mobile_logo_height : configuracion.logo_height
+    
+    // Reducimos el tamaño para el footer (aproximadamente 25% del tamaño original)
+    return {
+      width: Math.round(baseWidth * 0.25),
+      height: Math.round(baseHeight * 0.25)
     }
   }
 
@@ -20,11 +37,23 @@ export default function Footer() {
           {/* Columna 1: MUNDOCUOTAS */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <img 
-                src="/logo.png" 
-                alt="MUNDO CUOTAS" 
-                className="h-12 w-auto"
-              />
+              {configuracion?.logo_url ? (
+                <img 
+                  src={configuracion.logo_url} 
+                  alt="Logo" 
+                  style={{
+                    width: `${getLogoSize().width}px`,
+                    height: `${getLogoSize().height}px`,
+                    objectFit: 'contain'
+                  }}
+                />
+              ) : (
+                <img 
+                  src="/logo.png" 
+                  alt="MUNDO CUOTAS" 
+                  className="h-12 w-auto"
+                />
+              )}
               <div>
                 <h3 className="text-xl font-bold">MUNDOCUOTAS</h3>
                 <p className="text-violet-200 text-sm">Tu tienda de electrodomésticos de confianza</p>

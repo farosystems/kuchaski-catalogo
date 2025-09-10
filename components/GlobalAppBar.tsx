@@ -7,6 +7,8 @@ import CategoriesDropdown from "./CategoriesDropdown"
 import ShoppingListModal from "./ShoppingListModal"
 import { useState, useEffect } from "react"
 import { useShoppingList } from "@/hooks/use-shopping-list"
+import { useConfiguracionWebContext } from '@/contexts/ConfiguracionWebContext'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 export default function GlobalAppBar() {
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false)
@@ -14,6 +16,16 @@ export default function GlobalAppBar() {
   const [isShoppingListOpen, setIsShoppingListOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { itemCount } = useShoppingList()
+  const { configuracion } = useConfiguracionWebContext()
+  const isMobile = useIsMobile()
+
+  const getLogoSize = () => {
+    if (!configuracion) return { width: isMobile ? 150 : 200, height: isMobile ? 45 : 60 }
+    return {
+      width: isMobile ? configuracion.mobile_logo_width : configuracion.logo_width,
+      height: isMobile ? configuracion.mobile_logo_height : configuracion.logo_height
+    }
+  }
   
   // Cerrar menú móvil al cambiar el tamaño de pantalla
   useEffect(() => {
@@ -34,9 +46,25 @@ export default function GlobalAppBar() {
     }
   }
 
+  const getAppBarStyle = () => {
+    if (!configuracion) return {}
+    return {
+      backgroundColor: configuracion.appbar_background_color,
+      borderBottomColor: configuracion.primary_color
+    }
+  }
+
+  const getTextColor = () => {
+    if (!configuracion) return "#ffffff"
+    return configuracion.appbar_text_color
+  }
+
   return (
     <>
-      <div className="sticky top-0 z-50 bg-gradient-to-r from-violet-700 via-violet-600 to-violet-700 shadow-lg border-b border-violet-800">
+      <div 
+        className="sticky top-0 z-50 shadow-lg border-b"
+        style={getAppBarStyle()}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {/* Header principal */}
           <div className="flex items-center justify-between py-3 lg:py-4">
@@ -44,18 +72,39 @@ export default function GlobalAppBar() {
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center group">
                 <div className="relative">
-                  <img 
-                    src="/logo.png" 
-                    alt="MUNDO CUOTAS" 
-                    className="h-24 sm:h-28 lg:h-36 xl:h-40 w-auto transition-transform duration-300 group-hover:scale-105"
-                  />
+                  {configuracion?.logo_url ? (
+                    <img 
+                      src={configuracion.logo_url}
+                      alt="Logo" 
+                      style={{
+                        width: `${getLogoSize().width}px`,
+                        height: `${getLogoSize().height}px`,
+                        objectFit: 'contain'
+                      }}
+                      className="transition-transform duration-300 group-hover:scale-105"
+                    />
+                  ) : (
+                    <img 
+                      src="/logo.png" 
+                      alt="MUNDO CUOTAS" 
+                      className="h-24 sm:h-28 lg:h-36 xl:h-40 w-auto transition-transform duration-300 group-hover:scale-105"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-violet-400 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
                 </div>
-                <div className="ml-1 sm:ml-2 hidden lg:block">
-                  <h1 className="text-sm sm:text-lg lg:text-xl xl:text-2xl font-bold text-white tracking-wide group-hover:text-violet-200 transition-colors duration-300">
-                    MUNDOCUOTAS
+                <div className="ml-1 sm:ml-2">
+                  <h1 
+                    className="text-sm sm:text-base lg:text-lg xl:text-xl font-bold tracking-wide transition-colors duration-300"
+                    style={{ color: getTextColor() }}
+                  >
+                    MUNDO CUOTAS
                   </h1>
-                  <p className="text-xs text-violet-200 font-medium hidden sm:block">Tu tienda de confianza</p>
+                  <p 
+                    className="text-xs font-medium opacity-75 hidden sm:block"
+                    style={{ color: getTextColor() }}
+                  >
+                    Tu tienda de confianza
+                  </p>
                 </div>
               </Link>
             </div>
@@ -73,15 +122,27 @@ export default function GlobalAppBar() {
             {/* Controles de la derecha - solo en móvil */}
             <div className="flex items-center space-x-2 sm:space-x-4 lg:hidden">
               {/* Indicador de estado - oculto en móvil */}
-              <div className="hidden sm:flex items-center space-x-2 bg-violet-800/30 rounded-full px-2 sm:px-3 py-1 backdrop-blur-sm">
+              <div 
+                className="hidden sm:flex items-center space-x-2 rounded-full px-2 sm:px-3 py-1 backdrop-blur-sm opacity-30"
+                style={{ backgroundColor: configuracion?.primary_color || "#8b5cf6" }}
+              >
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="text-violet-200 text-xs font-medium">En línea</span>
+                <span 
+                  className="text-xs font-medium opacity-75"
+                  style={{ color: getTextColor() }}
+                >
+                  En línea
+                </span>
               </div>
               
               {/* Botón hamburguesa */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="text-white hover:text-violet-200 transition-colors duration-300 p-2 rounded-full bg-violet-800/30"
+                className="hover:opacity-70 transition-colors duration-300 p-2 rounded-full opacity-30"
+                style={{ 
+                  color: getTextColor(),
+                  backgroundColor: configuracion?.primary_color || "#8b5cf6"
+                }}
                 aria-label="Abrir menú"
               >
                 {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}

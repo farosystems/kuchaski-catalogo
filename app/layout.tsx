@@ -3,6 +3,8 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { ShoppingListProvider } from "@/hooks/use-shopping-list"
+import { ConfiguracionWebProvider } from "@/contexts/ConfiguracionWebContext"
+import GlobalStyles from "@/components/GlobalStyles"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -47,9 +49,12 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={inter.className}>
-        <ShoppingListProvider>
-          {children}
-        </ShoppingListProvider>
+        <ConfiguracionWebProvider>
+          <GlobalStyles />
+          <ShoppingListProvider>
+            {children}
+          </ShoppingListProvider>
+        </ConfiguracionWebProvider>
       </body>
     </html>
   )

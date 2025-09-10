@@ -13,7 +13,7 @@ export default function HeroSection() {
   return (
     <section
       id="inicio"
-      className="relative text-white pt-12 overflow-hidden h-[50vh] min-h-[400px] sm:h-[60vh] sm:min-h-[500px] flex items-center"
+      className="relative text-white pt-12 overflow-hidden h-[30vh] min-h-[250px] sm:h-[35vh] sm:min-h-[300px] flex items-center"
     >
       {/* Imagen de fondo */}
       <div 
@@ -35,16 +35,16 @@ export default function HeroSection() {
         <div className="absolute bottom-40 right-1/3 w-5 h-5 bg-purple-400 rounded-full animate-float delay-700"></div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 md:py-10">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-4 md:py-6">
         <div className={`text-center transition-all duration-1000 ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}>
-          <h1 className="text-2xl sm:text-3xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 leading-tight">
+          <h1 className="text-lg sm:text-xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 leading-tight">
             Bienvenidos a<br />
-            <span className="inline-block min-w-[280px] sm:min-w-[320px] md:min-w-[600px] lg:min-w-[700px]">
+            <span className="inline-block min-w-[200px] sm:min-w-[240px] md:min-w-[350px] lg:min-w-[420px]">
               <TypewriterText />
             </span>
           </h1>
           <p
-            className={`text-lg md:text-2xl lg:text-3xl mb-6 max-w-4xl mx-auto transition-all duration-1000 delay-500 ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}
+            className={`text-sm md:text-base lg:text-lg mb-3 max-w-2xl mx-auto transition-all duration-1000 delay-500 ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}
           >
             Tu tienda de electrodomésticos de confianza con los mejores planes de financiación
           </p>

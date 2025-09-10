@@ -6,6 +6,53 @@ export interface Configuracion {
   telefono: string | null
 }
 
+export interface ConfiguracionWeb {
+  id: number
+  created_at: string
+  
+  // Configuraciones Desktop
+  logo_url: string | null
+  logo_width: number
+  logo_height: number
+  
+  appbar_height: number
+  appbar_background_color: string
+  appbar_text_color: string
+  
+  section_title_size: number
+  section_subtitle_size: number
+  section_text_size: number
+  
+  search_box_width: number
+  search_box_height: number
+  
+  home_section_height: number
+  
+  // Configuraciones Mobile
+  mobile_logo_width: number
+  mobile_logo_height: number
+  
+  mobile_appbar_height: number
+  
+  mobile_section_title_size: number
+  mobile_section_subtitle_size: number
+  mobile_section_text_size: number
+  
+  mobile_search_box_width: number
+  mobile_search_box_height: number
+  
+  mobile_home_section_height: number
+  
+  // Colores generales
+  primary_color: string
+  secondary_color: string
+  accent_color: string
+  
+  // Tipografías
+  font_family_primary: string
+  font_family_secondary: string
+}
+
 export interface Zona {
   id: number
   created_at: string
@@ -122,4 +169,83 @@ export async function getTelefonoPorZona(zonaId: number): Promise<string | null>
     console.error('Error al obtener teléfono por zona:', error)
     return null
   }
+}
+
+export async function getConfiguracionWeb(): Promise<ConfiguracionWeb | null> {
+  try {
+    const { data, error } = await supabase
+      .from('configuracion_web')
+      .select('*')
+      .limit(1)
+      .single()
+
+    if (error) {
+      console.error('Error al obtener configuración web:', error)
+      return null
+    }
+
+    return data
+  } catch (error) {
+    console.error('Error al obtener configuración web:', error)
+    return null
+  }
+}
+
+export async function createDefaultConfiguracionWeb(): Promise<ConfiguracionWeb | null> {
+  try {
+    const defaultConfig = {
+      logo_url: '/logo.png',
+      logo_width: 200,
+      logo_height: 60,
+      appbar_height: 64,
+      appbar_background_color: '#ffffff',
+      appbar_text_color: '#000000',
+      section_title_size: 24,
+      section_subtitle_size: 18,
+      section_text_size: 16,
+      search_box_width: 400,
+      search_box_height: 40,
+      home_section_height: 500,
+      mobile_logo_width: 150,
+      mobile_logo_height: 45,
+      mobile_appbar_height: 56,
+      mobile_section_title_size: 20,
+      mobile_section_subtitle_size: 16,
+      mobile_section_text_size: 14,
+      mobile_search_box_width: 300,
+      mobile_search_box_height: 36,
+      mobile_home_section_height: 300,
+      primary_color: '#0066cc',
+      secondary_color: '#f8f9fa',
+      accent_color: '#ff6b35',
+      font_family_primary: 'Inter, sans-serif',
+      font_family_secondary: 'Roboto, sans-serif'
+    }
+
+    const { data, error } = await supabase
+      .from('configuracion_web')
+      .insert(defaultConfig)
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Error al crear configuración web por defecto:', error)
+      return null
+    }
+
+    return data
+  } catch (error) {
+    console.error('Error al crear configuración web por defecto:', error)
+    return null
+  }
+}
+
+export async function getOrCreateConfiguracionWeb(): Promise<ConfiguracionWeb | null> {
+  let config = await getConfiguracionWeb()
+  
+  if (!config) {
+    config = await createDefaultConfiguracionWeb()
+  }
+  
+  return config
 }
