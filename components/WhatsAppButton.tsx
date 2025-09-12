@@ -17,6 +17,7 @@ export default function WhatsAppButton({ product }: WhatsAppButtonProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { telefono, loading: configLoading, error: configError } = useConfiguracion()
   const { zonas, configuracionZonas, loading: zonasLoading } = useZonas()
+  const hasStock = product.tiene_stock === true // Solo true permite consultar
   
   // Función para generar el mensaje de WhatsApp
   const generateWhatsAppMessage = (product: Product): string => {
@@ -61,6 +62,11 @@ export default function WhatsAppButton({ product }: WhatsAppButtonProps) {
   }
 
   const handleClick = () => {
+    // No permitir consultar si no hay stock
+    if (!hasStock) {
+      return
+    }
+    
     // Verificar si hay zonas configuradas
     const zonasConTelefono = zonas.filter(zona => 
       configuracionZonas.some(config => config.fk_id_zona === zona.id)
@@ -86,6 +92,26 @@ export default function WhatsAppButton({ product }: WhatsAppButtonProps) {
         window.open(whatsappUrl, '_blank')
       }
     }
+  }
+
+  // Si no hay stock, mostrar un botón deshabilitado
+  if (!hasStock) {
+    return (
+      <button
+        disabled
+        className="relative w-full bg-gray-400 text-gray-600 font-semibold py-2 px-4 rounded-xl flex items-center justify-center transition-all duration-300 text-base shadow-md cursor-not-allowed"
+        title="Sin stock"
+      >
+        <Image 
+          src="/WhatsApp.svg.webp" 
+          alt="WhatsApp" 
+          width={20} 
+          height={20} 
+          className="mr-2 opacity-50" 
+        />
+        <span>Sin Stock</span>
+      </button>
+    )
   }
 
   // Si está cargando, mostrar un botón deshabilitado

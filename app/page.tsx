@@ -1,4 +1,3 @@
-import HeroSection from "@/components/HeroSection"
 import FeaturedSection from "@/components/FeaturedSection"
 import Promo12CuotasSection from "@/components/Promo12CuotasSection"
 import GlobalAppBar from "@/components/GlobalAppBar"
@@ -10,7 +9,6 @@ export default function Home() {
       <GlobalAppBar />
       
       <main>
-        <HeroSection />
         <FeaturedSection />
         <Promo12CuotasSection />
       </main>

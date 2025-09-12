@@ -79,6 +79,7 @@ export interface Product {
   fk_id_categoria: number
   fk_id_marca: number
   destacado: boolean
+  tiene_stock: boolean
   // Nuevos campos para configuración de planes
   aplicar_todos_planes?: boolean
   aplicar_planes_categoria?: boolean

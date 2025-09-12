@@ -24,6 +24,7 @@ export default function ProductImageGallery({ images, productName, isFeatured = 
   const touchStartY = useRef<number | null>(null)
 
   const isInFavorites = isInList(product.id)
+  const hasStock = product.tiene_stock === true // Solo true permite agregar
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -215,22 +216,24 @@ export default function ProductImageGallery({ images, productName, isFeatured = 
             />
           </div>
           
-          {/* Icono de Favoritos - Esquina superior derecha */}
-          <button
-            onClick={handleFavoriteClick}
-            className={`absolute top-2 right-2 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-20 ${
-              isInFavorites 
-                ? 'bg-violet-500 text-white' 
-                : 'bg-white/90 text-gray-600 hover:bg-white hover:text-violet-500'
-            }`}
-            title={isInFavorites ? 'Quitar de favoritos' : 'Agregar a favoritos'}
-          >
-            <Heart 
-              className={`w-5 h-5 transition-all duration-300 ${
-                isInFavorites ? 'fill-current' : ''
-              }`} 
-            />
-          </button>
+          {/* Icono de Favoritos - Esquina superior derecha (solo si hay stock) */}
+          {hasStock && (
+            <button
+              onClick={handleFavoriteClick}
+              className={`absolute top-2 right-2 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-20 ${
+                isInFavorites 
+                  ? 'bg-violet-500 text-white' 
+                  : 'bg-white/90 text-gray-600 hover:bg-white hover:text-violet-500'
+              }`}
+              title={isInFavorites ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+            >
+              <Heart 
+                className={`w-5 h-5 transition-all duration-300 ${
+                  isInFavorites ? 'fill-current' : ''
+                }`} 
+              />
+            </button>
+          )}
 
           {/* Botón de Compartir - Esquina inferior derecha */}
           <button

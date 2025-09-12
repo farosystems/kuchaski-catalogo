@@ -80,8 +80,19 @@ export default function FeaturedSection() {
   return (
     <section
       id="destacados"
-      className="py-20 bg-gradient-to-br from-blue-900 via-purple-900 to-blue-800 text-white relative overflow-hidden"
+      className="py-20 text-white relative overflow-hidden"
     >
+      {/* Imagen de fondo de la familia */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: "url('/hero-family.svg')"
+        }}
+      >
+        {/* Overlay para mantener legibilidad */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/80 via-purple-900/70 to-blue-800/80"></div>
+      </div>
+
       {/* Fondo animado */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-20 left-10 w-32 h-32 bg-yellow-400 rounded-full blur-3xl animate-float"></div>

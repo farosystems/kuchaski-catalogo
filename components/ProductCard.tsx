@@ -23,6 +23,11 @@ export default function ProductCard({ product }: ProductCardProps) {
     `/varios/${product.id}`
 
   const isInFavorites = isInList(product.id)
+  const hasStock = product.tiene_stock === true // Solo true permite agregar, undefined/null/false no permiten
+  
+  // Debug: log del stock
+  console.log('🔍 ProductCard - Product:', product.descripcion, 'tiene_stock:', product.tiene_stock, 'hasStock:', hasStock)
+  console.log('🔍 ProductCard - Tipo de tiene_stock:', typeof product.tiene_stock)
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -32,7 +37,11 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Link href={productUrl} className="block">
-      <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 group cursor-pointer">
+      <div className={`bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 group cursor-pointer ${
+        hasStock 
+          ? 'hover:shadow-xl hover:scale-105 active:scale-95' 
+          : 'opacity-75 grayscale-[0.3]'
+      }`}>
         {/* Imagen del producto */}
         <div className="relative aspect-square overflow-hidden">
           <img
@@ -41,25 +50,34 @@ export default function ProductCard({ product }: ProductCardProps) {
             className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
           />
           
-          {/* Icono de Favoritos - Esquina superior izquierda */}
-          <button
-            onClick={handleFavoriteClick}
-            className={`absolute top-2 left-2 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10 ${
-              isInFavorites 
-                ? 'bg-violet-500 text-white' 
-                : 'bg-white/90 text-gray-600 hover:bg-white hover:text-violet-500'
-            }`}
-            title={isInFavorites ? 'Quitar de favoritos' : 'Agregar a favoritos'}
-          >
-            <Heart 
-              className={`w-4 h-4 transition-all duration-300 ${
-                isInFavorites ? 'fill-current' : ''
-              }`} 
-            />
-          </button>
+          {/* Icono de Favoritos - Esquina superior izquierda (solo si hay stock) */}
+          {hasStock && (
+            <button
+              onClick={handleFavoriteClick}
+              className={`absolute top-2 left-2 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10 ${
+                isInFavorites 
+                  ? 'bg-violet-500 text-white' 
+                  : 'bg-white/90 text-gray-600 hover:bg-white hover:text-violet-500'
+              }`}
+              title={isInFavorites ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+            >
+              <Heart 
+                className={`w-4 h-4 transition-all duration-300 ${
+                  isInFavorites ? 'fill-current' : ''
+                }`} 
+              />
+            </button>
+          )}
 
-          {/* Badge Destacado - Esquina superior derecha */}
-          {product.destacado && (
+          {/* Badge Sin Stock - Esquina superior derecha */}
+          {!hasStock && (
+            <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs sm:text-sm font-semibold shadow-lg">
+              Sin Stock
+            </div>
+          )}
+          
+          {/* Badge Destacado - Esquina superior derecha (solo si hay stock) */}
+          {product.destacado && hasStock && (
             <div className="absolute top-2 right-2 bg-yellow-400 text-black px-2 py-1 rounded-full text-xs sm:text-sm font-semibold shadow-lg">
               Destacado
             </div>
@@ -67,16 +85,16 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* Información del producto */}
-        <div className="p-3 sm:p-4">
+        <div className="p-2 sm:p-3">
           {/* Marca */}
-          <div className="flex gap-1 sm:gap-2 mb-2 flex-wrap">
+          <div className="flex gap-1 sm:gap-2 mb-1 flex-wrap">
             <span className="text-xs text-white bg-gradient-to-r from-blue-500 to-blue-600 px-2 py-1 rounded-full truncate font-semibold shadow-sm">
               {productBrand}
             </span>
           </div>
 
           {/* Título del producto */}
-          <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-3">
+          <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2">
             {product.descripcion || product.name || 'Sin descripción'}
           </h3>
 

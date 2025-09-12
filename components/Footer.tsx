@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link"
-import { Home, Package, Zap, Phone, Mail, Clock, MapPin, Shield, CreditCard, Truck } from "lucide-react"
+import { Home, Package, Zap, Shield, CreditCard, Truck } from "lucide-react"
 import { useConfiguracionWebContext } from '@/contexts/ConfiguracionWebContext'
 import { useIsMobile } from '@/hooks/use-mobile'
 
@@ -32,7 +32,7 @@ export default function Footer() {
     <footer className="bg-gradient-to-r from-violet-800 via-violet-700 to-violet-800 text-white">
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Contenido principal */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
           
           {/* Columna 1: MUNDOCUOTAS */}
           <div className="space-y-4">
@@ -121,31 +121,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Columna 4: Contacto */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-bold border-b border-violet-600 pb-2">Contacto</h3>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <Phone className="size-4 text-violet-300" />
-                <div>
-                  <p className="text-white font-medium">0810-333-9435</p>
-                  <p className="text-white font-medium">011-6811-6000</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Mail className="size-4 text-violet-300" />
-                <p className="text-violet-200">info@mundocuotas.com</p>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Clock className="size-4 text-violet-300" />
-                <p className="text-violet-200">Lun-Dom 9:00-18:00</p>
-              </div>
-              <div className="flex items-center space-x-3">
-                <MapPin className="size-4 text-violet-300" />
-                <p className="text-violet-200">Buenos Aires, Argentina</p>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Línea separadora */}

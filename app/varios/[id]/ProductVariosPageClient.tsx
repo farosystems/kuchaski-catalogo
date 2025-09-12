@@ -11,6 +11,7 @@ import FinancingPlansLarge from "@/components/FinancingPlansLarge"
 import ProductCard from "@/components/ProductCard"
 import AddToListButton from "@/components/AddToListButton"
 import FormattedProductDescription from "@/components/FormattedProductDescription"
+import WhatsAppFloatingButton from "@/components/WhatsAppFloatingButton"
 import { useProducts } from "@/hooks/use-products"
 import { getProductById } from "@/lib/supabase-products"
 
@@ -251,9 +252,9 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
         </div>
 
         {/* Sección "Por qué elegirnos" */}
-        <div className="mb-4 bg-gray-50 py-16">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+        <div className="mb-4 bg-gray-50 py-2 sm:py-8">
+          <div className="text-center mb-3 sm:mb-12">
+            <h2 className="text-xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-4">
               ¿Por qué elegir MUNDOCUOTAS?
             </h2>
           </div>
@@ -346,6 +347,7 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
         )}
       </div>
       <Footer />
+      <WhatsAppFloatingButton product={product} />
     </div>
   )
 }

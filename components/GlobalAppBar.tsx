@@ -172,7 +172,7 @@ export default function GlobalAppBar() {
             </div>
             
             {/* Navegación central */}
-            <nav className="flex items-center space-x-12">
+            <nav className="flex items-center space-x-95">
               <Link 
                 href="/" 
                 className="text-white hover:text-violet-200 transition-colors duration-300 font-bold text-lg underline underline-offset-4"

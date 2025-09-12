@@ -11,6 +11,7 @@ import FinancingPlansLarge from "@/components/FinancingPlansLarge"
 import ProductCard from "@/components/ProductCard"
 import AddToListButton from "@/components/AddToListButton"
 import FormattedProductDescription from "@/components/FormattedProductDescription"
+import WhatsAppFloatingButton from "@/components/WhatsAppFloatingButton"
 import { useProducts } from "@/hooks/use-products"
 import { getProductById } from "@/lib/supabase-products"
 
@@ -356,6 +357,7 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
         )}
       </div>
       <Footer />
+      <WhatsAppFloatingButton product={product} />
     </div>
   )
 }

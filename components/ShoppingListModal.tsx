@@ -65,7 +65,7 @@ export default function ShoppingListModal({ isOpen, onClose }: ShoppingListModal
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 p-6">
           {items.length === 0 ? (
             <div className="text-center py-12">
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -79,7 +79,7 @@ export default function ShoppingListModal({ isOpen, onClose }: ShoppingListModal
               </p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="max-h-96 overflow-y-auto pr-2 space-y-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
               {items.map((item) => (
                 <div
                   key={item.id}

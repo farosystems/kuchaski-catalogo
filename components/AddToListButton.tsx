@@ -13,8 +13,18 @@ interface AddToListButtonProps {
 export default function AddToListButton({ product, variant = 'card' }: AddToListButtonProps) {
   const { addItem, isInList } = useShoppingList()
   const [isAdding, setIsAdding] = useState(false)
+  const hasStock = product.tiene_stock === true // Solo true permite agregar, undefined/null/false no permiten
+  
+  // Debug: log del stock
+  console.log('🔍 AddToListButton - Product:', product.descripcion, 'tiene_stock:', product.tiene_stock, 'hasStock:', hasStock)
+  console.log('🔍 AddToListButton - Tipo de tiene_stock:', typeof product.tiene_stock)
 
   const handleAddToList = () => {
+    // No permitir agregar si no hay stock
+    if (!hasStock) {
+      return
+    }
+    
     setIsAdding(true)
     addItem(product)
     
@@ -30,17 +40,29 @@ export default function AddToListButton({ product, variant = 'card' }: AddToList
     return (
       <button
         onClick={handleAddToList}
-        disabled={isAdding || isInShoppingList}
+        disabled={isAdding || isInShoppingList || !hasStock}
         className={`w-full py-1.5 px-3 rounded-xl font-semibold transition-all duration-300 text-sm flex items-center justify-center gap-2 ${
-          isInShoppingList
+          !hasStock
+            ? 'bg-gray-400 text-gray-600 cursor-not-allowed opacity-60 pointer-events-none'
+            : isInShoppingList
             ? 'bg-green-100 text-green-700 cursor-not-allowed'
             : isAdding
             ? 'bg-violet-100 text-violet-700 cursor-not-allowed'
             : 'bg-violet-600 text-white hover:bg-violet-700 hover:scale-105 shadow-lg hover:shadow-xl'
         }`}
-        title={isInShoppingList ? 'Ya está en la lista' : 'Agregar a lista de compra'}
+        title={
+          !hasStock 
+            ? 'Sin stock' 
+            : isInShoppingList 
+            ? 'Ya está en la lista' 
+            : 'Agregar a lista de compra'
+        }
       >
-        {isAdding ? (
+        {!hasStock ? (
+          <>
+            Sin Stock
+          </>
+        ) : isAdding ? (
           <>
             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
             Agregando...
@@ -64,17 +86,29 @@ export default function AddToListButton({ product, variant = 'card' }: AddToList
   return (
     <button
       onClick={handleAddToList}
-      disabled={isAdding || isInShoppingList}
+      disabled={isAdding || isInShoppingList || !hasStock}
       className={`w-full py-2 px-4 rounded-xl font-semibold transition-all duration-300 text-base shadow-md flex items-center justify-center gap-2 ${
-        isInShoppingList
+        !hasStock
+          ? 'bg-gray-400 text-gray-600 cursor-not-allowed opacity-60 pointer-events-none'
+          : isInShoppingList
           ? 'bg-green-100 text-green-700 cursor-not-allowed'
           : isAdding
           ? 'bg-violet-100 text-violet-700 cursor-not-allowed'
           : 'bg-violet-600 text-white hover:bg-violet-700 hover:scale-102 hover:shadow-lg'
       }`}
-      title={isInShoppingList ? 'Ya está en la lista' : 'Agregar a lista de compra'}
+      title={
+        !hasStock 
+          ? 'Sin stock' 
+          : isInShoppingList 
+          ? 'Ya está en la lista' 
+          : 'Agregar a lista de compra'
+      }
     >
-      {isAdding ? (
+      {!hasStock ? (
+        <>
+          Sin Stock
+        </>
+      ) : isAdding ? (
         <>
           <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-current"></div>
           Agregando...
