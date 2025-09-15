@@ -134,7 +134,7 @@ export default function CategoriesDropdown({ isOpen, onClose, isMobile: isMobile
     // Delay antes de cerrar para permitir mover el cursor al submenu
     timeoutRef.current = setTimeout(() => {
       setHoveredLinea(null)
-    }, 200)
+    }, 800)
   }
 
   const handleSubmenuMouseEnter = () => {
@@ -300,73 +300,45 @@ export default function CategoriesDropdown({ isOpen, onClose, isMobile: isMobile
 
   // Vista desktop
   return (
-    <div 
+    <div
       ref={dropdownRef}
-      className="bg-white rounded-xl shadow-2xl border border-gray-200 z-50 w-full max-w-[480px] min-w-[400px] relative"
+      className="bg-white rounded-xl shadow-2xl border border-gray-200 z-50 w-full max-w-[420px] min-w-[350px] relative overflow-visible max-h-[70vh] flex flex-col"
     >
-      <div className="p-6">
-        <h3 className="text-lg font-bold text-gray-900 mb-4 px-3">Todas las Categorías</h3>
-        
-        {loading ? (
-          <div className="flex items-center justify-center py-8">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-violet-600"></div>
-          </div>
-        ) : (
+      <div className="p-4 flex-shrink-0">
+        <h3 className="text-base font-bold text-gray-900 px-2">Todas las Categorías</h3>
+      </div>
+
+      {loading ? (
+        <div className="flex items-center justify-center py-8">
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-violet-600"></div>
+        </div>
+      ) : (
+        <div className="flex-1 overflow-y-auto overflow-x-visible px-4 pb-4">
           <div className="space-y-2">
             {/* Líneas con categorías */}
             {lineasWithCategorias.map((linea) => (
               <div
                 key={linea.id}
                 className="relative"
+                data-linea-id={linea.id}
                 onMouseEnter={() => handleLineaMouseEnter(linea.id)}
                 onMouseLeave={handleLineaMouseLeave}
               >
                 {/* Línea principal */}
-                <div className="flex items-center justify-between px-4 py-3 hover:bg-violet-50 rounded-lg transition-colors group border border-transparent hover:border-violet-200 cursor-pointer">
-                  <span className="text-gray-900 group-hover:text-violet-600 font-semibold text-base">
+                <div className="flex items-center justify-between px-3 py-2 hover:bg-violet-50 rounded-lg transition-colors group border border-transparent hover:border-violet-200 cursor-pointer">
+                  <span className="text-gray-900 group-hover:text-violet-600 font-semibold text-sm">
                     {linea.descripcion}
                   </span>
                   <div className="flex items-center gap-2">
                     {linea.categorias.length > 0 && (
-                      <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full min-w-[24px] text-center">
+                      <span className="text-xs text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
                         {linea.categorias.length}
                       </span>
                     )}
-                    <ChevronRight className="text-gray-400 group-hover:text-violet-600 size-5 flex-shrink-0" />
+                    <ChevronRight className="text-gray-400 group-hover:text-violet-600 size-4 flex-shrink-0" />
                   </div>
                 </div>
 
-                {/* Submenu de categorías (aparece al hacer hover) - Solo en desktop */}
-                {hoveredLinea === linea.id && linea.categorias.length > 0 && (
-                  <div 
-                    data-submenu
-                    className="absolute left-full top-0 ml-2 bg-white rounded-xl shadow-2xl border border-gray-200 z-[70] min-w-[320px] max-w-[420px]"
-                    onMouseEnter={handleSubmenuMouseEnter}
-                    onMouseLeave={handleSubmenuMouseLeave}
-                  >
-                    <div className="p-4">
-                      <h4 className="text-sm font-bold text-gray-800 mb-3 px-2">{linea.descripcion}</h4>
-                      <div className="space-y-1 max-h-[320px] overflow-y-auto">
-                        {linea.categorias.map((category) => {
-                          const slug = generateSlug(category.descripcion)
-                          return (
-                            <Link 
-                              key={category.id}
-                              href={`/${slug}`}
-                              onClick={onClose}
-                              className="flex items-center justify-between px-3 py-2 hover:bg-violet-50 rounded-lg transition-colors group border border-transparent hover:border-violet-200"
-                            >
-                              <span className="text-gray-700 group-hover:text-violet-600 font-medium text-sm">
-                                {category.descripcion}
-                              </span>
-                              <ChevronRight className="text-gray-400 group-hover:text-violet-600 size-4 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-                            </Link>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
             ))}
 
@@ -383,18 +355,72 @@ export default function CategoriesDropdown({ isOpen, onClose, isMobile: isMobile
                   key={category.id}
                   href={`/${slug}`}
                   onClick={onClose}
-                  className="flex items-center justify-between px-4 py-3 hover:bg-violet-50 rounded-lg transition-colors group border border-transparent hover:border-violet-200"
+                  className="flex items-center justify-between px-3 py-2 hover:bg-violet-50 rounded-lg transition-colors group border border-transparent hover:border-violet-200"
                 >
-                  <span className="text-gray-700 group-hover:text-violet-600 font-medium text-base">
+                  <span className="text-gray-700 group-hover:text-violet-600 font-medium text-sm">
                     {category.descripcion}
                   </span>
-                  <ChevronRight className="text-gray-400 group-hover:text-violet-600 size-5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <ChevronRight className="text-gray-400 group-hover:text-violet-600 size-4 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Link>
               )
             })}
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
+      {/* Submenús renderizados fuera del contenedor principal */}
+      {hoveredLinea && isClient && createPortal(
+        (() => {
+          const linea = lineasWithCategorias.find(l => l.id === hoveredLinea)
+          if (!linea || linea.categorias.length === 0) return null
+
+          // Calcular posición del submenu
+          const dropdownRect = dropdownRef.current?.getBoundingClientRect()
+          const hoveredElement = dropdownRef.current?.querySelector(`[data-linea-id="${hoveredLinea}"]`)
+          const hoveredRect = hoveredElement?.getBoundingClientRect()
+
+          if (!dropdownRect || !hoveredRect) return null
+
+          const left = dropdownRect.right + 2
+          const top = hoveredRect.top
+
+          return (
+            <div
+              data-submenu
+              className="fixed bg-white rounded-xl shadow-2xl border border-gray-200 min-w-[280px] max-w-[360px]"
+              style={{
+                left: `${left}px`,
+                top: `${top}px`,
+                zIndex: 9999
+              }}
+              onMouseEnter={handleSubmenuMouseEnter}
+              onMouseLeave={handleSubmenuMouseLeave}
+            >
+              <div className="p-3">
+                <div className="space-y-0.5 max-h-[280px] overflow-y-auto">
+                  {linea.categorias.map((category) => {
+                    const slug = generateSlug(category.descripcion)
+                    return (
+                      <Link
+                        key={category.id}
+                        href={`/${slug}`}
+                        onClick={onClose}
+                        className="flex items-center justify-between px-2 py-1.5 hover:bg-violet-50 rounded-lg transition-colors group border border-transparent hover:border-violet-200"
+                      >
+                        <span className="text-gray-700 group-hover:text-violet-600 font-medium text-xs">
+                          {category.descripcion}
+                        </span>
+                        <ChevronRight className="text-gray-400 group-hover:text-violet-600 size-3 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </Link>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+          )
+        })(),
+        document.body
+      )}
     </div>
   )
 }

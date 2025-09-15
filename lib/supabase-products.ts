@@ -781,16 +781,25 @@ export async function getProductosHomeDinamicos(): Promise<Product[]> {
       return await getProductosConPlan12Cuotas()
     }
 
-    const { 
-      home_display_plan_id, 
-      home_display_products_count, 
-      home_display_category_filter, 
-      home_display_brand_filter, 
-      home_display_featured_only 
+    const {
+      home_display_plan_id,
+      home_display_products_count,
+      home_display_category_filter,
+      home_display_brand_filter,
+      home_display_featured_only
     } = config
+
+    console.log('🔍 getProductosHomeDinamicos - Configuración:', {
+      home_display_plan_id,
+      home_display_products_count,
+      home_display_category_filter,
+      home_display_brand_filter,
+      home_display_featured_only
+    })
 
     // Si no hay plan configurado, usar comportamiento por defecto
     if (!home_display_plan_id) {
+      console.log('🔍 getProductosHomeDinamicos - No hay plan configurado, usando fallback')
       return await getProductosConPlan12Cuotas()
     }
 
@@ -799,6 +808,7 @@ export async function getProductosHomeDinamicos(): Promise<Product[]> {
       .from('producto_planes_default')
       .select('fk_id_producto')
       .eq('fk_id_plan', home_display_plan_id)
+      .eq('activo', true)
 
     if (planesError) {
       console.error('Error fetching productos con plan configurado:', planesError)
@@ -807,7 +817,10 @@ export async function getProductosHomeDinamicos(): Promise<Product[]> {
 
     const productIds = [...new Set(productosConPlan?.map(item => item.fk_id_producto) || [])]
 
+    console.log('🔍 getProductosHomeDinamicos - IDs de productos con plan', home_display_plan_id, ':', productIds)
+
     if (productIds.length === 0) {
+      console.log('🔍 getProductosHomeDinamicos - No se encontraron productos con el plan configurado')
       return []
     }
 
@@ -821,17 +834,26 @@ export async function getProductosHomeDinamicos(): Promise<Product[]> {
 
     // Aplicar filtro por categoría si está configurado
     if (home_display_category_filter) {
+      console.log('🔍 getProductosHomeDinamicos - Aplicando filtro de categoría:', home_display_category_filter)
       query = query.eq('fk_id_categoria', home_display_category_filter)
+    } else {
+      console.log('🔍 getProductosHomeDinamicos - Sin filtro de categoría, mostrando todas las categorías')
     }
 
     // Aplicar filtro por marca si está configurado
     if (home_display_brand_filter) {
+      console.log('🔍 getProductosHomeDinamicos - Aplicando filtro de marca:', home_display_brand_filter)
       query = query.eq('fk_id_marca', home_display_brand_filter)
+    } else {
+      console.log('🔍 getProductosHomeDinamicos - Sin filtro de marca, mostrando todas las marcas')
     }
 
     // Aplicar filtro de destacados si está configurado
     if (home_display_featured_only) {
+      console.log('🔍 getProductosHomeDinamicos - Aplicando filtro de destacados')
       query = query.eq('destacado', true)
+    } else {
+      console.log('🔍 getProductosHomeDinamicos - Sin filtro de destacados, mostrando todos los productos')
     }
 
     // Aplicar límite de productos y ordenamiento
@@ -846,6 +868,8 @@ export async function getProductosHomeDinamicos(): Promise<Product[]> {
       console.error('Error fetching productos dinámicos:', error)
       return []
     }
+
+    console.log('🔍 getProductosHomeDinamicos - Productos encontrados:', data?.length || 0)
 
     // Obtener categorías y marcas
     const { categoriesCache, brandsCache } = await getCachedCategoriesAndBrands()

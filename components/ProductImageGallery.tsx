@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react"
 import Image from "next/image"
-import { ChevronLeft, ChevronRight, Star, X, Heart, Send } from "lucide-react"
+import { ChevronLeft, ChevronRight, Star, X, Heart, Share2 } from "lucide-react"
 import { Marca, Product } from "@/lib/products"
 import { useShoppingList } from "@/hooks/use-shopping-list"
 
@@ -15,7 +15,7 @@ interface ProductImageGalleryProps {
 }
 
 export default function ProductImageGallery({ images, productName, isFeatured = false, brand, product }: ProductImageGalleryProps) {
-  const { addItem, isInList } = useShoppingList()
+  const { addItem, removeItem, isInList } = useShoppingList()
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isZoomOpen, setIsZoomOpen] = useState(false)
   const [isSliding, setIsSliding] = useState(false)
@@ -23,13 +23,18 @@ export default function ProductImageGallery({ images, productName, isFeatured = 
   const touchStartX = useRef<number | null>(null)
   const touchStartY = useRef<number | null>(null)
 
-  const isInFavorites = isInList(product.id)
+  const isInFavorites = isInList(Number(product.id))
   const hasStock = product.tiene_stock === true // Solo true permite agregar
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    addItem(product)
+
+    if (isInFavorites) {
+      removeItem(Number(product.id))
+    } else {
+      addItem(product)
+    }
   }
 
   const handleShareClick = async (e: React.MouseEvent) => {
@@ -241,29 +246,29 @@ export default function ProductImageGallery({ images, productName, isFeatured = 
             className="absolute bottom-2 right-2 p-2 bg-white/90 text-gray-600 hover:bg-white hover:text-gray-800 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-20"
             title="Compartir producto"
           >
-            <Send className="w-5 h-5" />
+            <Share2 className="w-5 h-5" />
           </button>
 
           {/* Botones de navegación - solo mostrar si hay más de una imagen */}
           {validImages.length > 1 && (
             <>
-              <button 
+              <button
                 onClick={(e) => {
                   e.stopPropagation()
                   prevImage()
                 }}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white transition-all duration-300 z-10 cursor-pointer"
+                className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white transition-all duration-300 z-10 cursor-pointer"
                 aria-label="Imagen anterior"
                 type="button"
               >
                 <ChevronLeft size={20} className="text-gray-700" />
               </button>
-              <button 
+              <button
                 onClick={(e) => {
                   e.stopPropagation()
                   nextImage()
                 }}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white transition-all duration-300 z-10 cursor-pointer"
+                className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white transition-all duration-300 z-10 cursor-pointer"
                 aria-label="Imagen siguiente"
                 type="button"
               >
@@ -340,22 +345,22 @@ export default function ProductImageGallery({ images, productName, isFeatured = 
             {/* Navegación en zoom para múltiples imágenes */}
             {validImages.length > 1 && (
               <>
-                <button 
+                <button
                   onClick={(e) => {
                     e.stopPropagation()
                     prevImage()
                   }}
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white transition-all duration-300 z-10"
+                  className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white transition-all duration-300 z-10"
                   aria-label="Imagen anterior"
                 >
                   <ChevronLeft size={24} className="text-gray-700" />
                 </button>
-                <button 
+                <button
                   onClick={(e) => {
                     e.stopPropagation()
                     nextImage()
                   }}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white transition-all duration-300 z-10"
+                  className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white transition-all duration-300 z-10"
                   aria-label="Imagen siguiente"
                 >
                   <ChevronRight size={24} className="text-gray-700" />

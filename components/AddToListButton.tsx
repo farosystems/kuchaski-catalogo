@@ -11,7 +11,7 @@ interface AddToListButtonProps {
 }
 
 export default function AddToListButton({ product, variant = 'card' }: AddToListButtonProps) {
-  const { addItem, isInList } = useShoppingList()
+  const { addItem, removeItem, isInList } = useShoppingList()
   const [isAdding, setIsAdding] = useState(false)
   const hasStock = product.tiene_stock === true // Solo true permite agregar, undefined/null/false no permiten
   
@@ -19,15 +19,20 @@ export default function AddToListButton({ product, variant = 'card' }: AddToList
   console.log('🔍 AddToListButton - Product:', product.descripcion, 'tiene_stock:', product.tiene_stock, 'hasStock:', hasStock)
   console.log('🔍 AddToListButton - Tipo de tiene_stock:', typeof product.tiene_stock)
 
-  const handleAddToList = () => {
-    // No permitir agregar si no hay stock
+  const handleToggleList = () => {
+    // No permitir acciones si no hay stock
     if (!hasStock) {
       return
     }
-    
+
     setIsAdding(true)
-    addItem(product)
-    
+
+    if (isInShoppingList) {
+      removeItem(product.id)
+    } else {
+      addItem(product)
+    }
+
     // Mostrar feedback visual
     setTimeout(() => {
       setIsAdding(false)
@@ -39,22 +44,22 @@ export default function AddToListButton({ product, variant = 'card' }: AddToList
   if (variant === 'card') {
     return (
       <button
-        onClick={handleAddToList}
-        disabled={isAdding || isInShoppingList || !hasStock}
+        onClick={handleToggleList}
+        disabled={isAdding || !hasStock}
         className={`w-full py-1.5 px-3 rounded-xl font-semibold transition-all duration-300 text-sm flex items-center justify-center gap-2 ${
           !hasStock
             ? 'bg-gray-400 text-gray-600 cursor-not-allowed opacity-60 pointer-events-none'
             : isInShoppingList
-            ? 'bg-green-100 text-green-700 cursor-not-allowed'
+            ? 'bg-green-100 text-green-700 hover:bg-red-100 hover:text-red-700'
             : isAdding
             ? 'bg-violet-100 text-violet-700 cursor-not-allowed'
             : 'bg-violet-600 text-white hover:bg-violet-700 hover:scale-105 shadow-lg hover:shadow-xl'
         }`}
         title={
-          !hasStock 
-            ? 'Sin stock' 
-            : isInShoppingList 
-            ? 'Ya está en la lista' 
+          !hasStock
+            ? 'Sin stock'
+            : isInShoppingList
+            ? 'Quitar de la lista'
             : 'Agregar a lista de compra'
         }
       >
@@ -70,7 +75,7 @@ export default function AddToListButton({ product, variant = 'card' }: AddToList
         ) : isInShoppingList ? (
           <>
             <Check size={16} />
-            En lista
+            Quitar de lista
           </>
         ) : (
           <>
@@ -85,22 +90,22 @@ export default function AddToListButton({ product, variant = 'card' }: AddToList
   // Variante para página de producto
   return (
     <button
-      onClick={handleAddToList}
-      disabled={isAdding || isInShoppingList || !hasStock}
+      onClick={handleToggleList}
+      disabled={isAdding || !hasStock}
       className={`w-full py-2 px-4 rounded-xl font-semibold transition-all duration-300 text-base shadow-md flex items-center justify-center gap-2 ${
         !hasStock
           ? 'bg-gray-400 text-gray-600 cursor-not-allowed opacity-60 pointer-events-none'
           : isInShoppingList
-          ? 'bg-green-100 text-green-700 cursor-not-allowed'
+          ? 'bg-green-100 text-green-700 hover:bg-red-100 hover:text-red-700'
           : isAdding
           ? 'bg-violet-100 text-violet-700 cursor-not-allowed'
           : 'bg-violet-600 text-white hover:bg-violet-700 hover:scale-102 hover:shadow-lg'
       }`}
       title={
-        !hasStock 
-          ? 'Sin stock' 
-          : isInShoppingList 
-          ? 'Ya está en la lista' 
+        !hasStock
+          ? 'Sin stock'
+          : isInShoppingList
+          ? 'Quitar de la lista'
           : 'Agregar a lista de compra'
       }
     >
@@ -116,7 +121,7 @@ export default function AddToListButton({ product, variant = 'card' }: AddToList
       ) : isInShoppingList ? (
         <>
           <Check size={20} />
-          Agregado a la lista
+          Quitar de la lista
         </>
       ) : (
         <>

@@ -90,7 +90,7 @@ export default function ShoppingListModal({ isOpen, onClose }: ShoppingListModal
                     <img
                       src={item.imagen || item.image || '/placeholder.jpg'}
                       alt={item.descripcion || item.name || 'Producto'}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                     />
                   </div>
 

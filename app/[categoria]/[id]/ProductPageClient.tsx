@@ -261,57 +261,14 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
           </div>
         </div>
 
-        {/* Sección "Por qué elegirnos" */}
-        <div className="mb-4 bg-gray-50 py-2 sm:py-8">
-          <div className="text-center mb-3 sm:mb-12">
-            <h2 className="text-xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-4">
-              ¿Por qué elegir MUNDOCUOTAS?
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 max-w-6xl mx-auto">
-            {/* Envío gratis */}
-            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Truck className="w-8 h-8 text-blue-600" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900">Envío Gratis</h3>
-            </div>
-
-            {/* Garantía oficial */}
-            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
-              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="w-8 h-8 text-green-600" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900">Garantía Oficial</h3>
-            </div>
-
-            {/* Financiación flexible */}
-            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
-              <div className="bg-violet-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CreditCard className="w-8 h-8 text-violet-600" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900">Financiación Flexible</h3>
-            </div>
-
-            {/* Atención personalizada */}
-            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
-              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8 text-orange-600" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900">Atención Personalizada</h3>
-            </div>
-          </div>
-        </div>
-
         {/* Productos relacionados */}
         {relatedProducts.length > 0 && (
-          <div className="mb-16">
+          <div className="mb-16 mt-12">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-xl sm:text-3xl font-bold text-gray-900 mb-4">
                 Productos que te pueden interesar
               </h2>
-              <p className="text-lg text-gray-600">
+              <p className="text-xs md:text-sm text-gray-600">
                 Descubre más productos de la misma categoría que podrían ser perfectos para ti
               </p>
             </div>
@@ -355,6 +312,49 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
             </div>
           </div>
         )}
+
+        {/* Sección "Por qué elegirnos" */}
+        <div className="mb-4 bg-gray-50 py-2 sm:py-8">
+          <div className="text-center mb-3 sm:mb-12">
+            <h2 className="text-xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-4">
+              ¿Por qué elegir MUNDOCUOTAS?
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 max-w-6xl mx-auto">
+            {/* Envío gratis */}
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
+              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Truck className="w-8 h-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900">Envío Gratis</h3>
+            </div>
+
+            {/* Garantía oficial */}
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
+              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900">Garantía Oficial</h3>
+            </div>
+
+            {/* Financiación flexible */}
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
+              <div className="bg-violet-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CreditCard className="w-8 h-8 text-violet-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900">Financiación Flexible</h3>
+            </div>
+
+            {/* Atención personalizada */}
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
+              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="w-8 h-8 text-orange-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900">Atención Personalizada</h3>
+            </div>
+          </div>
+        </div>
       </div>
       <Footer />
       <WhatsAppFloatingButton product={product} />

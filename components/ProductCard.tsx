@@ -11,7 +11,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { addItem, isInList } = useShoppingList()
+  const { addItem, removeItem, isInList } = useShoppingList()
   const productCategory = product.categoria?.descripcion || product.category || 'Sin categoría'
   const productBrand = product.marca?.descripcion || product.brand || 'Sin marca'
   const productPrice = product.precio || product.price || 0
@@ -32,7 +32,12 @@ export default function ProductCard({ product }: ProductCardProps) {
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    addItem(product)
+
+    if (isInFavorites) {
+      removeItem(product.id)
+    } else {
+      addItem(product)
+    }
   }
 
   return (
