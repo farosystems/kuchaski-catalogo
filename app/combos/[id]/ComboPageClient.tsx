@@ -90,7 +90,13 @@ export default function ComboPageClient({ params: paramsPromise }: ComboPageClie
 
   const isValid = isComboValid(combo)
   const hasDiscount = combo.descuento_porcentaje > 0
-  const comboDescription = combo.descripcion || `Combo especial ${combo.nombre} con descuento del ${combo.descuento_porcentaje}%`
+  const comboDescription = combo.descripcion && combo.descripcion.trim() !== ''
+    ? combo.descripcion
+    : `<h3>Combo Especial ${combo.nombre}</h3>
+       <p>Este combo incluye ${combo.productos?.length || 0} productos seleccionados especialmente para ti.</p>
+       ${combo.descuento_porcentaje > 0 ? `<p><strong>¡Ahorrás un ${combo.descuento_porcentaje}% comprando todo junto!</strong></p>` : ''}
+       <p>Precio final del combo: <strong>$${combo.precio_combo.toLocaleString()}</strong></p>
+       ${hasDiscount ? `<p>Precio original: <strike>$${combo.precio_original.toLocaleString()}</strike> - Ahorro: <strong style="color: green;">$${(combo.precio_original - combo.precio_combo).toLocaleString()}</strong></p>` : ''}`
 
   // Convertir combo a formato de producto para componentes existentes
   const comboAsProduct = {
