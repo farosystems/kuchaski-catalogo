@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     description: 'Tu tienda de electrodomésticos de confianza con los mejores planes de financiación. Heladeras, lavarropas, aires acondicionados y más.',
     images: [
       {
-        url: '/logo1.svg',
+        url: '/LOGO2.png',
         width: 1200,
         height: 630,
         alt: 'MUNDOCUOTA - Electrodomésticos en Cuotas',
