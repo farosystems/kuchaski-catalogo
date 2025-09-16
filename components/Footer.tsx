@@ -50,7 +50,7 @@ export default function Footer() {
               ) : (
                 <img 
                   src="/LOGO2.png" 
-                  alt="MUNDO CUOTAS" 
+                  alt="MUNDO CUOTA" 
                   className="h-12 w-auto"
                 />
               )}

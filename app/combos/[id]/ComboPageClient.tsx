@@ -192,6 +192,7 @@ export default function ComboPageClient({ params: paramsPromise }: ComboPageClie
                     comboId={combo.id.toString()}
                     precio={combo.precio_combo}
                     showDebug={false}
+                    hasStock={combo.activo && isValid}
                   />
                 </div>
               )}
@@ -244,6 +245,7 @@ export default function ComboPageClient({ params: paramsPromise }: ComboPageClie
                   comboId={combo.id.toString()}
                   precio={combo.precio_combo}
                   showDebug={false}
+                  hasStock={combo.activo && isValid}
                 />
               </div>
             )}

@@ -8,9 +8,10 @@ interface FinancingPlansComboLargeProps {
   comboId: string
   precio: number
   showDebug?: boolean
+  hasStock?: boolean
 }
 
-const FinancingPlansComboLarge = memo(function FinancingPlansComboLarge({ comboId, precio, showDebug = false }: FinancingPlansComboLargeProps) {
+const FinancingPlansComboLarge = memo(function FinancingPlansComboLarge({ comboId, precio, showDebug = false, hasStock = true }: FinancingPlansComboLargeProps) {
   const [planes, setPlanes] = useState<PlanFinanciacion[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -62,8 +63,17 @@ const FinancingPlansComboLarge = memo(function FinancingPlansComboLarge({ comboI
   const colores = ['bg-orange-100 text-orange-800', 'bg-red-100 text-red-800', 'bg-pink-100 text-pink-800', 'bg-yellow-100 text-yellow-800']
 
   return (
-    <div className="bg-white rounded-lg p-4 sm:p-6 shadow-sm">
-      <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Opciones de Financiación</h3>
+    <div className={`bg-white rounded-lg p-4 sm:p-6 shadow-sm transition-all duration-300 ${
+      !hasStock ? 'opacity-50 grayscale' : ''
+    }`}>
+      <div className="flex items-center gap-2 mb-3 sm:mb-4">
+        <h3 className="text-lg sm:text-xl font-bold text-gray-900">Opciones de Financiación</h3>
+        {!hasStock && (
+          <span className="text-xs text-red-600 bg-red-100 px-2 py-1 rounded-full font-semibold">
+            NO DISPONIBLE
+          </span>
+        )}
+      </div>
 
       {/* Información de debug */}
       {showDebug && (
@@ -72,13 +82,21 @@ const FinancingPlansComboLarge = memo(function FinancingPlansComboLarge({ comboI
         </div>
       )}
 
+      {!hasStock && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+          <p className="text-red-700 text-sm font-medium text-center">
+            Las opciones de financiación no están disponibles para combos sin stock
+          </p>
+        </div>
+      )}
+
       <div className="space-y-2 sm:space-y-3">
         {calculatedPlanes.map(({ plan, calculo, anticipo }, index) => (
           <div
             key={plan.id}
-            className={`p-3 sm:p-4 rounded-lg sm:rounded-xl text-center font-bold text-sm sm:text-lg ${
+            className={`p-3 sm:p-4 rounded-lg sm:rounded-xl text-center font-bold text-sm sm:text-lg transition-all duration-300 ${
               colores[index % colores.length]
-            }`}
+            } ${!hasStock ? 'opacity-40 cursor-not-allowed' : ''}`}
           >
             <div className="mb-1 sm:mb-2">
               {/* Primera línea: cuotas mensuales */}

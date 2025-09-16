@@ -86,7 +86,7 @@ export default function GlobalAppBar() {
                   ) : (
                     <img 
                       src="/LOGO2.png" 
-                      alt="MUNDO CUOTAS" 
+                      alt="MUNDO CUOTA" 
                       className="h-24 sm:h-28 lg:h-36 xl:h-40 w-auto transition-transform duration-300 group-hover:scale-105"
                     />
                   )}
@@ -97,7 +97,7 @@ export default function GlobalAppBar() {
                     className="text-sm sm:text-base lg:text-lg xl:text-xl font-bold tracking-wide transition-colors duration-300"
                     style={{ color: getTextColor() }}
                   >
-                    MUNDO CUOTAS
+                    MUNDO CUOTA
                   </h1>
                   <p 
                     className="text-xs font-medium opacity-75 hidden sm:block"

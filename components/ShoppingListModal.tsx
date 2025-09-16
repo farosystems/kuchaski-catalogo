@@ -25,17 +25,18 @@ export default function ShoppingListModal({ isOpen, onClose }: ShoppingListModal
     marca: { descripcion: 'Varias marcas' },
     precio: 0,
     imagen: '/placeholder.jpg',
+    tiene_stock: true, // Habilitar WhatsApp para listas de productos
     descripcion_detallada: items.map((item, index) => {
       let productLine = `${index + 1}. ${item.descripcion || item.name || 'Producto'}`
-      
+
       if (item.categoria?.descripcion) {
         productLine += `\n   Categoría: ${item.categoria.descripcion}`
       }
-      
+
       if (item.marca?.descripcion) {
         productLine += `\n   Marca: ${item.marca.descripcion}`
       }
-      
+
       return productLine
     }).join('\n\n')
   }

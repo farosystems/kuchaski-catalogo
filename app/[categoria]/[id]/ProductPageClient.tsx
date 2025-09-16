@@ -169,7 +169,7 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
             {/* Título móvil - debajo de la imagen */}
             <div className="lg:hidden mt-6">
               {/* Categoría y Marca */}
-              <div className="flex gap-2 mb-3">
+              <div className="flex flex-wrap gap-2 mb-3">
                 <span className="text-xs text-violet-600 bg-violet-100 px-2 py-1 rounded-full uppercase">
                   {categoria?.descripcion}
                 </span>
@@ -200,7 +200,7 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
           {/* Información del producto */}
           <div>
             {/* Categoría y Marca - solo desktop */}
-            <div className="hidden lg:flex gap-2 mb-4">
+            <div className="hidden lg:flex flex-wrap gap-2 mb-4">
               <span className="text-xs text-violet-600 bg-violet-100 px-2 py-1 rounded-full uppercase">
                 {categoria?.descripcion}
               </span>
@@ -228,9 +228,10 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
 
             {/* Precios */}
             <div className="mb-4 -mt-2 lg:mt-0">
-              <FinancingPlansLarge 
+              <FinancingPlansLarge
                 productoId={product.id.toString()}
                 precio={product.precio || 0}
+                hasStock={product.tiene_stock}
               />
             </div>
 

@@ -48,7 +48,7 @@ export default function AddToListButton({ product, variant = 'card' }: AddToList
         disabled={isAdding || !hasStock}
         className={`w-full py-1.5 px-3 rounded-xl font-semibold transition-all duration-300 text-sm flex items-center justify-center gap-2 ${
           !hasStock
-            ? 'bg-gray-400 text-gray-600 cursor-not-allowed opacity-60 pointer-events-none'
+            ? 'bg-red-500 text-white cursor-not-allowed border-2 border-red-600 shadow-lg font-bold uppercase tracking-wide'
             : isInShoppingList
             ? 'bg-green-100 text-green-700 hover:bg-red-100 hover:text-red-700'
             : isAdding
@@ -94,7 +94,7 @@ export default function AddToListButton({ product, variant = 'card' }: AddToList
       disabled={isAdding || !hasStock}
       className={`w-full py-2 px-4 rounded-xl font-semibold transition-all duration-300 text-base shadow-md flex items-center justify-center gap-2 ${
         !hasStock
-          ? 'bg-gray-400 text-gray-600 cursor-not-allowed opacity-60 pointer-events-none'
+          ? 'bg-red-500 text-white cursor-not-allowed border-2 border-red-600 shadow-lg font-bold uppercase tracking-wide text-lg py-3'
           : isInShoppingList
           ? 'bg-green-100 text-green-700 hover:bg-red-100 hover:text-red-700'
           : isAdding

@@ -8,9 +8,10 @@ interface FinancingPlansLargeProps {
   productoId: string
   precio: number
   showDebug?: boolean
+  hasStock?: boolean
 }
 
-const FinancingPlansLarge = memo(function FinancingPlansLarge({ productoId, precio, showDebug = false }: FinancingPlansLargeProps) {
+const FinancingPlansLarge = memo(function FinancingPlansLarge({ productoId, precio, showDebug = false, hasStock = true }: FinancingPlansLargeProps) {
   const [planes, setPlanes] = useState<PlanFinanciacion[]>([])
   const [loading, setLoading] = useState(true)
   const [tipoPlanes, setTipoPlanes] = useState<'especiales' | 'default' | 'todos' | 'ninguno'>('ninguno')
@@ -82,8 +83,17 @@ const FinancingPlansLarge = memo(function FinancingPlansLarge({ productoId, prec
   const colores = ['bg-blue-100 text-blue-800', 'bg-green-100 text-green-800', 'bg-purple-100 text-purple-800', 'bg-orange-100 text-orange-800']
 
   return (
-    <div className="bg-white rounded-lg p-4 sm:p-6 shadow-sm">
-      <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Planes de Financiación</h3>
+    <div className={`bg-white rounded-lg p-4 sm:p-6 shadow-sm transition-all duration-300 ${
+      !hasStock ? 'opacity-50 grayscale' : ''
+    }`}>
+      <div className="flex items-center gap-2 mb-3 sm:mb-4">
+        <h3 className="text-lg sm:text-xl font-bold text-gray-900">Planes de Financiación</h3>
+        {!hasStock && (
+          <span className="text-xs text-red-600 bg-red-100 px-2 py-1 rounded-full font-semibold">
+            NO DISPONIBLE
+          </span>
+        )}
+      </div>
       
       {/* Información de debug */}
       {showDebug && (
@@ -92,13 +102,14 @@ const FinancingPlansLarge = memo(function FinancingPlansLarge({ productoId, prec
         </div>
       )}
       
+
       <div className="space-y-2 sm:space-y-3">
         {calculatedPlanes.map(({ plan, calculo, anticipo }, index) => (
           <div
             key={plan.id}
-            className={`p-3 sm:p-4 rounded-lg sm:rounded-xl text-center font-bold text-sm sm:text-lg ${
+            className={`p-3 sm:p-4 rounded-lg sm:rounded-xl text-center font-bold text-sm sm:text-lg transition-all duration-300 ${
               index === 0 ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
-            }`}
+            } ${!hasStock ? 'opacity-40 cursor-not-allowed' : ''}`}
           >
             <div className="mb-1 sm:mb-2">
               {/* Primera línea: cuotas mensuales */}
