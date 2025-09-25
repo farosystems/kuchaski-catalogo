@@ -30,13 +30,17 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
     const comboImage = combo.imagen || combo.imagen_2 || combo.imagen_3 || combo.imagen_4 || combo.imagen_5 || '/placeholder.jpg'
 
     let imageUrl: string
-    if (comboImage.includes('supabase.co')) {
-      // PROBAR DIRECTA DE SUPABASE CON PARÁMETROS ESPECÍFICOS
-      imageUrl = `${comboImage}?width=1200&height=630&resize=cover&quality=85`
-      console.log('📸 Usando Supabase directo con parámetros:', imageUrl)
-    } else {
+
+    // Si es imagen de Supabase, usar nuestro proxy para mejorar compatibilidad
+    if (comboImage && comboImage.includes('supabase.co')) {
+      // Usar el proxy para servir la imagen desde nuestro dominio
+      imageUrl = `https://catalogo-mundocuotas.vercel.app/api/image-proxy?url=${encodeURIComponent(comboImage)}`
+    } else if (comboImage && (comboImage.startsWith('http://') || comboImage.startsWith('https://'))) {
+      // URLs externas (como MercadoLibre) las usamos directamente
       imageUrl = comboImage
-      console.log('✅ Usando URL directa:', imageUrl)
+    } else {
+      // Fallback al logo
+      imageUrl = 'https://catalogo-mundocuotas.vercel.app/LOGO2.png'
     }
 
     console.log(`🌐 [Combo ${resolvedParams.id}] URL imagen final:`, imageUrl)
