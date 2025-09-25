@@ -45,9 +45,10 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
       imageUrl = `https://catalogo-mundocuotas.vercel.app/${comboImage}`
     }
 
-    // Forzar actualización de metadatos con parámetro único
+    // SOLUCIÓN: Usar proxy para imágenes de Supabase
     if (imageUrl.includes('supabase.co')) {
-      imageUrl += `?t=combo-${resolvedParams.id}-v2`
+      const encodedUrl = encodeURIComponent(imageUrl)
+      imageUrl = `https://catalogo-mundocuotas.vercel.app/api/image-proxy?url=${encodedUrl}`
     }
 
     console.log(`🌐 [Combo ${resolvedParams.id}] URL imagen final:`, imageUrl)
@@ -64,7 +65,7 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
       openGraph: {
         type: 'website',
         locale: 'es_AR',
-        url: `https://catalogo-mundocuotas.vercel.app/combos/${resolvedParams.id}?share=v2`,
+        url: `https://catalogo-mundocuotas.vercel.app/combos/${resolvedParams.id}?share=v3`,
         siteName: 'MUNDOCUOTA',
         title,
         description,
