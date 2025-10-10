@@ -51,17 +51,17 @@ export async function generateMetadata({ params }: ProductoPageProps): Promise<M
     if (productImage.startsWith('http://') || productImage.startsWith('https://')) {
       // URL absoluta - usar proxy para Supabase y PostImages
       if (productImage.includes('supabase.co') || productImage.includes('postimages.org') || productImage.includes('postimg.cc') || productImage.includes('i.postimg.cc')) {
-        imageUrl = `https://catalogo-mundocuotas.vercel.app/api/image-proxy?url=${encodeURIComponent(productImage)}`
+        imageUrl = `https://www.mundocuota.com.ar/api/image-proxy?url=${encodeURIComponent(productImage)}`
       } else {
         // URLs externas como mlstatic funcionan directamente
         imageUrl = productImage
       }
     } else if (productImage.startsWith('/')) {
       // URL relativa que empieza con /
-      imageUrl = `https://catalogo-mundocuotas.vercel.app${productImage}`
+      imageUrl = `https://www.mundocuota.com.ar${productImage}`
     } else {
       // URL relativa sin /
-      imageUrl = `https://catalogo-mundocuotas.vercel.app/${productImage}`
+      imageUrl = `https://www.mundocuota.com.ar/${productImage}`
     }
 
     const title = `${product.descripcion} - ${categoria?.descripcion || 'Producto'} | MUNDOCUOTA`
@@ -76,7 +76,7 @@ export async function generateMetadata({ params }: ProductoPageProps): Promise<M
       openGraph: {
         type: 'website',
         locale: 'es_AR',
-        url: `https://catalogo-mundocuotas.vercel.app/${resolvedParams.categoria}/${resolvedParams.id}`,
+        url: `https://www.mundocuota.com.ar/${resolvedParams.categoria}/${resolvedParams.id}`,
         siteName: 'MUNDOCUOTA',
         title,
         description,

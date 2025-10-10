@@ -20,13 +20,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'es_AR',
-    url: 'https://catalogo-mundocuotas.vercel.app',
+    url: 'https://www.mundocuota.com.ar',
     siteName: 'MUNDOCUOTA',
     title: 'MUNDOCUOTA - Electrodomésticos en Cuotas',
     description: 'Tu tienda de electrodomésticos de confianza con los mejores planes de financiación. Heladeras, lavarropas, aires acondicionados y más.',
     images: [
       {
-        url: 'https://catalogo-mundocuotas.vercel.app/LOGO2.png?v=3',
+        url: 'https://www.mundocuota.com.ar/LOGO2.png?v=3',
         width: 1200,
         height: 630,
         alt: 'MUNDOCUOTA - Electrodomésticos en Cuotas',
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'MUNDOCUOTA - Electrodomésticos en Cuotas',
     description: 'Tu tienda de electrodomésticos de confianza con los mejores planes de financiación. Heladeras, lavarropas, aires acondicionados y más.',
-    images: ['https://catalogo-mundocuotas.vercel.app/LOGO2.png?v=2'],
+    images: ['https://www.mundocuota.com.ar/LOGO2.png?v=2'],
   },
 }
 
