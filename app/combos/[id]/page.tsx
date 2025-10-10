@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
 
     if (comboImage && (comboImage.startsWith('http://') || comboImage.startsWith('https://'))) {
       // URL absoluta - usar proxy para Supabase y PostImages
-      if (comboImage.includes('supabase.co') || comboImage.includes('postimages.org') || comboImage.includes('postimg.cc')) {
+      if (comboImage.includes('supabase.co') || comboImage.includes('postimages.org') || comboImage.includes('postimg.cc') || comboImage.includes('i.postimg.cc')) {
         imageUrl = `https://catalogo-mundocuotas.vercel.app/api/image-proxy?url=${encodeURIComponent(comboImage)}`
       } else {
         // URLs externas como mlstatic funcionan directamente

@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Permitir URLs de Supabase y PostImages para seguridad
-    const allowedDomains = ['supabase.co', 'postimages.org', 'postimg.cc']
+    const allowedDomains = ['supabase.co', 'postimages.org', 'postimg.cc', 'i.postimg.cc']
     const isAllowed = allowedDomains.some(domain => imageUrl.includes(domain))
 
     if (!isAllowed) {
@@ -23,15 +23,27 @@ export async function GET(request: NextRequest) {
 
     console.log('📥 Image Proxy - Fetching image...')
 
-    const response = await fetch(imageUrl, {
-      headers: {
-        'User-Agent': 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
-        'Accept': 'image/*,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Cache-Control': 'no-cache',
-        'Referer': 'https://www.facebook.com/',
-      }
-    })
+    // Headers especiales según el dominio
+    const headers: HeadersInit = {
+      'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+      'Accept-Language': 'en-US,en;q=0.9',
+      'Cache-Control': 'no-cache',
+    }
+
+    // Para PostImages, usar headers de navegador normal
+    if (imageUrl.includes('postimg')) {
+      headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      headers['Referer'] = 'https://postimages.org/'
+      headers['Sec-Fetch-Dest'] = 'image'
+      headers['Sec-Fetch-Mode'] = 'no-cors'
+      headers['Sec-Fetch-Site'] = 'cross-site'
+    } else {
+      // Para otros (Facebook, Supabase), usar headers de bot de Facebook
+      headers['User-Agent'] = 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)'
+      headers['Referer'] = 'https://www.facebook.com/'
+    }
+
+    const response = await fetch(imageUrl, { headers })
 
     console.log('📤 Image Proxy - Response status:', response.status)
 
