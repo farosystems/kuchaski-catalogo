@@ -1,28 +1,68 @@
 import { supabase } from './supabase'
-import { Product, Categoria, Marca, Linea, PlanFinanciacion, ProductoPlan } from './products'
+import { Product, Categoria, Marca, Linea, PlanFinanciacion, ProductoPlan, Promo } from './products'
 
-// Cache global para categorías y marcas
+// Cache global para categorías, marcas y promociones
 let categoriesCache: Map<number, Categoria> | null = null
 let brandsCache: Map<number, Marca> | null = null
+let promosCache: Map<number, Promo> | null = null
+let promoProductsCache: Map<number, number> | null = null // Map de producto_id -> promo_id
 let cacheTimestamp = 0
 const CACHE_DURATION = 5 * 60 * 1000 // 5 minutos
 
-// Función para obtener categorías y marcas con cache
-async function getCachedCategoriesAndBrands(): Promise<{ categoriesCache: Map<number, Categoria>, brandsCache: Map<number, Marca> }> {
+// Función para obtener categorías, marcas y promociones con cache
+async function getCachedCategoriesAndBrands(): Promise<{
+  categoriesCache: Map<number, Categoria>,
+  brandsCache: Map<number, Marca>,
+  promosCache: Map<number, Promo>,
+  promoProductsCache: Map<number, number>
+}> {
   const now = Date.now()
-  
-  if (!categoriesCache || !brandsCache || (now - cacheTimestamp) > CACHE_DURATION) {
-    const [categoriesResponse, brandsResponse] = await Promise.all([
+
+  if (!categoriesCache || !brandsCache || !promosCache || !promoProductsCache || (now - cacheTimestamp) > CACHE_DURATION) {
+    const [categoriesResponse, brandsResponse, promosResponse, promoProductsResponse] = await Promise.all([
       supabase.from('categorias').select('*'),
-      supabase.from('marcas').select('*')
+      supabase.from('marcas').select('*'),
+      supabase.from('promos').select('*').eq('activa', true),
+      supabase.from('promo_productos').select('promo_id, producto_id')
     ])
-    
+
     categoriesCache = new Map(categoriesResponse.data?.map(cat => [cat.id, cat]) || [])
     brandsCache = new Map(brandsResponse.data?.map(brand => [brand.id, brand]) || [])
+
+    // Filtrar solo promociones vigentes
+    // La promo es válida si: fecha_inicio <= HOY y HOY <= fecha_fin
+    // Si fecha_fin es hoy, la promo es válida todo el día de hoy
+    // Si fecha_fin fue ayer o antes, la promo NO es válida
+    const promosVigentes = promosResponse.data?.filter(promo => {
+      const now = new Date()
+      const fechaInicio = new Date(promo.fecha_inicio)
+      const fechaFin = new Date(promo.fecha_fin)
+
+      // Establecer la fecha_fin al final del día (23:59:59.999)
+      fechaFin.setHours(23, 59, 59, 999)
+
+      return fechaInicio <= now && now <= fechaFin
+    }) || []
+
+    promosCache = new Map(promosVigentes.map(promo => [promo.id, promo]))
+    promoProductsCache = new Map(promoProductsResponse.data?.map(pp => [pp.producto_id, pp.promo_id]) || [])
+
+    // Debug logs
+    console.log('🔍 Promociones activas:', promosResponse.data?.length || 0)
+    console.log('🔍 Promociones vigentes:', promosVigentes.length)
+    console.log('🔍 Relación promo-productos:', promoProductsResponse.data?.length || 0)
+    console.log('🔍 Promociones vigentes:', Array.from(promosCache.values()))
+    console.log('🔍 Productos con promo:', Array.from(promoProductsCache.entries()))
+
     cacheTimestamp = now
   }
-  
-  return { categoriesCache: categoriesCache!, brandsCache: brandsCache! }
+
+  return {
+    categoriesCache: categoriesCache!,
+    brandsCache: brandsCache!,
+    promosCache: promosCache!,
+    promoProductsCache: promoProductsCache!
+  }
 }
 
 // Función para formatear números sin decimales
@@ -247,23 +287,43 @@ export async function getProducts(): Promise<Product[]> {
 
     //console.log('🔍 getProducts - Total productos obtenidos:', data?.length || 0)
 
-    // Obtener categorías y marcas usando cache
-    const { categoriesCache: categoriesMap, brandsCache: brandsMap } = await getCachedCategoriesAndBrands()
+    // Obtener categorías, marcas y promociones usando cache
+    const { categoriesCache: categoriesMap, brandsCache: brandsMap, promosCache, promoProductsCache } = await getCachedCategoriesAndBrands()
 
     // Transformar datos para que coincidan con la nueva estructura
     const transformedData = data?.map(product => {
-      const categoria = categoriesMap.get(product.fk_id_categoria) || 
+      const categoria = categoriesMap.get(product.fk_id_categoria) ||
                        { id: product.fk_id_categoria || 1, descripcion: `Categoría ${product.fk_id_categoria || 1}` }
-      
-      const marca = brandsMap.get(product.fk_id_marca) || 
+
+      const marca = brandsMap.get(product.fk_id_marca) ||
                    { id: product.fk_id_marca || 1, descripcion: `Marca ${product.fk_id_marca || 1}` }
+
+      // Verificar si el producto tiene una promoción activa
+      const promoId = promoProductsCache.get(parseInt(product.id))
+      const promo = promoId ? promosCache.get(promoId) : undefined
+      const precio_con_descuento = promo
+        ? product.precio * (1 - promo.descuento_porcentaje / 100)
+        : undefined
+
+      // Debug para productos con promo
+      if (promo) {
+        console.log(`🔍 Producto ${product.id} (${product.descripcion}):`, {
+          promoId,
+          promo: promo.nombre,
+          descuento: promo.descuento_porcentaje,
+          precio_original: product.precio,
+          precio_con_descuento
+        })
+      }
 
       return {
         ...product,
         fk_id_categoria: product.fk_id_categoria || 1,
         fk_id_marca: product.fk_id_marca || 1,
         categoria,
-        marca
+        marca,
+        promo,
+        precio_con_descuento
       }
     }) || []
 
@@ -291,41 +351,32 @@ export async function getFeaturedProducts(): Promise<Product[]> {
       return []
     }
 
-    // Obtener categorías y marcas por separado
-    const { data: categories, error: categoriesError } = await supabase
-      .from('categorias')
-      .select('*')
-
-    const { data: brands, error: brandsError } = await supabase
-      .from('marcas')
-      .select('*')
-
-    if (categoriesError) {
-      console.error('Error fetching categories:', categoriesError)
-    }
-
-    if (brandsError) {
-      console.error('Error fetching brands:', brandsError)
-    }
-
-    // Crear mapas para búsqueda rápida
-    const categoriesMap = new Map(categories?.map(cat => [cat.id, cat]) || [])
-    const brandsMap = new Map(brands?.map(brand => [brand.id, brand]) || [])
+    // Obtener categorías, marcas y promociones usando el cache
+    const { categoriesCache: categoriesMap, brandsCache: brandsMap, promosCache, promoProductsCache } = await getCachedCategoriesAndBrands()
 
     // Transformar datos para que coincidan con la nueva estructura
     const transformedData = data?.map(product => {
-      const categoria = categoriesMap.get(product.fk_id_categoria) || 
+      const categoria = categoriesMap.get(product.fk_id_categoria) ||
                        { id: product.fk_id_categoria || 1, descripcion: `Categoría ${product.fk_id_categoria || 1}` }
-      
-      const marca = brandsMap.get(product.fk_id_marca) || 
+
+      const marca = brandsMap.get(product.fk_id_marca) ||
                    { id: product.fk_id_marca || 1, descripcion: `Marca ${product.fk_id_marca || 1}` }
+
+      // Verificar si el producto tiene una promoción activa
+      const promoId = promoProductsCache.get(parseInt(product.id))
+      const promo = promoId ? promosCache.get(promoId) : undefined
+      const precio_con_descuento = promo
+        ? product.precio * (1 - promo.descuento_porcentaje / 100)
+        : undefined
 
       return {
         ...product,
         fk_id_categoria: product.fk_id_categoria || 1,
         fk_id_marca: product.fk_id_marca || 1,
         categoria,
-        marca
+        marca,
+        promo,
+        precio_con_descuento
       }
     }) || []
 
@@ -472,26 +523,8 @@ export async function getProductById(id: string): Promise<Product | null> {
       return null
     }
 
-    // Obtener categorías y marcas por separado
-    const { data: categories, error: categoriesError } = await supabase
-      .from('categorias')
-      .select('*')
-
-    const { data: brands, error: brandsError } = await supabase
-      .from('marcas')
-      .select('*')
-
-    if (categoriesError) {
-      console.error('Error fetching categories:', categoriesError)
-    }
-
-    if (brandsError) {
-      console.error('Error fetching brands:', brandsError)
-    }
-
-    // Crear mapas para búsqueda rápida
-    const categoriesMap = new Map(categories?.map(cat => [cat.id, cat]) || [])
-    const brandsMap = new Map(brands?.map(brand => [brand.id, brand]) || [])
+    // Obtener categorías, marcas y promociones usando el cache
+    const { categoriesCache: categoriesMap, brandsCache: brandsMap, promosCache, promoProductsCache } = await getCachedCategoriesAndBrands()
 
     // Transformar datos
     const categoria = categoriesMap.get(data.fk_id_categoria) || 
@@ -509,15 +542,23 @@ export async function getProductById(id: string): Promise<Product | null> {
       data.imagen_5
     ].filter(img => img && img.trim() !== '') // Filtrar imágenes vacías
 
-    // Debug: Log para verificar las imágenes
-    //console.log('🔍 getProductById - Imágenes individuales:', {
-      //imagen: data.imagen,
-      //imagen_2: data.imagen_2,
-      //imagen_3: data.imagen_3,
-      //imagen_4: data.imagen_4,
-      //imagen_5: data.imagen_5
-    //})
-    //console.log('🔍 getProductById - Array de imágenes filtrado:', imagenes)
+    // Verificar si el producto tiene una promoción activa
+    const promoId = promoProductsCache.get(parseInt(id))
+    const promo = promoId ? promosCache.get(promoId) : undefined
+    const precio_con_descuento = promo
+      ? data.precio * (1 - promo.descuento_porcentaje / 100)
+      : undefined
+
+    // Debug para productos con promo
+    if (promo) {
+      console.log(`🔍 getProductById - Producto ${id} con promo:`, {
+        promoId,
+        promo: promo.nombre,
+        descuento: promo.descuento_porcentaje,
+        precio_original: data.precio,
+        precio_con_descuento
+      })
+    }
 
     const transformedData = {
       ...data,
@@ -525,7 +566,9 @@ export async function getProductById(id: string): Promise<Product | null> {
       fk_id_marca: data.fk_id_marca || 1,
       categoria,
       marca,
-      imagenes // Agregar el array de imágenes
+      imagenes, // Agregar el array de imágenes
+      promo,
+      precio_con_descuento
     }
 
     return transformedData
@@ -890,23 +933,32 @@ export async function getProductosHomeDinamicos(): Promise<Product[]> {
 
     console.log('🔍 getProductosHomeDinamicos - Productos encontrados:', data?.length || 0)
 
-    // Obtener categorías y marcas
-    const { categoriesCache, brandsCache } = await getCachedCategoriesAndBrands()
+    // Obtener categorías, marcas y promociones
+    const { categoriesCache, brandsCache, promosCache, promoProductsCache } = await getCachedCategoriesAndBrands()
 
     // Transformar datos
     const transformedData = data?.map(product => {
-      const categoria = categoriesCache.get(product.fk_id_categoria) || 
+      const categoria = categoriesCache.get(product.fk_id_categoria) ||
                        { id: product.fk_id_categoria || 1, descripcion: `Categoría ${product.fk_id_categoria || 1}` }
-      
-      const marca = brandsCache.get(product.fk_id_marca) || 
+
+      const marca = brandsCache.get(product.fk_id_marca) ||
                    { id: product.fk_id_marca || 1, descripcion: `Marca ${product.fk_id_marca || 1}` }
+
+      // Verificar si el producto tiene una promoción activa
+      const promoId = promoProductsCache.get(parseInt(product.id))
+      const promo = promoId ? promosCache.get(promoId) : undefined
+      const precio_con_descuento = promo
+        ? product.precio * (1 - promo.descuento_porcentaje / 100)
+        : undefined
 
       return {
         ...product,
         fk_id_categoria: product.fk_id_categoria || 1,
         fk_id_marca: product.fk_id_marca || 1,
         categoria,
-        marca
+        marca,
+        promo,
+        precio_con_descuento
       }
     }) || []
 
@@ -1245,13 +1297,14 @@ export async function getPlanHomeDinamico(): Promise<PlanFinanciacion | null> {
       .single()
 
     if (configError || !config || !config.home_display_plan_id) {
-      // Fallback al plan de 12 cuotas
+      // Fallback: buscar cualquier plan activo, ordenado por cuotas
       const { data: planData, error } = await supabase
         .from('planes_financiacion')
         .select('*')
-        .eq('id', 3)
         .eq('activo', true)
-        .single()
+        .order('cuotas', { ascending: false })
+        .limit(1)
+        .maybeSingle()
 
       if (error) {
         console.error('Error fetching plan fallback:', error)
@@ -1266,11 +1319,24 @@ export async function getPlanHomeDinamico(): Promise<PlanFinanciacion | null> {
       .select('*')
       .eq('id', config.home_display_plan_id)
       .eq('activo', true)
-      .single()
+      .maybeSingle()
 
     if (planError) {
       console.error('Error fetching plan configurado:', planError)
       return null
+    }
+
+    // Si el plan configurado no existe, buscar cualquier plan activo
+    if (!planData) {
+      const { data: fallbackPlan } = await supabase
+        .from('planes_financiacion')
+        .select('*')
+        .eq('activo', true)
+        .order('cuotas', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      return fallbackPlan
     }
 
     return planData

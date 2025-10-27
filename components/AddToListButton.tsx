@@ -52,9 +52,18 @@ export default function AddToListButton({ product, variant = 'card' }: AddToList
             : isInShoppingList
             ? 'bg-green-100 text-green-700 hover:bg-red-100 hover:text-red-700'
             : isAdding
-            ? 'bg-violet-100 text-violet-700 cursor-not-allowed'
-            : 'bg-violet-600 text-white hover:bg-violet-700 hover:scale-105 shadow-lg hover:shadow-xl'
+            ? 'bg-emerald-100 text-emerald-700 cursor-not-allowed'
+            : 'text-white hover:scale-105 shadow-lg hover:shadow-xl'
         }`}
+        style={!hasStock || isInShoppingList || isAdding ? {} : { backgroundColor: '#ec3036' }}
+        onMouseEnter={(e) => {
+          if (!hasStock || isInShoppingList || isAdding) return
+          e.currentTarget.style.backgroundColor = '#d42a30'
+        }}
+        onMouseLeave={(e) => {
+          if (!hasStock || isInShoppingList || isAdding) return
+          e.currentTarget.style.backgroundColor = '#ec3036'
+        }}
         title={
           !hasStock
             ? 'Sin stock'
@@ -98,9 +107,18 @@ export default function AddToListButton({ product, variant = 'card' }: AddToList
           : isInShoppingList
           ? 'bg-green-100 text-green-700 hover:bg-red-100 hover:text-red-700'
           : isAdding
-          ? 'bg-violet-100 text-violet-700 cursor-not-allowed'
-          : 'bg-violet-600 text-white hover:bg-violet-700 hover:scale-102 hover:shadow-lg'
+          ? 'bg-emerald-100 text-emerald-700 cursor-not-allowed'
+          : 'text-white hover:scale-102 hover:shadow-lg'
       }`}
+      style={!hasStock || isInShoppingList || isAdding ? {} : { backgroundColor: '#ec3036' }}
+      onMouseEnter={(e) => {
+        if (!hasStock || isInShoppingList || isAdding) return
+        e.currentTarget.style.backgroundColor = '#d42a30'
+      }}
+      onMouseLeave={(e) => {
+        if (!hasStock || isInShoppingList || isAdding) return
+        e.currentTarget.style.backgroundColor = '#ec3036'
+      }}
       title={
         !hasStock
           ? 'Sin stock'

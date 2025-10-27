@@ -9,7 +9,7 @@ import GlobalStyles from "@/components/GlobalStyles"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "MUNDOCUOTA - Electrodomésticos en Cuotas",
+  title: "SUR IMPORTACIONES - Electrodomésticos en Cuotas",
   description:
     "Tu tienda de electrodomésticos de confianza con los mejores planes de financiación. Heladeras, lavarropas, aires acondicionados y más.",
   keywords: "electrodomésticos, cuotas, financiación, heladeras, lavarropas, aires acondicionados",
@@ -21,21 +21,21 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'es_AR',
     url: 'https://www.mundocuota.com.ar',
-    siteName: 'MUNDOCUOTA',
-    title: 'MUNDOCUOTA - Electrodomésticos en Cuotas',
+    siteName: 'SUR IMPORTACIONES',
+    title: 'SUR IMPORTACIONES - Electrodomésticos en Cuotas',
     description: 'Tu tienda de electrodomésticos de confianza con los mejores planes de financiación. Heladeras, lavarropas, aires acondicionados y más.',
     images: [
       {
         url: 'https://www.mundocuota.com.ar/LOGO2.png?v=3',
         width: 1200,
         height: 630,
-        alt: 'MUNDOCUOTA - Electrodomésticos en Cuotas',
+        alt: 'SUR IMPORTACIONES - Electrodomésticos en Cuotas',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'MUNDOCUOTA - Electrodomésticos en Cuotas',
+    title: 'SUR IMPORTACIONES - Electrodomésticos en Cuotas',
     description: 'Tu tienda de electrodomésticos de confianza con los mejores planes de financiación. Heladeras, lavarropas, aires acondicionados y más.',
     images: ['https://www.mundocuota.com.ar/LOGO2.png?v=2'],
   },

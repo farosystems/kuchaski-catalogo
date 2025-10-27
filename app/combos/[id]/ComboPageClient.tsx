@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { notFound, useRouter } from "next/navigation"
 import GlobalAppBar from "@/components/GlobalAppBar"
 import Footer from "@/components/Footer"
-import WhatsAppFloatingButton from "@/components/WhatsAppFloatingButton"
+import WhatsAppButton from "@/components/WhatsAppButton"
 import ProductImageGallery from "@/components/ProductImageGallery"
 import FormattedProductDescription from "@/components/FormattedProductDescription"
 import AddToListButton from "@/components/AddToListButton"
@@ -77,7 +77,7 @@ export default function ComboPageClient({ params: paramsPromise }: ComboPageClie
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-violet-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Cargando combo...</p>
         </div>
       </div>
@@ -132,14 +132,14 @@ export default function ComboPageClient({ params: paramsPromise }: ComboPageClie
         <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-4 sm:mb-8">
           <button
             onClick={handleBackToHome}
-            className="hover:text-violet-600 transition-colors"
+            className="hover:text-emerald-600 transition-colors"
           >
             Inicio
           </button>
           <span>/</span>
           <button
             onClick={handleBackToHome}
-            className="hover:text-violet-600 transition-colors"
+            className="hover:text-emerald-600 transition-colors"
           >
             Combos
           </button>
@@ -207,10 +207,11 @@ export default function ComboPageClient({ params: paramsPromise }: ComboPageClie
                 </div>
               )}
 
-              {/* Botón agregar a lista móvil */}
+              {/* Botones de acción móvil */}
               {isValid && (
-                <div className="mb-6">
+                <div className="mb-6 space-y-3">
                   <AddToListButton product={comboAsProduct} variant="page" />
+                  <WhatsAppButton product={comboAsProduct} />
                 </div>
               )}
             </div>
@@ -260,10 +261,11 @@ export default function ComboPageClient({ params: paramsPromise }: ComboPageClie
               </div>
             )}
 
-            {/* Botón agregar a lista */}
+            {/* Botones de acción */}
             {isValid && (
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <AddToListButton product={comboAsProduct} variant="page" />
+                <WhatsAppButton product={comboAsProduct} />
               </div>
             )}
 
@@ -326,7 +328,7 @@ export default function ComboPageClient({ params: paramsPromise }: ComboPageClie
                       {/* Usar ComboCard aquí cuando esté disponible */}
                       <div className="bg-white rounded-lg p-4 shadow-sm">
                         <h3 className="font-semibold">{relatedCombo.nombre}</h3>
-                        <p className="text-violet-600 font-bold">
+                        <p className="text-emerald-600 font-bold">
                           ${relatedCombo.precio_combo.toLocaleString()}
                         </p>
                       </div>
@@ -344,7 +346,7 @@ export default function ComboPageClient({ params: paramsPromise }: ComboPageClie
                     {/* Usar ComboCard aquí cuando esté disponible */}
                     <div className="bg-white rounded-lg p-4 shadow-sm">
                       <h3 className="font-semibold">{relatedCombo.nombre}</h3>
-                      <p className="text-violet-600 font-bold">
+                      <p className="text-emerald-600 font-bold">
                         ${relatedCombo.precio_combo.toLocaleString()}
                       </p>
                     </div>
@@ -368,7 +370,6 @@ export default function ComboPageClient({ params: paramsPromise }: ComboPageClie
       </div>
 
       <Footer />
-      <WhatsAppFloatingButton product={comboAsProduct} />
     </div>
   )
 }

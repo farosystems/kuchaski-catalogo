@@ -76,7 +76,7 @@ export default function FinancingPlans({ productoId, precio, showDebug = false }
   })
 
   // Mostrar todos los planes disponibles para este producto
-  const colores = ['bg-blue-100 text-blue-800', 'bg-green-100 text-green-800', 'bg-purple-100 text-purple-800', 'bg-orange-100 text-orange-800']
+  const colores = ['bg-blue-100 text-blue-800', 'bg-green-100 text-green-800', 'bg-emerald-100 text-emerald-800', 'bg-orange-100 text-orange-800']
 
   return (
     <div className="mt-3 space-y-2">
@@ -101,12 +101,12 @@ export default function FinancingPlans({ productoId, precio, showDebug = false }
           >
             <div className="text-center leading-tight">
               {/* Primera línea: cuotas mensuales */}
-              <div className="whitespace-nowrap text-xs lowercase">
+              <div className="whitespace-nowrap text-base lowercase">
                 {plan.cuotas} cuotas mensuales de
               </div>
-              {/* Segunda línea: precios EF / P.ELEC */}
-              <div className="text-[10px] lowercase">
-                ${formatearPrecio(calculo.cuota_mensual)} ef / ${formatearPrecio(calculo.cuota_mensual_electro)} p.elec
+              {/* Segunda línea: precio EF */}
+              <div className="text-sm lowercase">
+                ${formatearPrecio(calculo.cuota_mensual)} ef
               </div>
               {anticipo > 0 && (
                 <div className="whitespace-nowrap text-xs">

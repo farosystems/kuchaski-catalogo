@@ -137,8 +137,8 @@ function ProductCard({ producto, cantidad, onFavoriteClick }: ProductCardProps) 
             onClick={onFavoriteClick}
             className={`absolute top-2 right-2 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10 ${
               isInFavorites
-                ? 'bg-violet-500 text-white'
-                : 'bg-white/90 text-gray-600 hover:bg-white hover:text-violet-500'
+                ? 'bg-emerald-500 text-white'
+                : 'bg-white/90 text-gray-600 hover:bg-white hover:text-emerald-500'
             }`}
             title={isInFavorites ? 'Quitar de favoritos' : 'Agregar a favoritos'}
           >
@@ -159,7 +159,7 @@ function ProductCard({ producto, cantidad, onFavoriteClick }: ProductCardProps) 
 
           {/* Precio */}
           <div className="mb-2">
-            <p className="text-lg font-bold text-violet-600">
+            <p className="text-lg font-bold text-emerald-600">
               ${producto.precio.toLocaleString()}
             </p>
             {cantidad > 1 && (

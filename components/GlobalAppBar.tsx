@@ -81,13 +81,13 @@ export default function GlobalAppBar() {
                     // Durante la carga inicial, usar tamaño seguro
                     <img
                       src="/LOGO2.png"
-                      alt="MUNDO CUOTA"
+                      alt="Sur Importaciones"
                       className="h-12 sm:h-16 w-auto transition-transform duration-300 group-hover:scale-105"
                     />
                   ) : isMobile ? (
                     <img
                       src="/LOGO2.png"
-                      alt="MUNDO CUOTA"
+                      alt="Sur Importaciones"
                       className="h-24 sm:h-28 w-auto transition-transform duration-300 group-hover:scale-105"
                     />
                   ) : configuracion?.logo_url ? (
@@ -104,25 +104,11 @@ export default function GlobalAppBar() {
                   ) : (
                     <img
                       src="/LOGO2.png"
-                      alt="MUNDO CUOTA"
+                      alt="Sur Importaciones"
                       className="lg:h-36 xl:h-40 w-auto transition-transform duration-300 group-hover:scale-105"
                     />
                   )}
                   <div className="absolute inset-0 bg-violet-400 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
-                </div>
-                <div className="ml-1 sm:ml-2 hidden sm:block">
-                  <h1 
-                    className="text-sm sm:text-base lg:text-lg xl:text-xl font-bold tracking-wide transition-colors duration-300"
-                    style={{ color: getTextColor() }}
-                  >
-                    MUNDO CUOTA
-                  </h1>
-                  <p 
-                    className="text-xs font-medium opacity-75 hidden sm:block"
-                    style={{ color: getTextColor() }}
-                  >
-                    Tu tienda de confianza
-                  </p>
                 </div>
               </Link>
             </div>
@@ -158,7 +144,7 @@ export default function GlobalAppBar() {
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="hover:opacity-70 transition-colors duration-300 p-2 rounded-full text-white"
                 style={{
-                  backgroundColor: configuracion?.primary_color || "#0066cc"
+                  backgroundColor: "#54ba96"
                 }}
                 aria-label="Abrir menú"
               >
@@ -170,12 +156,15 @@ export default function GlobalAppBar() {
           {/* Navegación desktop */}
           <div className="hidden lg:flex items-center justify-between py-3 border-t border-violet-800/30 px-6">
             {/* Categorías */}
-            <div 
+            <div
               className="relative"
               onMouseEnter={() => setIsCategoriesOpen(true)}
               onMouseLeave={() => setIsCategoriesOpen(false)}
             >
-              <button className="text-white hover:text-violet-200 transition-colors duration-300 font-bold text-lg flex items-center">
+              <button
+                className="hover:opacity-70 transition-colors duration-300 font-bold text-lg flex items-center"
+                style={{ color: getTextColor() }}
+              >
                 <Menu className="mr-2 size-6" />
                 Categorías
               </button>
@@ -191,16 +180,18 @@ export default function GlobalAppBar() {
             
             {/* Navegación central */}
             <nav className="flex items-center space-x-95">
-              <Link 
-                href="/" 
-                className="text-white hover:text-violet-200 transition-colors duration-300 font-bold text-lg underline underline-offset-4"
+              <Link
+                href="/"
+                className="hover:opacity-70 transition-colors duration-300 font-bold text-lg underline underline-offset-4"
+                style={{ color: getTextColor() }}
               >
                 Inicio
               </Link>
-              
-              <Link 
-                href="/#destacados" 
-                className="text-white hover:text-violet-200 transition-colors duration-300 font-bold text-lg"
+
+              <Link
+                href="/#destacados"
+                className="hover:opacity-70 transition-colors duration-300 font-bold text-lg"
+                style={{ color: getTextColor() }}
               >
                 Destacados
               </Link>
@@ -210,7 +201,8 @@ export default function GlobalAppBar() {
             <div className="flex items-center">
               <button
                 onClick={() => setIsShoppingListOpen(true)}
-                className="text-white hover:text-violet-200 transition-colors duration-300 font-bold text-lg flex items-center gap-2"
+                className="hover:opacity-70 transition-colors duration-300 font-bold text-lg flex items-center gap-2"
+                style={{ color: getTextColor() }}
                 title="Mi Lista de Compra"
               >
                 <ShoppingBag size={20} />
@@ -223,46 +215,50 @@ export default function GlobalAppBar() {
 
         {/* Menú móvil */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden bg-violet-800/95 backdrop-blur-sm border-t border-violet-700">
+          <div className="lg:hidden bg-white/95 backdrop-blur-sm border-t border-gray-200">
             <div className="px-4 py-4 space-y-1">
               {/* Navegación principal */}
               <Link
                 href="/"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center px-4 py-3 text-white hover:bg-violet-700/50 rounded-lg transition-colors font-medium"
+                className="flex items-center px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors font-medium"
+                style={{ color: getTextColor() }}
               >
                 <Home className="mr-3" size={20} />
                 Inicio
               </Link>
-              
+
               <Link
                 href="/#destacados"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center px-4 py-3 text-white hover:bg-violet-700/50 rounded-lg transition-colors font-medium"
+                className="flex items-center px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors font-medium"
+                style={{ color: getTextColor() }}
               >
                 <Star className="mr-3" size={20} />
                 Destacados
               </Link>
-              
+
               {/* Mi Lista móvil */}
               <button
                 onClick={() => {
                   setIsShoppingListOpen(true)
                   setIsMobileMenuOpen(false)
                 }}
-                className="flex items-center px-4 py-3 text-white hover:bg-violet-700/50 rounded-lg transition-colors font-medium"
+                className="flex items-center px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors font-medium"
+                style={{ color: getTextColor() }}
               >
                 <ShoppingBag className="mr-3" size={20} />
                 Mi Lista ({itemCount})
               </button>
-              
+
               {/* Categorías móvil */}
               <button
                 onClick={() => {
                   setIsMobileCategoriesOpen(true)
                   setIsMobileMenuOpen(false)
                 }}
-                className="flex items-center w-full px-4 py-3 text-white hover:bg-violet-700/50 rounded-lg transition-colors font-medium"
+                className="flex items-center w-full px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors font-medium"
+                style={{ color: getTextColor() }}
               >
                 <div className="flex items-center">
                   <Menu className="mr-3" size={20} />

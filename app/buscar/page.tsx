@@ -138,7 +138,7 @@ function BuscarPageContent() {
         <GlobalAppBar />
         <div className="flex items-center justify-center py-20" style={{ marginTop: '10px' }}>
           <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-violet-600 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-emerald-600 mx-auto mb-4"></div>
             <h2 className="text-2xl font-bold text-gray-900">Cargando productos y combos...</h2>
           </div>
         </div>
@@ -208,7 +208,7 @@ function BuscarPageContent() {
           <div className="mb-8 bg-white p-6 rounded-xl shadow-lg border border-gray-200">
             <div className="text-center">
               <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                Resultados para: <span className="text-violet-600">"{searchTerm}"</span>
+                Resultados para: <span className="text-emerald-600">"{searchTerm}"</span>
               </h2>
               <p className="text-lg text-gray-600">
                 {allItems.length === 0
@@ -256,7 +256,7 @@ function BuscarPageContent() {
                   </p>
                   <button
                     onClick={handleClearFilters}
-                    className="px-6 py-3 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors"
+                    className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-violet-700 transition-colors"
                   >
                     Nueva búsqueda
                   </button>
@@ -287,7 +287,7 @@ export default function BuscarPage() {
         <GlobalAppBar />
         <div className="flex items-center justify-center py-20" style={{ marginTop: '10px' }}>
           <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-violet-600 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-emerald-600 mx-auto mb-4"></div>
             <h2 className="text-2xl font-bold text-gray-900">Cargando página de búsqueda...</h2>
           </div>
         </div>

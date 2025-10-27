@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
     if (!combo) {
       console.log(`❌ [Combo ${resolvedParams.id}] No encontrado`)
       return {
-        title: "Combo no encontrado - MUNDOCUOTA",
+        title: "Combo no encontrado - SUR IMPORTACIONES",
         description: "El combo que buscas no está disponible.",
       }
     }
@@ -56,7 +56,7 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
 
     console.log(`🌐 [Combo ${resolvedParams.id}] URL imagen final:`, imageUrl)
 
-    const title = `${combo.nombre} - Combo Especial | MUNDOCUOTAS`
+    const title = `${combo.nombre} - Combo Especial | SUR IMPORTACIONES`
     const description = combo.descripcion
       ? combo.descripcion.substring(0, 160) + '...'
       : `Aprovechá nuestro combo ${combo.nombre} con ${combo.descuento_porcentaje}% de descuento. ¡Ahorrá en grande!`
@@ -69,7 +69,7 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
         type: 'website',
         locale: 'es_AR',
         url: `https://www.mundocuota.com.ar/combos/${resolvedParams.id}?share=final`,
-        siteName: 'MUNDOCUOTA',
+        siteName: 'SUR IMPORTACIONES',
         title,
         description,
         images: [
@@ -91,7 +91,7 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
   } catch (error) {
     console.error('Error generating metadata:', error)
     return {
-      title: "Combo - MUNDOCUOTA",
+      title: "Combo - SUR IMPORTACIONES",
       description: "Descubre nuestros combos especiales con los mejores descuentos.",
     }
   }

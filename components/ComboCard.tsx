@@ -66,9 +66,20 @@ export default function ComboCard({ combo }: ComboCardProps) {
               onClick={handleFavoriteClick}
               className={`absolute top-2 left-2 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10 ${
                 isInFavorites
-                  ? 'bg-violet-500 text-white'
-                  : 'bg-white/90 text-gray-600 hover:bg-white hover:text-violet-500'
+                  ? 'text-white'
+                  : 'bg-white/90 text-gray-600 hover:bg-white'
               }`}
+              style={isInFavorites ? { backgroundColor: '#ec3036' } : {}}
+              onMouseEnter={(e) => {
+                if (!isInFavorites) {
+                  e.currentTarget.style.color = '#ec3036'
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isInFavorites) {
+                  e.currentTarget.style.color = ''
+                }
+              }}
               title={isInFavorites ? 'Quitar de favoritos' : 'Agregar a favoritos'}
             >
               <Heart

@@ -100,12 +100,12 @@ const FinancingPlansComboLarge = memo(function FinancingPlansComboLarge({ comboI
           >
             <div className="mb-1 sm:mb-2">
               {/* Primera línea: cuotas mensuales */}
-              <div className="text-base sm:text-xl mb-1">
+              <div className="text-lg sm:text-2xl mb-1">
                 {plan.cuotas} cuotas mensuales de
               </div>
-              {/* Segunda línea: precios EF / P.ELEC */}
-              <div className="text-sm sm:text-lg">
-                ${formatearPrecio(calculo!.cuota_mensual)} EF / ${formatearPrecio(calculo!.cuota_mensual_electro)} P.ELEC
+              {/* Segunda línea: precio EF */}
+              <div className="text-xl sm:text-3xl">
+                ${formatearPrecio(calculo!.cuota_mensual)} EF
               </div>
             </div>
             {anticipo > 0 && (

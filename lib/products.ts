@@ -65,6 +65,18 @@ export interface FinancingPlan {
   monthlyPayment: number
 }
 
+export interface Promo {
+  id: number
+  nombre: string
+  descripcion?: string
+  descuento_porcentaje: number
+  fecha_inicio: string
+  fecha_fin: string
+  activa: boolean
+  created_at: string
+  updated_at: string
+}
+
 export interface Product {
   id: string
   descripcion: string
@@ -102,6 +114,8 @@ export interface Product {
   categoria?: Categoria
   marca?: Marca
   planes_financiacion?: PlanFinanciacion[]
+  promo?: Promo
+  precio_con_descuento?: number
 }
 
 export interface Combo {

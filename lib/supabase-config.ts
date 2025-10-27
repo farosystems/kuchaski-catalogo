@@ -65,6 +65,11 @@ export interface ConfiguracionWeb {
   combos_subtitulo: string | null
   titulo_seccion_promos: string | null
   titulo_seccion_destacados: string | null
+
+  // Banners
+  banner_1: string | null
+  banner_2: string | null
+  banner_3: string | null
 }
 
 export interface Zona {
@@ -321,5 +326,21 @@ export async function getSubtituloCombos(): Promise<string> {
   } catch (error) {
     console.error('Error al obtener subtítulo de combos:', error)
     return 'Aprovechá nuestros combos con descuentos especiales y ahorrá en grande' // Por defecto
+  }
+}
+
+export async function getBanners(): Promise<string[]> {
+  try {
+    const config = await getOrCreateConfiguracionWeb()
+    const banners: string[] = []
+
+    if (config?.banner_1) banners.push(config.banner_1)
+    if (config?.banner_2) banners.push(config.banner_2)
+    if (config?.banner_3) banners.push(config.banner_3)
+
+    return banners
+  } catch (error) {
+    console.error('Error al obtener banners:', error)
+    return []
   }
 }

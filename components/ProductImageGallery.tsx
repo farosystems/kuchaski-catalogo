@@ -241,10 +241,21 @@ export default function ProductImageGallery({ images, productName, isFeatured = 
             <button
               onClick={handleFavoriteClick}
               className={`absolute top-2 right-2 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-20 ${
-                isInFavorites 
-                  ? 'bg-violet-500 text-white' 
-                  : 'bg-white/90 text-gray-600 hover:bg-white hover:text-violet-500'
+                isInFavorites
+                  ? 'text-white'
+                  : 'bg-white/90 text-gray-600 hover:bg-white'
               }`}
+              style={isInFavorites ? { backgroundColor: '#ec3036' } : {}}
+              onMouseEnter={(e) => {
+                if (!isInFavorites) {
+                  e.currentTarget.style.color = '#ec3036'
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isInFavorites) {
+                  e.currentTarget.style.color = ''
+                }
+              }}
               title={isInFavorites ? 'Quitar de favoritos' : 'Agregar a favoritos'}
             >
               <Heart 
@@ -312,8 +323,8 @@ export default function ProductImageGallery({ images, productName, isFeatured = 
                 }}
                 className={`w-20 h-20 bg-white rounded-xl flex items-center justify-center shadow-md transition-all duration-200 cursor-pointer overflow-hidden ${
                   index === currentImageIndex 
-                    ? 'border-2 border-violet-500 scale-105' 
-                    : 'border border-gray-300 hover:border-violet-300 hover:scale-105'
+                    ? 'border-2 border-emerald-500 scale-105' 
+                    : 'border border-gray-300 hover:border-emerald-300 hover:scale-105'
                 }`}
                 aria-label={`Ver imagen ${index + 1}`}
                 type="button"

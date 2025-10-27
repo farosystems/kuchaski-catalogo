@@ -164,7 +164,7 @@ export default function ProductsSection() {
       <section id="productos" className="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-emerald-600 to-emerald-600 bg-clip-text text-transparent">
               Nuestros Productos
             </h2>
             <p className="text-xl text-gray-600">Cargando productos...</p>
@@ -179,7 +179,7 @@ export default function ProductsSection() {
       <section id="productos" className="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-emerald-600 to-emerald-600 bg-clip-text text-transparent">
               Nuestros Productos
             </h2>
             <p className="text-xl text-red-600">Error al cargar los productos: {error}</p>
@@ -195,7 +195,7 @@ export default function ProductsSection() {
         <div
           className={`text-center mb-16 transition-all duration-1000 ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}
         >
-          <h2 className="text-4xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-emerald-600 to-emerald-600 bg-clip-text text-transparent">
             Nuestros Productos
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">

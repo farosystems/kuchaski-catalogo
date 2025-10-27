@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react"
 import { use } from "react"
-import { ArrowLeft, Package, CheckCircle, Star, Truck, Shield, CreditCard, Users } from "lucide-react"
+import { ArrowLeft, Package, CheckCircle, Star, Truck, Shield, CreditCard, Users, Tag } from "lucide-react"
 import { useRouter } from "next/navigation"
 import GlobalAppBar from "@/components/GlobalAppBar"
 import Footer from "@/components/Footer"
@@ -11,9 +11,9 @@ import FinancingPlansLarge from "@/components/FinancingPlansLarge"
 import ProductCard from "@/components/ProductCard"
 import AddToListButton from "@/components/AddToListButton"
 import FormattedProductDescription from "@/components/FormattedProductDescription"
-import WhatsAppFloatingButton from "@/components/WhatsAppFloatingButton"
+import WhatsAppButton from "@/components/WhatsAppButton"
 import { useProducts } from "@/hooks/use-products"
-import { getProductById } from "@/lib/supabase-products"
+import { getProductById, formatearPrecio } from "@/lib/supabase-products"
 
 interface ProductVariosPageClientProps {
   params: Promise<{
@@ -97,7 +97,7 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
             <p className="text-xl text-gray-600 mb-6">{error || 'El producto no existe'}</p>
             <button
               onClick={handleBackToHome}
-              className="px-6 py-3 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors"
+              className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-violet-700 transition-colors"
             >
               Volver al inicio
             </button>
@@ -109,6 +109,8 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
   }
 
   const productDescription = product.descripcion_detallada || product.description || 'Sin descripción disponible'
+  const hasPromo = !!product.promo && !!product.precio_con_descuento
+  const finalPrice = hasPromo ? product.precio_con_descuento! : (product.precio || 0)
 
   // Debug: Log para verificar las imágenes del producto
   console.log('🔍 Producto completo:', product)
@@ -129,7 +131,7 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
             <div className="flex justify-between items-center mb-4">
               <button
                 onClick={handleBackToHome}
-                className="inline-flex items-center text-violet-600 hover:text-violet-700 transition-colors"
+                className="inline-flex items-center text-emerald-600 hover:text-violet-700 transition-colors"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Volver al inicio
@@ -157,7 +159,7 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
               {/* Categoría y Marca */}
               <div className="flex gap-2 mb-3">
                 {product.categoria && (
-                  <span className="text-xs text-violet-600 bg-violet-100 px-2 py-1 rounded-full uppercase">
+                  <span className="text-xs text-emerald-600 bg-emerald-100 px-2 py-1 rounded-full uppercase">
                     {product.categoria.descripcion}
                   </span>
                 )}
@@ -190,7 +192,7 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
             {/* Categoría y Marca - solo desktop */}
             <div className="hidden lg:flex gap-2 mb-4">
               {product.categoria && (
-                <span className="text-xs text-violet-600 bg-violet-100 px-2 py-1 rounded-full uppercase">
+                <span className="text-xs text-emerald-600 bg-emerald-100 px-2 py-1 rounded-full uppercase">
                   {product.categoria.descripcion}
                 </span>
               )}
@@ -212,21 +214,59 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
               </div>
             )}
             
-            <h1 className="hidden lg:block text-3xl font-bold text-gray-900 mb-2 uppercase">
+            <h1 className="hidden lg:block text-3xl font-bold text-gray-900 mb-4 uppercase">
               {product.descripcion}
             </h1>
 
+            {/* Precio del producto - Siempre visible */}
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5 mb-4 shadow-md border border-blue-200">
+              {hasPromo ? (
+                // Con promoción
+                <>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Tag className="w-5 h-5 text-red-600" />
+                    <span className="text-sm font-bold text-red-600 uppercase">
+                      {product.promo!.nombre}
+                    </span>
+                    <span className="ml-auto bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold shadow-md">
+                      -{product.promo!.descuento_porcentaje}% OFF
+                    </span>
+                  </div>
+                  <div className="flex items-baseline gap-4">
+                    <span className="text-2xl font-bold text-red-600 line-through decoration-4">
+                      ${formatearPrecio(product.precio || 0)}
+                    </span>
+                    <span className="text-5xl font-bold text-green-600">
+                      ${formatearPrecio(finalPrice)}
+                    </span>
+                  </div>
+                  {product.promo!.descripcion && (
+                    <p className="text-sm text-gray-700 mt-3 bg-white/50 rounded p-2">{product.promo!.descripcion}</p>
+                  )}
+                </>
+              ) : (
+                // Sin promoción
+                <div className="flex items-center gap-3">
+                  <span className="text-lg font-semibold text-blue-700">Precio:</span>
+                  <span className="text-5xl font-bold text-blue-600">
+                    ${formatearPrecio(product.precio || 0)}
+                  </span>
+                </div>
+              )}
+            </div>
+
             {/* Precios */}
             <div className="mb-4 -mt-2 lg:mt-0">
-              <FinancingPlansLarge 
+              <FinancingPlansLarge
                 productoId={product.id.toString()}
-                precio={product.precio || 0}
+                precio={finalPrice}
               />
             </div>
 
             {/* Botones de acción */}
-            <div className="mb-8">
+            <div className="mb-8 space-y-3">
               <AddToListButton product={product} variant="page" />
+              <WhatsAppButton product={product} />
             </div>
 
             {/* Características adicionales */}
@@ -307,7 +347,7 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
         <div className="mb-4 bg-gray-50 py-2 sm:py-8">
           <div className="text-center mb-3 sm:mb-12">
             <h2 className="text-xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-4">
-              ¿Por qué elegir MUNDOCUOTAS?
+              ¿Por qué elegir SUR IMPORTACIONES?
             </h2>
           </div>
 
@@ -330,8 +370,8 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
 
             {/* Financiación flexible */}
             <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
-              <div className="bg-violet-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CreditCard className="w-8 h-8 text-violet-600" />
+              <div className="bg-emerald-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CreditCard className="w-8 h-8 text-emerald-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-900">Financiación Flexible</h3>
             </div>
@@ -347,7 +387,6 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
         </div>
       </div>
       <Footer />
-      <WhatsAppFloatingButton product={product} />
     </div>
   )
 }

@@ -155,7 +155,7 @@ function ProductSearchContent({ className = '' }: ProductSearchProps) {
               }
             }}
             placeholder="Buscar productos y combos..."
-            className="w-full pl-12 pr-12 py-3 bg-white/90 backdrop-blur-sm border border-violet-200 rounded-full text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all duration-300"
+            className="w-full pl-12 pr-12 py-3 bg-white/90 backdrop-blur-sm border border-emerald-200 rounded-full text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
           />
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 size-5" />
           {searchTerm && (
@@ -253,7 +253,7 @@ function ProductSearchContent({ className = '' }: ProductSearchProps) {
 
                   {/* Información del producto */}
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-xs sm:text-sm font-medium text-gray-900 group-hover:text-violet-600 transition-colors line-clamp-2">
+                    <h4 className="text-xs sm:text-sm font-medium text-gray-900 group-hover:text-emerald-600 transition-colors line-clamp-2">
                       {highlightText(product.descripcion || '', searchTerm)}
                     </h4>
                     <div className="flex items-center mt-1 space-x-1 sm:space-x-2">
@@ -283,7 +283,7 @@ function ProductSearchContent({ className = '' }: ProductSearchProps) {
               <Link
                 href={`/buscar?q=${encodeURIComponent(searchTerm)}`}
                 onClick={() => setIsSearchOpen(false)}
-                className="flex items-center justify-center w-full py-2 px-4 bg-violet-600 text-white text-sm font-medium rounded-lg hover:bg-violet-700 transition-colors"
+                className="flex items-center justify-center w-full py-2 px-4 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 <Package className="size-4 mr-2" />
                 Ver todos los resultados
@@ -404,7 +404,7 @@ export default function ProductSearch({ className = '' }: ProductSearchProps) {
             type="text"
             placeholder="Buscar productos..."
             disabled
-            className="w-full pl-12 pr-12 py-3 bg-white/90 backdrop-blur-sm border border-violet-200 rounded-full text-gray-900 placeholder-gray-500 opacity-50 cursor-not-allowed"
+            className="w-full pl-12 pr-12 py-3 bg-white/90 backdrop-blur-sm border border-emerald-200 rounded-full text-gray-900 placeholder-gray-500 opacity-50 cursor-not-allowed"
           />
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 size-5" />
         </div>

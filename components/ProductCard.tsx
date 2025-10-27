@@ -1,10 +1,11 @@
 "use client"
 
 import Link from "next/link"
-import { Heart } from "lucide-react"
+import { Heart, Tag } from "lucide-react"
 import { Product } from "@/lib/products"
 import FinancingPlans from "./FinancingPlans"
 import { useShoppingList } from "@/hooks/use-shopping-list"
+import { formatearPrecio } from "@/lib/supabase-products"
 
 interface ProductCardProps {
   product: Product
@@ -15,6 +16,8 @@ export default function ProductCard({ product }: ProductCardProps) {
   const productCategory = product.categoria?.descripcion || product.category || 'Sin categoría'
   const productBrand = product.marca?.descripcion || product.brand || 'Sin marca'
   const productPrice = product.precio || product.price || 0
+  const hasPromo = !!product.promo && !!product.precio_con_descuento
+  const finalPrice = hasPromo ? product.precio_con_descuento! : productPrice
 
   const productUrl = product.categoria && product.categoria.descripcion && 
     !product.categoria.descripcion.toLowerCase().includes('categor') &&
@@ -61,8 +64,8 @@ export default function ProductCard({ product }: ProductCardProps) {
               onClick={handleFavoriteClick}
               className={`absolute top-1.5 left-1.5 p-1.5 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10 ${
                 isInFavorites
-                  ? 'bg-violet-500 text-white'
-                  : 'bg-white/90 text-gray-600 hover:bg-white hover:text-violet-500'
+                  ? 'bg-[#ec3036] text-white'
+                  : 'bg-white/90 text-gray-600 hover:bg-white hover:text-[#ec3036]'
               }`}
               title={isInFavorites ? 'Quitar de favoritos' : 'Agregar a favoritos'}
             >
@@ -81,8 +84,16 @@ export default function ProductCard({ product }: ProductCardProps) {
             </div>
           )}
 
-          {/* Badge Destacado - Esquina superior derecha (solo si hay stock) */}
-          {product.destacado && hasStock && (
+          {/* Badge Promoción - Esquina superior derecha (prioridad sobre destacado) */}
+          {hasPromo && hasStock && (
+            <div className="absolute top-1.5 right-1.5 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
+              <Tag className="w-3 h-3" />
+              -{product.promo!.descuento_porcentaje}%
+            </div>
+          )}
+
+          {/* Badge Destacado - Esquina superior derecha (solo si hay stock y no hay promo) */}
+          {product.destacado && hasStock && !hasPromo && (
             <div className="absolute top-1.5 right-1.5 bg-yellow-400 text-black px-1.5 py-0.5 rounded-full text-xs font-semibold shadow-lg">
               Destacado
             </div>
@@ -103,8 +114,33 @@ export default function ProductCard({ product }: ProductCardProps) {
             {product.descripcion || product.name || 'Sin descripción'}
           </h3>
 
+          {/* Precio - Siempre visible */}
+          <div className="mb-2">
+            {hasPromo ? (
+              // Con promoción: precio tachado + precio con descuento
+              <>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-base font-semibold text-red-600 line-through decoration-2">
+                    ${formatearPrecio(productPrice)}
+                  </span>
+                  <span className="text-xs font-bold text-white bg-red-600 px-2 py-0.5 rounded-full">
+                    -{product.promo!.descuento_porcentaje}%
+                  </span>
+                </div>
+                <div className="text-2xl font-bold text-green-600">
+                  ${formatearPrecio(finalPrice)}
+                </div>
+              </>
+            ) : (
+              // Sin promoción: precio normal
+              <div className="text-xl font-bold text-blue-600">
+                ${formatearPrecio(productPrice)}
+              </div>
+            )}
+          </div>
+
           {/* Planes de Financiación - Versión simplificada */}
-          <FinancingPlans productoId={product.id} precio={productPrice} />
+          <FinancingPlans productoId={product.id} precio={finalPrice} />
         </div>
       </div>
     </Link>
