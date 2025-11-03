@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: ProductoVariosPageProps): Pro
     
     if (!product) {
       return {
-        title: "Producto no encontrado - SUR IMPORTACIONES",
+        title: "Producto no encontrado - SUR IMPORTACIÓN",
         description: "El producto que buscas no está disponible.",
       }
     }
@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: ProductoVariosPageProps): Pro
       imageUrl = `https://www.mundocuota.com.ar/${productImage}?v=${Date.now()}`
     }
 
-    const title = `${product.descripcion} | SUR IMPORTACIONES`
+    const title = `${product.descripcion} | SUR IMPORTACIÓN`
     const description = product.descripcion_detallada 
       ? product.descripcion_detallada.substring(0, 160) + '...'
       : `Descubre ${product.descripcion} con los mejores planes de financiación. Producto de calidad.`
@@ -62,7 +62,7 @@ export async function generateMetadata({ params }: ProductoVariosPageProps): Pro
         type: 'website',
         locale: 'es_AR',
         url: `https://www.mundocuota.com.ar/varios/${resolvedParams.id}`,
-        siteName: 'SUR IMPORTACIONES',
+        siteName: 'SUR IMPORTACIÓN',
         title,
         description,
         images: [
@@ -84,7 +84,7 @@ export async function generateMetadata({ params }: ProductoVariosPageProps): Pro
   } catch (error) {
     console.error('Error generating metadata:', error)
     return {
-      title: "Producto - SUR IMPORTACIONES",
+      title: "Producto - SUR IMPORTACIÓN",
       description: "Descubre nuestros productos con los mejores planes de financiación.",
     }
   }

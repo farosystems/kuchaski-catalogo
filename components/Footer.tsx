@@ -34,7 +34,7 @@ export default function Footer() {
         {/* Contenido principal */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
           
-          {/* Columna 1: Sur Importaciones */}
+          {/* Columna 1: Sur Importación */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
               {configuracion?.logo_url ? (
@@ -50,12 +50,12 @@ export default function Footer() {
               ) : (
                 <img
                   src="/LOGO2.png"
-                  alt="Sur Importaciones"
+                  alt="Sur Importación"
                   className="h-12 w-auto"
                 />
               )}
               <div>
-                <h3 className="text-xl font-bold">SUR IMPORTACIONES</h3>
+                <h3 className="text-xl font-bold">SUR IMPORTACIÓN</h3>
                 <p className="text-emerald-200 text-sm">Tu tienda de electrodomésticos de confianza</p>
               </div>
             </div>
@@ -127,7 +127,7 @@ export default function Footer() {
         <div className="border-t border-emerald-600 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-emerald-200 text-sm text-center md:text-left">
-              © 2025 SUR IMPORTACIONES. Todos los derechos reservados. 
+              © 2025 SUR IMPORTACIÓN. Todos los derechos reservados. 
               Especialistas en electrodomésticos con financiación.
             </p>
             <div className="flex items-center space-x-4">
