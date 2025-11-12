@@ -126,7 +126,17 @@ export default function FinancingPlans({ productoId, precio, showDebug = false }
 
         const sinInteres = plan.recargo_fijo === 0 && plan.recargo_porcentual === 0
         const esContado = plan.cuotas === 1
-        const precioContado = esContado ? precio * 0.8 : calculo.cuota_mensual
+
+        // Extraer porcentaje del nombre del plan (ej: "Contado 20%off" -> 20)
+        let descuentoContado = 20 // valor por defecto
+        if (esContado && plan.nombre) {
+          const match = plan.nombre.match(/(\d+)%/i)
+          if (match) {
+            descuentoContado = parseInt(match[1])
+          }
+        }
+
+        const precioContado = esContado ? precio * (1 - descuentoContado / 100) : calculo.cuota_mensual
 
         return (
           <div
@@ -140,7 +150,7 @@ export default function FinancingPlans({ productoId, precio, showDebug = false }
                 <>
                   {/* Plan de contado (1 cuota) */}
                   <div className="whitespace-nowrap text-base">
-                    Contado 20% OFF!
+                    Contado {descuentoContado}% OFF!
                   </div>
                   <div className="text-sm">
                     ${formatearPrecio(precioContado)}
