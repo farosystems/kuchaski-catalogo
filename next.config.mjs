@@ -7,6 +7,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
+    unoptimized: true, // Deshabilitar optimización de imágenes para evitar problemas en Vercel
     remotePatterns: [
       {
         protocol: 'https',
