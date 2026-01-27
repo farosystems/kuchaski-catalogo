@@ -55,25 +55,25 @@ export default function BannersCarousel() {
   }
 
   return (
-    <section className="py-8" style={{ background: 'linear-gradient(135deg, #f0f9ff, #dbeafe, #f0f9ff)' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-4 sm:py-8" style={{ background: 'linear-gradient(135deg, #f0f9ff, #dbeafe, #f0f9ff)' }}>
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
         <div className="relative group">
           {/* Contenedor del carrusel */}
-          <div className="relative overflow-hidden rounded-2xl aspect-[4/3] sm:aspect-[16/7] md:aspect-[21/7] lg:aspect-[21/6] border-4 sm:border-8" style={{ boxShadow: '0 20px 60px rgba(0, 112, 187, 0.5)', borderColor: '#0070bb' }}>
+          <div className="relative overflow-hidden rounded-xl sm:rounded-2xl border-4 sm:border-8 bg-gradient-to-r from-blue-50 to-blue-100" style={{ boxShadow: '0 20px 60px rgba(0, 112, 187, 0.5)', borderColor: '#0070bb' }}>
             {/* Banners */}
             <div
-              className="flex transition-transform duration-700 ease-in-out h-full"
+              className="flex transition-transform duration-700 ease-in-out"
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
               {banners.map((banner, index) => (
                 <div
                   key={index}
-                  className="min-w-full h-full flex-shrink-0 bg-white"
+                  className="min-w-full max-w-full flex-shrink-0 h-[250px] sm:h-[300px] md:h-[350px] lg:h-[400px]"
                 >
                   <img
                     src={banner}
                     alt={`Banner ${index + 1}`}
-                    className="w-full h-full object-contain"
+                    className="w-full h-full object-cover"
                   />
                 </div>
               ))}
