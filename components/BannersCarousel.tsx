@@ -59,7 +59,7 @@ export default function BannersCarousel() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative group">
           {/* Contenedor del carrusel */}
-          <div className="relative overflow-hidden rounded-2xl aspect-[16/6] md:aspect-[21/6] border-8" style={{ boxShadow: '0 20px 60px rgba(0, 112, 187, 0.5)', borderColor: '#0070bb' }}>
+          <div className="relative overflow-hidden rounded-2xl aspect-[4/3] sm:aspect-[16/7] md:aspect-[21/7] lg:aspect-[21/6] border-4 sm:border-8" style={{ boxShadow: '0 20px 60px rgba(0, 112, 187, 0.5)', borderColor: '#0070bb' }}>
             {/* Banners */}
             <div
               className="flex transition-transform duration-700 ease-in-out h-full"
@@ -68,12 +68,12 @@ export default function BannersCarousel() {
               {banners.map((banner, index) => (
                 <div
                   key={index}
-                  className="min-w-full h-full flex-shrink-0"
+                  className="min-w-full h-full flex-shrink-0 bg-white"
                 >
                   <img
                     src={banner}
                     alt={`Banner ${index + 1}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 </div>
               ))}
