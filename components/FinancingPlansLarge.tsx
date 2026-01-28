@@ -111,7 +111,7 @@ const FinancingPlansLarge = memo(function FinancingPlansLarge({ productoId, prec
   }
 
   // Mostrar todos los planes disponibles para este producto
-  const colores = ['bg-blue-100 text-blue-800', 'bg-green-100 text-green-800', 'bg-emerald-100 text-emerald-800', 'bg-orange-100 text-orange-800']
+  const colores = ['bg-orange-100 text-orange-800', 'bg-green-100 text-green-800', 'bg-emerald-100 text-emerald-800', 'bg-yellow-100 text-yellow-800']
 
   return (
     <div className={`bg-white rounded-lg p-4 sm:p-6 shadow-sm transition-all duration-300 ${
@@ -154,7 +154,7 @@ const FinancingPlansLarge = memo(function FinancingPlansLarge({ productoId, prec
             <div
               key={`${productoId}-${plan.id}`}
               className={`p-3 sm:p-4 rounded-lg sm:rounded-xl text-center font-bold text-sm sm:text-lg transition-all duration-300 ${
-                esContado ? 'bg-red-100 text-red-800' : (index === 0 ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800')
+                esContado ? 'bg-red-100 text-red-800' : (index === 0 ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800')
               } ${!hasStock ? 'opacity-40 cursor-not-allowed' : ''}`}
             >
               <div className="mb-1 sm:mb-2">

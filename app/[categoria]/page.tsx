@@ -160,7 +160,7 @@ export default function CategoriaPage({ params }: CategoriaPageProps) {
 
   if (loading || combosLoading) {
     return (
-      <div className="bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen">
+      <div className="bg-gradient-to-br from-gray-50 to-orange-50 min-h-screen">
         <GlobalAppBar />
         <div className="flex items-center justify-center py-20" style={{ marginTop: '140px' }}>
           <div className="text-center">
@@ -175,7 +175,7 @@ export default function CategoriaPage({ params }: CategoriaPageProps) {
 
   if (error) {
     return (
-      <div className="bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen">
+      <div className="bg-gradient-to-br from-gray-50 to-orange-50 min-h-screen">
         <GlobalAppBar />
         <div className="flex items-center justify-center py-20" style={{ marginTop: '140px' }}>
           <div className="text-center">
@@ -190,7 +190,7 @@ export default function CategoriaPage({ params }: CategoriaPageProps) {
 
   if (!categoria) {
     return (
-      <div className="bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen">
+      <div className="bg-gradient-to-br from-gray-50 to-orange-50 min-h-screen">
         <GlobalAppBar />
         <div className="flex items-center justify-center py-20" style={{ marginTop: '140px' }}>
           <div className="text-center">

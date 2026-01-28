@@ -134,7 +134,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="p-2">
           {/* Marca */}
           <div className="flex gap-1 mb-1 flex-wrap">
-            <span className="text-xs text-white bg-gradient-to-r from-blue-500 to-blue-600 px-1.5 py-0.5 rounded-full truncate font-semibold shadow-sm">
+            <span className="text-xs text-white bg-gradient-to-r from-orange-500 to-orange-600 px-1.5 py-0.5 rounded-full truncate font-semibold shadow-sm">
               {productBrand}
             </span>
           </div>
@@ -175,7 +175,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                       -{product.promo.descuento_porcentaje}%
                     </span>
                   </div>
-                  <div className="text-xl font-bold text-blue-600">
+                  <div className="text-xl font-bold text-orange-600">
                     ${formatearPrecio(product.precio_con_descuento)}
                   </div>
                   <div className="text-xs text-gray-600 mt-0.5">{product.promo.nombre}</div>
@@ -198,7 +198,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               </>
             ) : (
               // Sin oferta ni promoción: precio normal
-              <div className="text-xl font-bold text-blue-600">
+              <div className="text-xl font-bold text-orange-600">
                 ${formatearPrecio(productPrice)}
               </div>
             )}

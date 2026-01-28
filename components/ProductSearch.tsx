@@ -155,7 +155,7 @@ function ProductSearchContent({ className = '' }: ProductSearchProps) {
               }
             }}
             placeholder="Buscar productos y combos..."
-            className="w-full pl-12 pr-12 py-3 bg-white/90 backdrop-blur-sm border border-emerald-200 rounded-full text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
+            className="w-full pl-12 pr-12 py-3 bg-white/90 backdrop-blur-sm border-2 border-orange-400 rounded-full text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300"
           />
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 size-5" />
           {searchTerm && (
@@ -329,7 +329,7 @@ function ProductFinancingPrices({ product }: { product: Product }) {
   // Si no hay planes, mostrar solo el precio
   if (planes.length === 0) {
     return (
-      <div className="text-xs font-bold text-blue-600">
+      <div className="text-xs font-bold text-orange-600">
         ${formatearPrecio(precioMostrar)}
       </div>
     )
@@ -341,7 +341,7 @@ function ProductFinancingPrices({ product }: { product: Product }) {
 
   if (!calculo) {
     return (
-      <div className="text-xs font-bold text-blue-600">
+      <div className="text-xs font-bold text-orange-600">
         ${formatearPrecio(precioMostrar)}
       </div>
     )
@@ -352,7 +352,7 @@ function ProductFinancingPrices({ product }: { product: Product }) {
 
   return (
     <div>
-      <div className="text-xs font-bold text-blue-600">
+      <div className="text-xs font-bold text-orange-600">
         ${formatearPrecio(precioMostrar)}
       </div>
       <div className="text-xs font-bold text-green-600">

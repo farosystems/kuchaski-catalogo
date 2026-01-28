@@ -98,7 +98,7 @@ export default function Navbar() {
                   className="text-2xl font-bold transition-colors duration-300 animate-pulse-glow"
                   style={{ color: configuracion?.appbar_text_color || "#ffffff" }}
                 >
-                  MaxiPet
+                  Kuchaski
                 </span>
               )}
             </Link>
@@ -140,7 +140,7 @@ export default function Navbar() {
         >
           <div 
             className="px-2 pt-2 pb-3 space-y-1 sm:px-3 backdrop-blur-md rounded-b-lg"
-            style={{ backgroundColor: configuracion?.appbar_background_color || "#1e40af" }}
+            style={{ backgroundColor: configuracion?.appbar_background_color || "#ff8727" }}
           >
             {["inicio", "productos", "destacados"].map((section, index) => (
               <button

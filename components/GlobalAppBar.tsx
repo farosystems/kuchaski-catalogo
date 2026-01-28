@@ -81,13 +81,13 @@ export default function GlobalAppBar() {
                     // Durante la carga inicial, usar tamaño seguro
                     <img
                       src="/LOGO2.png"
-                      alt="MaxiPet"
+                      alt="Kuchaski"
                       className="h-12 sm:h-16 w-auto transition-transform duration-300 group-hover:scale-105"
                     />
                   ) : isMobile ? (
                     <img
                       src="/LOGO2.png"
-                      alt="MaxiPet"
+                      alt="Kuchaski"
                       className="h-24 sm:h-28 w-auto transition-transform duration-300 group-hover:scale-105"
                     />
                   ) : configuracion?.logo_url ? (
@@ -104,7 +104,7 @@ export default function GlobalAppBar() {
                   ) : (
                     <img
                       src="/LOGO2.png"
-                      alt="MaxiPet"
+                      alt="Kuchaski"
                       className="lg:h-36 xl:h-40 w-auto transition-transform duration-300 group-hover:scale-105"
                     />
                   )}
@@ -128,7 +128,7 @@ export default function GlobalAppBar() {
               {/* Indicador de estado - oculto en móvil */}
               <div
                 className="hidden sm:flex items-center space-x-2 rounded-full px-2 sm:px-3 py-1 backdrop-blur-sm opacity-30"
-                style={{ backgroundColor: configuracion?.primary_color || "#0066cc" }}
+                style={{ backgroundColor: configuracion?.primary_color || "#ff8727" }}
               >
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                 <span 
@@ -144,7 +144,7 @@ export default function GlobalAppBar() {
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="hover:opacity-70 transition-colors duration-300 p-2 rounded-full text-white"
                 style={{
-                  backgroundColor: "#0070bb"
+                  backgroundColor: "#ff8727"
                 }}
                 aria-label="Abrir menú"
               >
@@ -154,7 +154,7 @@ export default function GlobalAppBar() {
           </div>
 
           {/* Navegación desktop */}
-          <div className="hidden lg:flex items-center justify-between py-3 border-t border-violet-800/30 px-6">
+          <div className="hidden lg:flex items-center justify-between py-3 border-t border-orange-800/30 px-6">
             {/* Categorías */}
             <div
               className="relative"

@@ -176,7 +176,7 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
                   </span>
                 )}
                 {product.marca && (
-                  <span className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded-full uppercase">
+                  <span className="text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded-full uppercase">
                     {product.marca.descripcion}
                   </span>
                 )}
@@ -231,12 +231,12 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
             </h1>
 
             {/* Precio del producto - Siempre visible */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5 mb-4 shadow-md border border-blue-200">
+            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-5 mb-4 shadow-md border border-orange-200">
               {hasOferta && hasPromo ? (
                 // Tiene AMBOS: oferta individual Y promoción
                 <>
                   {/* Precio de oferta */}
-                  <div className="mb-4 pb-4 border-b border-blue-300">
+                  <div className="mb-4 pb-4 border-b border-orange-300">
                     <div className="flex items-center gap-2 mb-3">
                       <Tag className="w-5 h-5 text-red-600" />
                       <span className="text-sm font-bold text-red-600 uppercase">
@@ -271,7 +271,7 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
                       <span className="text-xl font-bold text-orange-600 line-through decoration-4">
                         ${formatearPrecio(product.precio || 0)}
                       </span>
-                      <span className="text-4xl font-bold text-blue-600">
+                      <span className="text-4xl font-bold text-orange-600">
                         ${formatearPrecio(product.precio_con_descuento!)}
                       </span>
                     </div>
@@ -307,8 +307,8 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
               ) : (
                 // Sin oferta ni promoción
                 <div className="flex items-center gap-3">
-                  <span className="text-lg font-semibold text-blue-700">Precio:</span>
-                  <span className="text-5xl font-bold text-blue-600">
+                  <span className="text-lg font-semibold text-orange-700">Precio:</span>
+                  <span className="text-5xl font-bold text-orange-600">
                     ${formatearPrecio(product.precio || 0)}
                   </span>
                 </div>
@@ -407,15 +407,15 @@ export default function ProductVariosPageClient({ params }: ProductVariosPageCli
         <div className="mb-4 bg-gray-50 py-2 sm:py-8">
           <div className="text-center mb-3 sm:mb-12">
             <h2 className="text-xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-4">
-              ¿Por qué elegir MaxiPet?
+              ¿Por qué elegir Kuchaski?
             </h2>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 max-w-6xl mx-auto">
             {/* Envío gratis */}
             <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Truck className="w-8 h-8 text-blue-600" />
+              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Truck className="w-8 h-8 text-orange-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-900">Envío Gratis</h3>
             </div>

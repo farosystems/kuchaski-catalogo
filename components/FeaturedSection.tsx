@@ -46,10 +46,10 @@ export default function FeaturedSection() {
 
   if (loading) {
     return (
-      <section className="py-20 text-white" style={{ background: 'linear-gradient(135deg, #005a8d, #0070bb, #005a8d)' }}>
+      <section className="py-20 text-white shadow-2xl" style={{ background: 'linear-gradient(135deg, #d96e1f 0%, #ff8727 50%, #d96e1f 100%)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <p className="text-xl text-blue-100">Cargando productos destacados...</p>
+            <p className="text-xl text-orange-100">Cargando productos destacados...</p>
           </div>
         </div>
       </section>
@@ -58,7 +58,7 @@ export default function FeaturedSection() {
 
   if (error) {
     return (
-      <section className="py-20 text-white" style={{ background: 'linear-gradient(135deg, #005a8d, #0070bb, #005a8d)' }}>
+      <section className="py-20 text-white shadow-2xl" style={{ background: 'linear-gradient(135deg, #d96e1f 0%, #ff8727 50%, #d96e1f 100%)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <p className="text-xl text-red-300">Error al cargar los productos: {error}</p>
@@ -71,46 +71,36 @@ export default function FeaturedSection() {
   return (
     <section
       id="destacados"
-      className="pt-8 pb-20 text-white relative"
+      className="pt-8 pb-20 text-white relative shadow-2xl"
+      style={{ background: 'linear-gradient(135deg, #d96e1f 0%, #ff8727 50%, #d96e1f 100%)' }}
     >
-      {/* Imagen de fondo de la familia */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: "url('/hero-family.webp')"
-        }}
-      >
-        {/* Overlay para mantener legibilidad */}
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(0, 90, 141, 0.85), rgba(0, 112, 187, 0.75), rgba(0, 90, 141, 0.85))' }}></div>
-      </div>
-
-      {/* Fondo animado */}
+      {/* Fondo animado con sombras */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-20 left-10 w-32 h-32 bg-yellow-400 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-blue-400 rounded-full blur-3xl animate-float delay-200"></div>
+        <div className="absolute bottom-20 right-10 w-40 h-40 bg-yellow-300 rounded-full blur-3xl animate-float delay-200"></div>
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
-          <h2 className="text-2xl sm:text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent whitespace-nowrap">
+          <h2 className="text-2xl sm:text-4xl font-bold mb-4 text-white whitespace-nowrap drop-shadow-lg">
             {tituloSeccion}
           </h2>
-          <p className="text-xl text-blue-100 max-w-2xl mx-auto">
+          <p className="text-xl text-white/90 max-w-2xl mx-auto">
             Los electrodomésticos más vendidos y preferidos por nuestros clientes
           </p>
-          <div className="w-24 h-1 bg-gradient-to-r from-yellow-400 to-yellow-500 mx-auto mt-4 rounded-full animate-pulse-glow"></div>
+          <div className="w-24 h-1 bg-white mx-auto mt-4 rounded-full animate-pulse-glow"></div>
         </div>
 
         {/* Contador de productos destacados */}
         <div className="mb-8 text-center mt-4">
-          <p className="text-blue-100">
-            <span className="font-semibold text-yellow-300">{featuredProducts.length}</span> productos destacados
+          <p className="text-white/90">
+            <span className="font-semibold text-white">{featuredProducts.length}</span> productos destacados
           </p>
         </div>
 
         {featuredProducts.length === 0 ? (
           <div className="text-center">
-            <p className="text-xl text-blue-100">No hay productos destacados disponibles</p>
+            <p className="text-xl text-white/90">No hay productos destacados disponibles</p>
           </div>
         ) : (
           <div className="py-4">
