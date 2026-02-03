@@ -71,9 +71,15 @@ export default function FeaturedSection() {
   return (
     <section
       id="destacados"
-      className="pt-8 pb-20 text-white relative shadow-2xl"
-      style={{ background: 'linear-gradient(135deg, #d96e1f 0%, #ff8727 50%, #d96e1f 100%)' }}
+      className="pt-8 pb-20 text-white relative shadow-2xl overflow-hidden"
     >
+      {/* Imagen de fondo difuminada */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/hero-familyy.jpg')", filter: 'blur(8px)', transform: 'scale(1.05)' }}
+      ></div>
+      {/* Overlay naranja encima de la imagen */}
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(217,110,31,0.82) 0%, rgba(255,135,39,0.78) 50%, rgba(217,110,31,0.82) 100%)' }}></div>
       {/* Fondo animado con sombras */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-20 left-10 w-32 h-32 bg-yellow-400 rounded-full blur-3xl animate-float"></div>

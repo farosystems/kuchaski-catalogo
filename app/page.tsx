@@ -1,5 +1,6 @@
 import FeaturedSection from "@/components/FeaturedSection"
 import BannersCarousel from "@/components/BannersCarousel"
+import LineasCarousel from "@/components/LineasCarousel"
 import Promo12CuotasSection from "@/components/Promo12CuotasSection"
 import CombosSection from "@/components/CombosSection"
 import GlobalAppBar from "@/components/GlobalAppBar"
@@ -14,8 +15,9 @@ export default async function Home() {
       <GlobalAppBar />
 
       <main>
-        <FeaturedSection />
         <BannersCarousel />
+        <LineasCarousel />
+        <FeaturedSection />
         <Promo12CuotasSection />
         {mostrarCombos && <CombosSection />}
       </main>

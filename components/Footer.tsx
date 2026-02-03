@@ -29,12 +29,12 @@ export default function Footer() {
   }
 
   return (
-    <footer style={{ background: 'linear-gradient(to bottom, #ff8727 0%, #e6781f 100%)', boxShadow: '0 -10px 30px rgba(255, 135, 39, 0.3)' }} className="text-white">
+    <footer style={{ background: 'linear-gradient(to bottom, #ff8727 0%, #e6781f 100%)', boxShadow: '0 -10px 30px rgba(255, 135, 39, 0.3)' }} className="text-black">
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Contenido principal */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
 
-          {/* Columna 1: MaxiPet */}
+          {/* Columna 1: Kuchaski */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
               {configuracion?.logo_url ? (
@@ -55,11 +55,11 @@ export default function Footer() {
                 />
               )}
               <div>
-                <h3 className="text-xl font-bold">Kuchaski</h3>
-                <p className="text-orange-200 text-sm">Tu tienda de electrodomésticos de confianza</p>
+                <h3 className="text-xl font-bold text-black">Kuchaski</h3>
+                <p className="text-gray-800 text-sm">Tu tienda de electrodomésticos de confianza</p>
               </div>
             </div>
-            <p className="text-orange-200 text-sm leading-relaxed">
+            <p className="text-gray-800 text-sm leading-relaxed">
               Especialistas en electrodomésticos con los mejores planes de financiación.
               Hacemos que tus sueños sean realidad con cuotas accesibles.
             </p>
@@ -67,28 +67,28 @@ export default function Footer() {
 
           {/* Columna 2: Productos */}
           <div className="space-y-4">
-            <h3 className="text-lg font-bold border-b border-orange-400 pb-2">Productos</h3>
+            <h3 className="text-lg font-bold text-black border-b border-black/30 pb-2">Productos</h3>
             <ul className="space-y-2">
               <li>
                 <button
                   onClick={scrollToProducts}
-                  className="text-orange-200 hover:text-white transition-colors duration-300 flex items-center"
+                  className="text-gray-800 hover:text-black transition-colors duration-300 flex items-center"
                 >
                   <Package className="mr-2 size-4" />
                   Catálogo completo
                 </button>
               </li>
               <li>
-                <Link href="/#destacados" className="text-blue-200 hover:text-white transition-colors duration-300 flex items-center">
+                <Link href="/#destacados" className="text-gray-800 hover:text-black transition-colors duration-300 flex items-center">
                   <Zap className="mr-2 size-4" />
                   Productos destacados
                 </Link>
               </li>
-              <li className="text-orange-200 flex items-center">
+              <li className="text-gray-800 flex items-center">
                 <Truck className="mr-2 size-4" />
                 Envío a domicilio
               </li>
-              <li className="text-orange-200 flex items-center">
+              <li className="text-gray-800 flex items-center">
                 <CreditCard className="mr-2 size-4" />
                 Financiación en cuotas
               </li>
@@ -97,24 +97,24 @@ export default function Footer() {
 
           {/* Columna 3: Soporte */}
           <div className="space-y-4">
-            <h3 className="text-lg font-bold border-b border-orange-400 pb-2">Soporte</h3>
+            <h3 className="text-lg font-bold text-black border-b border-black/30 pb-2">Soporte</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/ayuda" className="text-blue-200 hover:text-white transition-colors duration-300">
+                <Link href="/ayuda" className="text-gray-800 hover:text-black transition-colors duration-300">
                   Centro de ayuda
                 </Link>
               </li>
               <li>
-                <Link href="/terminos" className="text-blue-200 hover:text-white transition-colors duration-300">
+                <Link href="/terminos" className="text-gray-800 hover:text-black transition-colors duration-300">
                   Términos y condiciones
                 </Link>
               </li>
               <li>
-                <Link href="/privacidad" className="text-blue-200 hover:text-white transition-colors duration-300">
+                <Link href="/privacidad" className="text-gray-800 hover:text-black transition-colors duration-300">
                   Política de privacidad
                 </Link>
               </li>
-              <li className="text-orange-200 flex items-center">
+              <li className="text-gray-800 flex items-center">
                 <Shield className="mr-2 size-4" />
                 Garantía extendida
               </li>
@@ -124,23 +124,23 @@ export default function Footer() {
         </div>
 
         {/* Línea separadora */}
-        <div className="border-t border-orange-400 pt-8">
+        <div className="border-t border-black/30 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-orange-200 text-sm text-center md:text-left">
+            <p className="text-gray-800 text-sm text-center md:text-left">
               © 2025 Kuchaski. Todos los derechos reservados.
               Especialistas en electrodomésticos con financiación.
             </p>
             <div className="flex items-center space-x-4">
-              <Link href="/" className="text-orange-200 hover:text-white transition-colors duration-300 text-sm">
+              <Link href="/" className="text-gray-800 hover:text-black transition-colors duration-300 text-sm">
                 Inicio
               </Link>
               <button
                 onClick={scrollToProducts}
-                className="text-orange-200 hover:text-white transition-colors duration-300 text-sm"
+                className="text-gray-800 hover:text-black transition-colors duration-300 text-sm"
               >
                 Productos
               </button>
-              <Link href="/#destacados" className="text-orange-200 hover:text-white transition-colors duration-300 text-sm">
+              <Link href="/#destacados" className="text-gray-800 hover:text-black transition-colors duration-300 text-sm">
                 Destacados
               </Link>
             </div>

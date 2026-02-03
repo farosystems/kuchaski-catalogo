@@ -52,17 +52,17 @@ export default function AddToListButton({ product, variant = 'card' }: AddToList
             : isInShoppingList
             ? 'bg-green-100 text-green-700 hover:bg-red-100 hover:text-red-700'
             : isAdding
-            ? 'bg-emerald-100 text-emerald-700 cursor-not-allowed'
+            ? 'bg-gray-100 text-gray-700 cursor-not-allowed'
             : 'text-white hover:scale-105 shadow-lg hover:shadow-xl'
         }`}
-        style={!hasStock || isInShoppingList || isAdding ? {} : { backgroundColor: '#ec3036' }}
+        style={!hasStock || isInShoppingList || isAdding ? {} : { backgroundColor: '#1a1a1a' }}
         onMouseEnter={(e) => {
           if (!hasStock || isInShoppingList || isAdding) return
-          e.currentTarget.style.backgroundColor = '#d42a30'
+          e.currentTarget.style.backgroundColor = '#000000'
         }}
         onMouseLeave={(e) => {
           if (!hasStock || isInShoppingList || isAdding) return
-          e.currentTarget.style.backgroundColor = '#ec3036'
+          e.currentTarget.style.backgroundColor = '#1a1a1a'
         }}
         title={
           !hasStock
@@ -107,17 +107,17 @@ export default function AddToListButton({ product, variant = 'card' }: AddToList
           : isInShoppingList
           ? 'bg-green-100 text-green-700 hover:bg-red-100 hover:text-red-700'
           : isAdding
-          ? 'bg-emerald-100 text-emerald-700 cursor-not-allowed'
+          ? 'bg-gray-100 text-gray-700 cursor-not-allowed'
           : 'text-white hover:scale-102 hover:shadow-lg'
       }`}
-      style={!hasStock || isInShoppingList || isAdding ? {} : { backgroundColor: '#ec3036' }}
+      style={!hasStock || isInShoppingList || isAdding ? {} : { backgroundColor: '#1a1a1a' }}
       onMouseEnter={(e) => {
         if (!hasStock || isInShoppingList || isAdding) return
-        e.currentTarget.style.backgroundColor = '#d42a30'
+        e.currentTarget.style.backgroundColor = '#000000'
       }}
       onMouseLeave={(e) => {
         if (!hasStock || isInShoppingList || isAdding) return
-        e.currentTarget.style.backgroundColor = '#ec3036'
+        e.currentTarget.style.backgroundColor = '#1a1a1a'
       }}
       title={
         !hasStock

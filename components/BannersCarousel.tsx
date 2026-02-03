@@ -55,73 +55,64 @@ export default function BannersCarousel() {
   }
 
   return (
-    <section className="py-4 sm:py-8" style={{ background: 'linear-gradient(135deg, #f0f9ff, #dbeafe, #f0f9ff)' }}>
-      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
-        <div className="relative group">
-          {/* Contenedor del carrusel */}
-          <div className="relative overflow-hidden rounded-xl sm:rounded-2xl border-4 sm:border-8 bg-gradient-to-r from-blue-50 to-blue-100" style={{ boxShadow: '0 20px 60px rgba(0, 112, 187, 0.5)', borderColor: '#0070bb' }}>
-            {/* Banners */}
+    <section className="w-full">
+      <div className="relative group w-full overflow-hidden">
+        {/* Banners */}
+        <div
+          className="flex transition-transform duration-700 ease-in-out"
+          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        >
+          {banners.map((banner, index) => (
             <div
-              className="flex transition-transform duration-700 ease-in-out"
-              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+              key={index}
+              className="min-w-full max-w-full flex-shrink-0 h-[220px] sm:h-[280px] md:h-[340px] lg:h-[400px]"
             >
-              {banners.map((banner, index) => (
-                <div
-                  key={index}
-                  className="min-w-full max-w-full flex-shrink-0 h-[250px] sm:h-[300px] md:h-[350px] lg:h-[400px]"
-                >
-                  <img
-                    src={banner}
-                    alt={`Banner ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
+              <img
+                src={banner}
+                alt={`Banner ${index + 1}`}
+                className="w-full h-full object-cover"
+              />
             </div>
-
-            {/* Botones de navegación - Solo si hay más de 1 banner */}
-            {banners.length > 1 && (
-              <>
-                {/* Botón Anterior */}
-                <button
-                  onClick={goToPrevious}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  aria-label="Banner anterior"
-                >
-                  <ChevronLeft size={24} />
-                </button>
-
-                {/* Botón Siguiente */}
-                <button
-                  onClick={goToNext}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  aria-label="Banner siguiente"
-                >
-                  <ChevronRight size={24} />
-                </button>
-              </>
-            )}
-          </div>
-
-          {/* Indicadores - Solo si hay más de 1 banner */}
-          {banners.length > 1 && (
-            <div className="flex justify-center gap-2 mt-4">
-              {banners.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToSlide(index)}
-                  className={`transition-all duration-300 rounded-full ${
-                    index === currentIndex
-                      ? "w-8 h-3"
-                      : "bg-gray-300 hover:bg-gray-400 w-3 h-3"
-                  }`}
-                  style={index === currentIndex ? { backgroundColor: '#0070bb' } : {}}
-                  aria-label={`Ir al banner ${index + 1}`}
-                />
-              ))}
-            </div>
-          )}
+          ))}
         </div>
+
+        {/* Botones de navegación - Solo si hay más de 1 banner */}
+        {banners.length > 1 && (
+          <>
+            <button
+              onClick={goToPrevious}
+              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white text-gray-800 p-1.5 sm:p-2 rounded-full shadow-md opacity-60 hover:opacity-100 transition-opacity duration-300"
+              aria-label="Banner anterior"
+            >
+              <ChevronLeft size={28} />
+            </button>
+            <button
+              onClick={goToNext}
+              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white text-gray-800 p-1.5 sm:p-2 rounded-full shadow-md opacity-60 hover:opacity-100 transition-opacity duration-300"
+              aria-label="Banner siguiente"
+            >
+              <ChevronRight size={28} />
+            </button>
+          </>
+        )}
+
+        {/* Indicadores superpuestos sobre el banner */}
+        {banners.length > 1 && (
+          <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+            {banners.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`transition-all duration-300 rounded-full ${
+                  index === currentIndex
+                    ? "w-6 h-2.5 bg-white"
+                    : "w-2.5 h-2.5 bg-white/50 hover:bg-white/80"
+                }`}
+                aria-label={`Ir al banner ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )

@@ -19,7 +19,7 @@ export default function HeroSection() {
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: "url('/hero-family.webp')"
+          backgroundImage: "url('/hero-family.jpg')"
         }}
       >
         {/* Overlay mejorado para mayor calidad visual */}

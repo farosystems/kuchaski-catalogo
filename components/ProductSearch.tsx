@@ -155,7 +155,7 @@ function ProductSearchContent({ className = '' }: ProductSearchProps) {
               }
             }}
             placeholder="Buscar productos y combos..."
-            className="w-full pl-12 pr-12 py-3 bg-white/90 backdrop-blur-sm border-2 border-orange-400 rounded-full text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300"
+            className="w-full pl-12 pr-12 py-3 bg-white/90 backdrop-blur-sm border-2 border-black rounded-full text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-300"
           />
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 size-5" />
           {searchTerm && (

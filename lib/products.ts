@@ -1,6 +1,7 @@
 export interface Linea {
   id: number
   descripcion: string
+  imagen?: string
   created_at?: string
 }
 
