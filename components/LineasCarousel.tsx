@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react"
 import Link from "next/link"
 import { Package, ChevronLeft, ChevronRight } from "lucide-react"
-import { getLineas } from "@/lib/supabase-products"
+import { getLineasConProductos } from "@/lib/supabase-products"
 import { Linea } from "@/lib/products"
 
 function getSlug(descripcion: string) {
@@ -21,7 +21,7 @@ export default function LineasCarousel() {
   useEffect(() => {
     const load = async () => {
       try {
-        const data = await getLineas()
+        const data = await getLineasConProductos()
         setLineas(data)
       } catch (err) {
         console.error('Error loading lineas:', err)
@@ -57,7 +57,7 @@ export default function LineasCarousel() {
       {/* Contenedor scroll */}
       <div
         ref={scrollRef}
-        className="flex gap-3 sm:gap-4 lg:gap-6 px-4 sm:px-8 overflow-x-auto"
+        className="flex justify-center gap-3 sm:gap-4 lg:gap-6 px-4 sm:px-8 overflow-x-auto"
         style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}
       >
         {lineas.map((linea) => (

@@ -765,6 +765,47 @@ export async function getTipoPlanesProducto(productoId: string): Promise<'especi
   }
 }
 
+// Obtener líneas que tienen al menos un producto activo con precio > 0
+export async function getLineasConProductos(): Promise<Linea[]> {
+  try {
+    // 1. Obtener IDs de categorías que tienen productos activos con precio > 0
+    const { data: productos, error: prodError } = await supabase
+      .from('productos')
+      .select('fk_id_categoria')
+      .eq('activo', true)
+      .gt('precio', 0)
+
+    if (prodError || !productos || productos.length === 0) return []
+
+    const categoriaIds = [...new Set(productos.map(p => p.fk_id_categoria).filter(Boolean))]
+
+    // 2. Obtener IDs de líneas que tienen alguna de esas categorías
+    const { data: categorias, error: catError } = await supabase
+      .from('categorias')
+      .select('fk_id_linea')
+      .in('id', categoriaIds)
+      .not('fk_id_linea', 'is', null)
+
+    if (catError || !categorias || categorias.length === 0) return []
+
+    const lineaIds = [...new Set(categorias.map(c => c.fk_id_linea).filter(Boolean))]
+
+    // 3. Obtener solo esas líneas
+    const { data, error } = await supabase
+      .from('lineas')
+      .select('*')
+      .in('id', lineaIds)
+      .order('descripcion', { ascending: true })
+
+    if (error) return []
+
+    return data || []
+  } catch (error) {
+    console.error('Error fetching lineas con productos:', error)
+    return []
+  }
+}
+
 // Obtener todas las líneas
 export async function getLineas(): Promise<Linea[]> {
   try {
@@ -785,13 +826,31 @@ export async function getLineas(): Promise<Linea[]> {
   }
 }
 
-// Obtener líneas con sus categorías agrupadas
+// Obtener líneas con sus categorías agrupadas (solo líneas con productos activos)
 export async function getLineasWithCategorias(): Promise<(Linea & { categorias: Categoria[] })[]> {
   try {
-    // 1. Obtener todas las líneas
+    // 0. Obtener IDs de líneas que tienen al menos un producto activo con precio > 0
+    const { data: productos } = await supabase
+      .from('productos')
+      .select('fk_id_categoria')
+      .eq('activo', true)
+      .gt('precio', 0)
+
+    const categoriaIdsConProductos = [...new Set((productos || []).map(p => p.fk_id_categoria).filter(Boolean))]
+
+    const { data: categoriasConProd } = await supabase
+      .from('categorias')
+      .select('fk_id_linea')
+      .in('id', categoriaIdsConProductos)
+      .not('fk_id_linea', 'is', null)
+
+    const lineaIdsConProductos = new Set((categoriasConProd || []).map(c => c.fk_id_linea).filter(Boolean))
+
+    // 1. Obtener solo las líneas con productos
     const { data: lineas, error: lineasError } = await supabase
       .from('lineas')
       .select('*')
+      .in('id', [...lineaIdsConProductos])
       .order('descripcion', { ascending: true })
 
     if (lineasError) {
