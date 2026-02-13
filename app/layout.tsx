@@ -27,8 +27,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: 'https://kuchaski-catalogo.vercel.app/LOGO2.png',
-        width: 400,
-        height: 200,
+        width: 1200,
+        height: 630,
         alt: 'Kuchaski - Electrodomésticos en Cuotas',
       },
     ],
