@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: ProductoPageProps): Promise<M
       // URL absoluta - usar proxy para Supabase (WhatsApp no acepta Supabase directo)
       if (productImage.includes('supabase.co')) {
         // Supabase SIEMPRE con proxy + timestamp
-        const proxiedUrl = `https://www.mundocuota.com.ar/api/image-proxy?url=${encodeURIComponent(productImage)}`
+        const proxiedUrl = `https://kuchaski-catalogo.vercel.app/api/image-proxy?url=${encodeURIComponent(productImage)}`
         imageUrl = `${proxiedUrl}&t=${Date.now()}`
       } else {
         // URLs externas como mlstatic funcionan directamente
@@ -62,10 +62,10 @@ export async function generateMetadata({ params }: ProductoPageProps): Promise<M
       }
     } else if (productImage.startsWith('/')) {
       // URL relativa que empieza con /
-      imageUrl = `https://www.mundocuota.com.ar${productImage}?v=${Date.now()}`
+      imageUrl = `https://kuchaski-catalogo.vercel.app${productImage}?v=${Date.now()}`
     } else {
       // URL relativa sin /
-      imageUrl = `https://www.mundocuota.com.ar/${productImage}?v=${Date.now()}`
+      imageUrl = `https://kuchaski-catalogo.vercel.app/${productImage}?v=${Date.now()}`
     }
 
     const title = `${product.descripcion} - ${categoria?.descripcion || 'Producto'} | Kuchaski`
@@ -80,7 +80,7 @@ export async function generateMetadata({ params }: ProductoPageProps): Promise<M
       openGraph: {
         type: 'website',
         locale: 'es_AR',
-        url: `https://www.mundocuota.com.ar/${resolvedParams.categoria}/${resolvedParams.id}`,
+        url: `https://kuchaski-catalogo.vercel.app/${resolvedParams.categoria}/${resolvedParams.id}`,
         siteName: 'Kuchaski',
         title,
         description,
