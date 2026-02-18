@@ -765,6 +765,34 @@ export async function getTipoPlanesProducto(productoId: string): Promise<'especi
   }
 }
 
+// Obtener categorías que tienen al menos un producto activo con precio > 0
+export async function getCategoriesConProductos(): Promise<Categoria[]> {
+  try {
+    const { data: productos, error: prodError } = await supabase
+      .from('productos')
+      .select('fk_id_categoria')
+      .eq('activo', true)
+      .gt('precio', 0)
+
+    if (prodError || !productos || productos.length === 0) return []
+
+    const categoriaIds = [...new Set(productos.map(p => p.fk_id_categoria).filter(Boolean))]
+
+    const { data, error } = await supabase
+      .from('categorias')
+      .select('*')
+      .in('id', categoriaIds)
+      .order('descripcion', { ascending: true })
+
+    if (error) return []
+
+    return (data || []).filter(c => c.descripcion && c.descripcion.trim() !== '')
+  } catch (error) {
+    console.error('Error fetching categories con productos:', error)
+    return []
+  }
+}
+
 // Obtener líneas que tienen al menos un producto activo con precio > 0
 export async function getLineasConProductos(): Promise<Linea[]> {
   try {
@@ -869,13 +897,14 @@ export async function getLineasWithCategorias(): Promise<(Linea & { categorias: 
       return []
     }
 
-    // 3. Agrupar categorías por línea y filtrar solo las que tienen categorías
+    // 3. Agrupar categorías por línea filtrando solo las que tienen productos activos
     const result = lineas?.map(linea => ({
       ...linea,
       categorias: categorias?.filter(categoria =>
         categoria.fk_id_linea === linea.id &&
         categoria.descripcion &&
-        categoria.descripcion.trim() !== ''
+        categoria.descripcion.trim() !== '' &&
+        categoriaIdsConProductos.includes(categoria.id)
       ) || []
     }))
     .filter(linea => linea.categorias.length > 0) || []
@@ -887,9 +916,20 @@ export async function getLineasWithCategorias(): Promise<(Linea & { categorias: 
   }
 }
 
-// Obtener categorías sin línea asignada
+// Obtener categorías sin línea asignada (solo las que tienen productos activos con precio > 0)
 export async function getCategoriasWithoutLinea(): Promise<Categoria[]> {
   try {
+    // Obtener IDs de categorías que tienen productos activos con precio > 0
+    const { data: productos } = await supabase
+      .from('productos')
+      .select('fk_id_categoria')
+      .eq('activo', true)
+      .gt('precio', 0)
+
+    const categoriaIdsConProductos = new Set(
+      (productos || []).map(p => p.fk_id_categoria).filter(Boolean)
+    )
+
     const { data, error } = await supabase
       .from('categorias')
       .select('*')
@@ -901,8 +941,11 @@ export async function getCategoriasWithoutLinea(): Promise<Categoria[]> {
       return []
     }
 
-    // Filtrar categorías con descripción vacía o nula
-    return (data || []).filter(categoria => categoria.descripcion && categoria.descripcion.trim() !== '')
+    return (data || []).filter(categoria =>
+      categoria.descripcion &&
+      categoria.descripcion.trim() !== '' &&
+      categoriaIdsConProductos.has(categoria.id)
+    )
   } catch (error) {
     console.error('Error fetching categorias without linea:', error)
     return []

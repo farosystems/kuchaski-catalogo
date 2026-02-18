@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Categoria } from '@/lib/products'
-import { getCategories } from '@/lib/supabase-products'
+import { getCategoriesConProductos } from '@/lib/supabase-products'
 import Link from 'next/link'
 import GlobalAppBar from '@/components/GlobalAppBar'
 import Footer from '@/components/Footer'
@@ -92,7 +92,7 @@ export default function CategoriasPage() {
   useEffect(() => {
     const loadCategories = async () => {
       try {
-        const categoriesData = await getCategories()
+        const categoriesData = await getCategoriesConProductos()
         setCategories(categoriesData)
       } catch (error) {
         console.error('Error loading categories:', error)
