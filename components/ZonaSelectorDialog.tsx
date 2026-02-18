@@ -117,7 +117,7 @@ export default function ZonaSelectorDialog({ isOpen, onClose, product }: ZonaSel
         </div>
 
         {/* Content */}
-        <div className="p-6">
+        <div className="p-6 overflow-y-auto max-h-[50vh]">
           {loading ? (
             <div className="text-center py-8">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto"></div>
