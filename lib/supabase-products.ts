@@ -1033,8 +1033,43 @@ export async function getProductosHomeDinamicos(): Promise<Product[]> {
 
     console.log('🔍 getProductosHomeDinamicos - Productos con planes en tabla default:', productIdsConPlanes.length)
 
-    if (productIdsConPlanes.length === 0) {
-      console.log('🔍 getProductosHomeDinamicos - No hay productos con planes en producto_planes_default')
+    // Obtener también productos que tienen promociones activas y vigentes
+    const { data: promoProductosData } = await supabase
+      .from('promo_productos')
+      .select('producto_id, promo_id')
+
+    // Obtener promos activas y vigentes
+    const { data: promosActivas } = await supabase
+      .from('promos')
+      .select('id, fecha_inicio, fecha_fin')
+      .eq('activa', true)
+
+    const now = new Date()
+    const promoIdsVigentes = new Set(
+      (promosActivas || [])
+        .filter(promo => {
+          if (!promo.fecha_inicio || !promo.fecha_fin) return true
+          const fechaFin = new Date(promo.fecha_fin)
+          fechaFin.setHours(23, 59, 59, 999)
+          return new Date(promo.fecha_inicio) <= now && now <= fechaFin
+        })
+        .map(p => p.id)
+    )
+
+    const productIdsConPromo = [...new Set(
+      (promoProductosData || [])
+        .filter(pp => promoIdsVigentes.has(pp.promo_id))
+        .map(pp => pp.producto_id)
+        .filter(Boolean)
+    )]
+
+    console.log('🔍 getProductosHomeDinamicos - Productos con promo vigente:', productIdsConPromo.length)
+
+    // Combinar ambos conjuntos de IDs
+    const todosLosIds = [...new Set([...productIdsConPlanes, ...productIdsConPromo])]
+
+    if (todosLosIds.length === 0) {
+      console.log('🔍 getProductosHomeDinamicos - No hay productos con planes ni promociones')
       return []
     }
 
@@ -1066,7 +1101,7 @@ export async function getProductosHomeDinamicos(): Promise<Product[]> {
     })
 
     // Si hay un plan específico configurado, filtrar solo los productos con ese plan
-    let productIdsFiltrados = productIdsConPlanes
+    let productIdsFiltrados = todosLosIds
     let planEspecifico: PlanFinanciacion | null = null
 
     if (home_display_plan_id && home_display_plan_id !== null) {
@@ -1100,7 +1135,9 @@ export async function getProductosHomeDinamicos(): Promise<Product[]> {
       if (planEspecificoError) {
         console.error('Error filtrando por plan específico:', planEspecificoError)
       } else {
-        productIdsFiltrados = [...new Set(productosConPlanEspecifico?.map(item => item.fk_id_producto) || [])]
+        const idsPorPlan = [...new Set(productosConPlanEspecifico?.map(item => item.fk_id_producto) || [])]
+        // Combinar los del plan específico con los de promo vigente
+        productIdsFiltrados = [...new Set([...idsPorPlan, ...productIdsConPromo])]
         console.log('🔍 getProductosHomeDinamicos - Productos filtrados por plan', home_display_plan_id, ':', productIdsFiltrados.length)
       }
     }
