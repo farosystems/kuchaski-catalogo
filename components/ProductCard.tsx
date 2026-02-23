@@ -22,25 +22,24 @@ export default function ProductCard({ product }: ProductCardProps) {
   const precioOferta = hasOferta ? product.precio_oferta! : productPrice
   const descuentoOferta = hasOferta ? product.descuento_porcentual! : 0
 
-  // Verificar si tiene promoción con descuento válido
-  const hasPromo = !!product.promo && !!product.precio_con_descuento && product.promo.descuento_porcentaje > 0
+  // Verificar si tiene promoción con descuento significativo (>= 1%)
+  const hasPromo = !!product.promo && !!product.precio_con_descuento && product.promo.descuento_porcentaje >= 1
 
-  // Debug log detallado
-  if (hasOferta || hasPromo) {
-    console.log('🔍 Debug de descuentos:', {
+  // Verificar si tiene promoción informativa (con descuento < 1%, incluyendo 0%)
+  const hasPromoSinDescuento = !!product.promo && product.promo.descuento_porcentaje < 1
+
+  // Debug log detallado - SIEMPRE mostrar si tiene promo
+  if (product.promo) {
+    console.log('🔍 ProductCard - Producto con promo:', {
       id: product.id,
-      descripcion: product.descripcion?.substring(0, 30),
-      hasOferta,
-      hasPromo,
-      'hasOferta && hasPromo': hasOferta && hasPromo,
-      promo_existe: !!product.promo,
+      descripcion: product.descripcion?.substring(0, 40),
+      'product.promo existe': !!product.promo,
       promo_nombre: product.promo?.nombre,
-      promo_descuento: product.promo?.descuento_porcentaje,
-      precio_con_descuento: product.precio_con_descuento,
-      precio_oferta: product.precio_oferta,
-      descuento_porcentual: product.descuento_porcentual,
-      fecha_vigencia_desde: product.fecha_vigencia_desde,
-      fecha_vigencia_hasta: product.fecha_vigencia_hasta
+      'product.promo.descuento_porcentaje': product.promo?.descuento_porcentaje,
+      'descuento < 1': product.promo.descuento_porcentaje < 1,
+      hasPromo,
+      hasPromoSinDescuento,
+      'DEBERIA MOSTRARSE BADGE': hasPromoSinDescuento ? 'SI ✅' : 'NO ❌',
     })
   }
 
@@ -144,6 +143,34 @@ export default function ProductCard({ product }: ProductCardProps) {
             {product.descripcion || product.name || 'Sin descripción'}
           </h3>
 
+          {/* Badge de Promoción Sin Descuento - Similar a las imágenes */}
+          {(() => {
+            if (hasPromoSinDescuento && product.promo) {
+              console.log('✅ RENDERIZANDO BADGE para producto:', product.id, product.promo.nombre)
+              return (
+                <div className="mb-2 bg-gradient-to-r from-orange-100 to-amber-100 border-2 border-orange-400 rounded-lg p-3 shadow-md">
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <Tag className="w-4 h-4 text-orange-700" />
+                    <span className="text-sm font-bold text-orange-900 uppercase tracking-wide">
+                      {product.promo.nombre}
+                    </span>
+                  </div>
+                  {product.promo.descripcion && (
+                    <p className="text-xs text-orange-800 leading-tight font-medium">
+                      {product.promo.descripcion}
+                    </p>
+                  )}
+                  {product.promo.fecha_inicio && product.promo.fecha_fin && (
+                    <p className="text-xs text-orange-700 mt-1.5 uppercase font-bold">
+                      Válida hasta el {new Date(product.promo.fecha_fin).toLocaleDateString('es-AR')} - PAGO CONTADO
+                    </p>
+                  )}
+                </div>
+              )
+            }
+            return null
+          })()}
+
           {/* Precio - Siempre visible */}
           <div className="mb-2">
             {hasOferta && hasPromo && product.promo && product.precio_con_descuento ? (
@@ -182,7 +209,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 </div>
               </>
             ) : hasDiscount ? (
-              // Solo oferta O solo promoción
+              // Solo oferta O solo promoción con descuento
               <>
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-base font-semibold text-red-600 line-through decoration-2">
@@ -197,7 +224,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 </div>
               </>
             ) : (
-              // Sin oferta ni promoción: precio normal
+              // Sin oferta ni promoción (o con promo sin descuento): precio normal
               <div className="text-xl font-bold text-orange-600">
                 ${formatearPrecio(productPrice)}
               </div>

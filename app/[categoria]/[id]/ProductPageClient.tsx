@@ -129,8 +129,11 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
   const precioOferta = hasOferta ? product.precio_oferta! : product.precio
   const descuentoOferta = hasOferta ? product.descuento_porcentual! : 0
 
-  // Verificar si tiene promoción con descuento válido
-  const hasPromo = !!product.promo && !!product.precio_con_descuento && product.promo.descuento_porcentaje > 0
+  // Verificar si tiene promoción con descuento significativo (>= 1%)
+  const hasPromo = !!product.promo && !!product.precio_con_descuento && product.promo.descuento_porcentaje >= 1
+
+  // Verificar si tiene promoción informativa (con descuento < 1%, incluyendo 0%)
+  const hasPromoSinDescuento = !!product.promo && product.promo.descuento_porcentaje < 1
 
   // Determinar precio final: priorizar oferta individual sobre promoción
   const finalPrice = hasOferta ? precioOferta : (hasPromo ? product.precio_con_descuento! : (product.precio || 0))
@@ -212,7 +215,7 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
               {/* Precio móvil - Siempre visible */}
               <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4 mb-0 shadow-md border border-orange-200">
                 {hasOferta && hasPromo ? (
-                  // Tiene AMBOS: oferta individual Y promoción
+                  // Tiene AMBOS: oferta individual Y promoción con descuento
                   <>
                     {/* Precio de oferta */}
                     <div className="mb-3 pb-3 border-b border-orange-300">
@@ -259,8 +262,50 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
                       )}
                     </div>
                   </>
+                ) : hasOferta && hasPromoSinDescuento && product.promo ? (
+                  // Tiene oferta individual Y promoción sin descuento
+                  <>
+                    {/* Precio de oferta */}
+                    <div className="mb-3 pb-3 border-b border-orange-300">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Tag className="w-4 h-4 text-red-600" />
+                        <span className="text-xs font-bold text-red-600 uppercase">
+                          Oferta Especial
+                        </span>
+                        <span className="ml-auto bg-red-600 text-white px-2 py-1 rounded-full text-xs font-bold shadow-md">
+                          -{descuentoOferta}% OFF
+                        </span>
+                      </div>
+                      <div className="flex items-baseline gap-3">
+                        <span className="text-lg font-bold text-red-600 line-through decoration-2">
+                          ${formatearPrecio(product.precio || 0)}
+                        </span>
+                        <span className="text-4xl font-bold text-green-600">
+                          ${formatearPrecio(precioOferta)}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Promoción sin descuento */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <Tag className="w-4 h-4 text-orange-600" />
+                        <span className="text-xs font-bold text-orange-800 uppercase">
+                          {product.promo.nombre}
+                        </span>
+                      </div>
+                      {product.promo.descripcion && (
+                        <p className="text-xs text-orange-700 bg-white/50 rounded p-2">{product.promo.descripcion}</p>
+                      )}
+                      {product.promo.fecha_inicio && product.promo.fecha_fin && (
+                        <p className="text-xs text-orange-600 mt-2 font-medium uppercase">
+                          Válida hasta el {new Date(product.promo.fecha_fin).toLocaleDateString('es-AR')}
+                        </p>
+                      )}
+                    </div>
+                  </>
                 ) : hasDiscount ? (
-                  // Solo oferta O solo promoción
+                  // Solo oferta O solo promoción con descuento
                   <>
                     <div className="flex items-center gap-2 mb-2">
                       <Tag className="w-4 h-4 text-red-600" />
@@ -282,6 +327,32 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
                     {hasPromo && product.promo!.descripcion && (
                       <p className="text-xs text-gray-700 mt-2 bg-white/50 rounded p-2">{product.promo!.descripcion}</p>
                     )}
+                  </>
+                ) : hasPromoSinDescuento && product.promo ? (
+                  // Promoción sin descuento o con descuento insignificante
+                  <>
+                    <div className="mb-3">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Tag className="w-4 h-4 text-orange-600" />
+                        <span className="text-xs font-bold text-orange-800 uppercase">
+                          {product.promo.nombre}
+                        </span>
+                      </div>
+                      {product.promo.descripcion && (
+                        <p className="text-xs text-orange-700 bg-white/50 rounded p-2">{product.promo.descripcion}</p>
+                      )}
+                      {product.promo.fecha_inicio && product.promo.fecha_fin && (
+                        <p className="text-xs text-orange-600 mt-2 font-medium uppercase">
+                          Válida hasta el {new Date(product.promo.fecha_fin).toLocaleDateString('es-AR')}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-orange-700">Precio:</span>
+                      <span className="text-4xl font-bold text-orange-600">
+                        ${formatearPrecio(product.precio || 0)}
+                      </span>
+                    </div>
                   </>
                 ) : (
                   // Sin oferta ni promoción
@@ -328,7 +399,7 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
             {/* Precio del producto - solo desktop */}
             <div className="hidden lg:block bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-5 mb-4 shadow-md border border-orange-200">
               {hasOferta && hasPromo ? (
-                // Tiene AMBOS: oferta individual Y promoción
+                // Tiene AMBOS: oferta individual Y promoción con descuento
                 <>
                   {/* Precio de oferta */}
                   <div className="mb-4 pb-4 border-b border-orange-300">
@@ -375,8 +446,50 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
                     )}
                   </div>
                 </>
+              ) : hasOferta && hasPromoSinDescuento && product.promo ? (
+                // Tiene oferta individual Y promoción sin descuento
+                <>
+                  {/* Precio de oferta */}
+                  <div className="mb-4 pb-4 border-b border-orange-300">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Tag className="w-5 h-5 text-red-600" />
+                      <span className="text-sm font-bold text-red-600 uppercase">
+                        Oferta Especial
+                      </span>
+                      <span className="ml-auto bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold shadow-md">
+                        -{descuentoOferta}% OFF
+                      </span>
+                    </div>
+                    <div className="flex items-baseline gap-4">
+                      <span className="text-2xl font-bold text-red-600 line-through decoration-4">
+                        ${formatearPrecio(product.precio || 0)}
+                      </span>
+                      <span className="text-5xl font-bold text-green-600">
+                        ${formatearPrecio(precioOferta)}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Promoción sin descuento */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <Tag className="w-5 h-5 text-orange-600" />
+                      <span className="text-sm font-bold text-orange-800 uppercase">
+                        {product.promo.nombre}
+                      </span>
+                    </div>
+                    {product.promo.descripcion && (
+                      <p className="text-sm text-orange-700 bg-white/50 rounded p-2">{product.promo.descripcion}</p>
+                    )}
+                    {product.promo.fecha_inicio && product.promo.fecha_fin && (
+                      <p className="text-sm text-orange-600 mt-3 font-medium uppercase">
+                        Válida hasta el {new Date(product.promo.fecha_fin).toLocaleDateString('es-AR')}
+                      </p>
+                    )}
+                  </div>
+                </>
               ) : hasDiscount ? (
-                // Solo oferta O solo promoción
+                // Solo oferta O solo promoción con descuento
                 <>
                   <div className="flex items-center gap-2 mb-3">
                     <Tag className="w-5 h-5 text-red-600" />
@@ -398,6 +511,32 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
                   {hasPromo && product.promo!.descripcion && (
                     <p className="text-sm text-gray-700 mt-3 bg-white/50 rounded p-2">{product.promo!.descripcion}</p>
                   )}
+                </>
+              ) : hasPromoSinDescuento && product.promo ? (
+                // Promoción sin descuento o con descuento insignificante
+                <>
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Tag className="w-5 h-5 text-orange-600" />
+                      <span className="text-sm font-bold text-orange-800 uppercase">
+                        {product.promo.nombre}
+                      </span>
+                    </div>
+                    {product.promo.descripcion && (
+                      <p className="text-sm text-orange-700 bg-white/50 rounded p-2">{product.promo.descripcion}</p>
+                    )}
+                    {product.promo.fecha_inicio && product.promo.fecha_fin && (
+                      <p className="text-sm text-orange-600 mt-3 font-medium uppercase">
+                        Válida hasta el {new Date(product.promo.fecha_fin).toLocaleDateString('es-AR')}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg font-semibold text-orange-700">Precio:</span>
+                    <span className="text-5xl font-bold text-orange-600">
+                      ${formatearPrecio(product.precio || 0)}
+                    </span>
+                  </div>
                 </>
               ) : (
                 // Sin oferta ni promoción

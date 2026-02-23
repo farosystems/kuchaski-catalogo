@@ -6,9 +6,9 @@ import { Product } from '@/lib/products'
 interface ShoppingListContextType {
   items: Product[]
   addItem: (product: Product) => void
-  removeItem: (productId: number) => void
+  removeItem: (productId: string) => void
   clearList: () => void
-  isInList: (productId: number) => boolean
+  isInList: (productId: string) => boolean
   itemCount: number
 }
 
@@ -45,7 +45,7 @@ export function ShoppingListProvider({ children }: { children: ReactNode }) {
     })
   }
 
-  const removeItem = (productId: number) => {
+  const removeItem = (productId: string) => {
     setItems(prev => prev.filter(item => item.id !== productId))
   }
 
@@ -53,7 +53,7 @@ export function ShoppingListProvider({ children }: { children: ReactNode }) {
     setItems([])
   }
 
-  const isInList = (productId: number) => {
+  const isInList = (productId: string) => {
     return items.some(item => item.id === productId)
   }
 
